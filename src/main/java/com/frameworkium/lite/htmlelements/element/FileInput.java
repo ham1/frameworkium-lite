@@ -1,10 +1,10 @@
 package com.frameworkium.lite.htmlelements.element;
 
 import com.frameworkium.lite.common.properties.Property;
+import com.frameworkium.lite.ui.UITestLifecycle;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.LocalFileDetector;
-import org.openqa.selenium.remote.RemoteWebElement;
+import org.openqa.selenium.remote.*;
 
 import java.io.File;
 import java.util.List;
@@ -36,9 +36,8 @@ public class FileInput extends TypifiedElement {
         // Proxy can't be used to check the element class, so find real WebElement
         WebElement fileInputElement = getNotProxiedInputElement();
         // Set local file detector in case of remote driver usage
-        if (Property.GRID_URL.isSpecified()
-                || isOnRemoteWebDriver(fileInputElement)) {
-            setLocalFileDetector((RemoteWebElement) fileInputElement);
+        if (Property.GRID_URL.isSpecified()) {
+            ((RemoteWebDriver) UITestLifecycle.get().getWebDriver()).setFileDetector(new LocalFileDetector());
         }
 
         String filePath = getFilePath(fileName);
@@ -58,9 +57,8 @@ public class FileInput extends TypifiedElement {
         // Proxy can't be used to check the element class, so find real WebElement
         WebElement fileInputElement = getNotProxiedInputElement();
         // Set local file detector in case of remote driver usage
-        if (Property.GRID_URL.isSpecified()
-                || isOnRemoteWebDriver(fileInputElement)) {
-            setLocalFileDetector((RemoteWebElement) fileInputElement);
+        if (Property.GRID_URL.isSpecified()) {
+            ((RemoteWebDriver) UITestLifecycle.get().getWebDriver()).setFileDetector(new LocalFileDetector());
         }
 
         String filePaths = fileNames.stream()
