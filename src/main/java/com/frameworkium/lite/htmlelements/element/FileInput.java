@@ -5,6 +5,7 @@ import com.frameworkium.lite.ui.UITestLifecycle;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.*;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
 
 import java.io.File;
 import java.util.List;
@@ -37,7 +38,7 @@ public class FileInput extends TypifiedElement {
         WebElement fileInputElement = getNotProxiedInputElement();
         // Set local file detector in case of remote driver usage
         if (Property.GRID_URL.isSpecified()) {
-            ((RemoteWebDriver) UITestLifecycle.get().getWebDriver()).setFileDetector(new LocalFileDetector());
+            ((RemoteWebDriver) ((EventFiringWebDriver) UITestLifecycle.get().getWebDriver()).getWrappedDriver()).setFileDetector(new LocalFileDetector());
         }
 
         String filePath = getFilePath(fileName);
@@ -58,7 +59,7 @@ public class FileInput extends TypifiedElement {
         WebElement fileInputElement = getNotProxiedInputElement();
         // Set local file detector in case of remote driver usage
         if (Property.GRID_URL.isSpecified()) {
-            ((RemoteWebDriver) UITestLifecycle.get().getWebDriver()).setFileDetector(new LocalFileDetector());
+            ((RemoteWebDriver) ((EventFiringWebDriver) UITestLifecycle.get().getWebDriver()).getWrappedDriver()).setFileDetector(new LocalFileDetector());
         }
 
         String filePaths = fileNames.stream()
