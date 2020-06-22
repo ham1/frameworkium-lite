@@ -34,15 +34,13 @@ public class FileInput extends TypifiedElement {
      * @param fileName Name of a file or a resource to be uploaded.
      */
     public void setFileToUpload(final String fileName) {
-        // Proxy can't be used to check the element class, so find real WebElement
-        WebElement fileInputElement = getNotProxiedInputElement();
         // Set local file detector in case of remote driver usage
         if (Property.GRID_URL.isSpecified()) {
             ((RemoteWebDriver) ((EventFiringWebDriver) UITestLifecycle.get().getWebDriver()).getWrappedDriver()).setFileDetector(new LocalFileDetector());
         }
 
         String filePath = getFilePath(fileName);
-        fileInputElement.sendKeys(filePath);
+        sendKeys(filePath);
     }
 
     /**
@@ -55,8 +53,6 @@ public class FileInput extends TypifiedElement {
      * @param fileNames a list of file Names to be uploaded.
      */
     public void setFilesToUpload(List<String> fileNames) {
-        // Proxy can't be used to check the element class, so find real WebElement
-        WebElement fileInputElement = getNotProxiedInputElement();
         // Set local file detector in case of remote driver usage
         if (Property.GRID_URL.isSpecified()) {
             ((RemoteWebDriver) ((EventFiringWebDriver) UITestLifecycle.get().getWebDriver()).getWrappedDriver()).setFileDetector(new LocalFileDetector());
@@ -65,7 +61,7 @@ public class FileInput extends TypifiedElement {
         String filePaths = fileNames.stream()
                 .map(this::getFilePath)
                 .collect(Collectors.joining("\n"));
-        fileInputElement.sendKeys(filePaths);
+        sendKeys(filePaths);
     }
 
     /**
