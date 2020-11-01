@@ -103,4 +103,17 @@ public class MultiUseDriverLifecycle implements DriverLifecycle {
 
         driverPool = null; // allows re-initialisation
     }
+
+    @Override
+    public void reInitialiseBrowserForCurrentThread(Supplier<Driver> newDriverSupplier) {
+        Driver currentDriver = threadLocalDriver.get();
+        if (currentDriver != null) {
+            try {
+                currentDriver.getWebDriver().quit();
+            } catch (Exception e) {
+                logger.warn("Failed to quit existing browser in the pool.", e);
+            }
+        }
+        driverPool.addLast(newDriverSupplier.get());
+    }
 }
