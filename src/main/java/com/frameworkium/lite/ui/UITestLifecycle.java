@@ -110,8 +110,8 @@ public class UITestLifecycle {
      * This can be useful if the browser crashes or becomes
      * unreachable and you don't want to restart the whole suite.
      */
-    public void reInitialiseBrowserForCurrentThread() {
-        driverLifecycle.reInitialiseBrowserForCurrentThread(DriverSetup::instantiateDriver);
+    public void reinitialiseCurrentDriver() {
+        driverLifecycle.reinitialiseCurrentDriver(DriverSetup::instantiateDriver);
     }
 
     /**
