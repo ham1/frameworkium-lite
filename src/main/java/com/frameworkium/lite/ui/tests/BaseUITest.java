@@ -1,11 +1,10 @@
 package com.frameworkium.lite.ui.tests;
 
-import com.frameworkium.lite.common.listeners.*;
+import com.frameworkium.lite.common.listeners.TestListener;
 import com.frameworkium.lite.ui.UITestLifecycle;
 import com.frameworkium.lite.ui.capture.ScreenshotCapture;
 import com.frameworkium.lite.ui.driver.Driver;
 import com.frameworkium.lite.ui.listeners.CaptureListener;
-import com.frameworkium.lite.ui.listeners.ScreenshotListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
@@ -14,7 +13,7 @@ import org.testng.annotations.*;
 
 import java.lang.reflect.Method;
 
-@Listeners({CaptureListener.class, ScreenshotListener.class, TestListener.class})
+@Listeners({CaptureListener.class, TestListener.class})
 @Test(groups = "base-ui")
 public abstract class BaseUITest {
 

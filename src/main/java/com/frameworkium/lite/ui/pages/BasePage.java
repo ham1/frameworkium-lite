@@ -160,40 +160,14 @@ public abstract class BasePage<T extends BasePage<T>> {
      * @see JavascriptExecutor#executeScript(String, Object...)
      */
     protected Object executeJS(String javascript, Object... objects) {
-        Object returnObj = null;
-        var jsExecutor = (JavascriptExecutor) driver;
+        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         try {
-            returnObj = jsExecutor.executeScript(javascript, objects);
+            return jsExecutor.executeScript(javascript, objects);
         } catch (Exception e) {
             logger.error("Javascript execution failed!");
             logger.debug("Failed Javascript:\n{}", javascript, e);
+            throw e;
         }
-        return returnObj;
-    }
-
-    /**
-     * Execute an asynchronous piece of JavaScript in the context of the
-     * currently selected frame or window. Unlike executing synchronous
-     * JavaScript, scripts executed with this method must explicitly signal they
-     * are finished by invoking the provided callback. This callback is always
-     * injected into the executed function as the last argument.
-     *
-     * <p>If executeAsyncScript throws an Exception it's caught and logged.
-     *
-     * @param javascript the JavaScript code to execute
-     * @return One of Boolean, Long, String, List, WebElement, or null.
-     * @see JavascriptExecutor#executeAsyncScript(String, Object...)
-     */
-    protected Object executeAsyncJS(String javascript, Object... objects) {
-        Object returnObj = null;
-        try {
-            var jsExecutor = (JavascriptExecutor) driver;
-            returnObj = jsExecutor.executeAsyncScript(javascript, objects);
-        } catch (Exception e) {
-            logger.error("Async Javascript execution failed!");
-            logger.debug("Failed Javascript:\n{}", javascript, e);
-        }
-        return returnObj;
     }
 
 }
