@@ -53,7 +53,7 @@ public class TheInternetExampleTests extends BaseUITest {
                 .clickDropDownLink();
 
         assertThat(dropDownPage.getAllOptions())
-                .isEqualTo(List.of("Option 1", "Option 2"));
+                .isEqualTo(List.of("Please select an option", "Option 1", "Option 2"));
 
         dropDownPage.select("Option 1");
 
