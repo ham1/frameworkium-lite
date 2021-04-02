@@ -24,7 +24,7 @@ public class DropDownPage extends BasePage<DropDownPage> {
     }
 
     public void select(String option) {
-        select.selectByValue(option);
+        select.selectByVisibleText(option);
     }
 
     public String getCurrentSelection() {
