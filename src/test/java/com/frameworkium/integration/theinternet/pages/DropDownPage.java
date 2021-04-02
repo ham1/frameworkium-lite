@@ -1,5 +1,6 @@
 package com.frameworkium.integration.theinternet.pages;
 
+import com.frameworkium.lite.ui.annotations.Visible;
 import com.frameworkium.lite.ui.pages.BasePage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,6 +12,7 @@ import static java.util.stream.Collectors.toList;
 
 public class DropDownPage extends BasePage<DropDownPage> {
 
+    @Visible
     @FindBy(css = "select#dropdown")
     private Select select;
 
