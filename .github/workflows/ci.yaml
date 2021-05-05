@@ -5,7 +5,22 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    env:
+      SELENIUM_HUB_HOST: hub
+      THREAD_COUNT: 2
+    services:
+      hub:
+        image: selenium/hub:4.0.0-beta-3-20210426
+      chrome:
+        image: selenium/node-chrome:4.0.0-beta-3-20210426
+        env:
+          HUB_HOST: hub
+          HUB_PORT: 4444
+      firefox:
+        image: selenium/node-firefox:4.0.0-beta-3-20210426
+        env:
+          HUB_HOST: hub
+          HUB_PORT: 4444
     steps:
       - uses: actions/checkout@v2
       - name: Setup JDK 11
@@ -19,5 +34,19 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+#      # Set up code climate test reporter
+#      - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+#      - chmod +x ./cc-test-reporter
+#      - ./cc-test-reporter before-build
       - name: Compile and run checkstyle
-        run: mvn test-compile --batch-mode -U --show-version -DskipTests=true -Dmaven.javadoc.skip=true
+        run: |
+          mvn test-compile \
+            --batch-mode --show-version \
+            -DskipTests=true -Dmaven.javadoc.skip=true
+      - name: Install chrome and chromedriver locally and test
+        run: |
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt install ./google-chrome-stable_current_amd64.deb
+          wget --quiet http://chromedriver.storage.googleapis.com/90.0.4430.24/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip
+          mvn verify --batch-mode -Dthreads=${THREAD_COUNT} -Dbrowser=chrome
