@@ -3,7 +3,7 @@ name: FWium-lite CI
 on: [ push ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     env:
       SELENIUM_HUB_HOST: hub
@@ -11,6 +11,8 @@ jobs:
     services:
       hub:
         image: selenium/hub:4.0.0-beta-3-20210426
+        ports:
+          - 4444:4444
       chrome1:
         image: selenium/node-chrome:4.0.0-beta-3-20210426
         env:
@@ -33,7 +35,7 @@ jobs:
           HUB_PORT: 4444
     steps:
       - name: test grid
-        run: wget http://hub:4444
+        run: wget http://localhost:4444
       - uses: actions/checkout@v2
       - name: Setup JDK 11
         uses: actions/setup-java@v2
