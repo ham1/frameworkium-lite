@@ -7,16 +7,26 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SELENIUM_HUB_HOST: hub
-      THREAD_COUNT: 3
+      THREAD_COUNT: 2
     services:
       hub:
         image: selenium/hub:4.0.0-beta-3-20210426
-      chrome:
+      chrome1:
         image: selenium/node-chrome:4.0.0-beta-3-20210426
         env:
           HUB_HOST: hub
           HUB_PORT: 4444
-      firefox:
+      chrome2:
+        image: selenium/node-chrome:4.0.0-beta-3-20210426
+        env:
+          HUB_HOST: hub
+          HUB_PORT: 4444
+      firefox1:
+        image: selenium/node-firefox:4.0.0-beta-3-20210426
+        env:
+          HUB_HOST: hub
+          HUB_PORT: 4444
+      firefox2:
         image: selenium/node-firefox:4.0.0-beta-3-20210426
         env:
           HUB_HOST: hub
@@ -54,3 +64,19 @@ jobs:
             mvn verify --batch-mode \
               -Dthreads=${THREAD_COUNT} -Dbrowser=chrome \
               -Dheadless -DreuseBrowser
+      - name: Use custom browser impl
+        run: |
+          mvn verify --batch-mode \
+            -Dthreads=${THREAD_COUNT} \
+            -DcustomBrowserImpl=com.frameworkium.integration.CustomFirefoxImpl \
+            -Dmaximise=true -Dit.test=DocumentationTest
+      - name: Run tests against Chrome grid
+        run: |
+          mvn verify --batch-mode \
+            -Dthreads=${THREAD_COUNT} -Dbrowser=chrome \
+            -DreuseBrowser -Dheadless -DgridURL=http://hub:4444/
+      - name: Run tests against Firefox grid
+        run: |
+          mvn verify --batch-mode \
+            -Dthreads=${THREAD_COUNT} -Dbrowser=firefox \
+            -DreuseBrowser -Dheadless -DgridURL=http://hub:4444/
