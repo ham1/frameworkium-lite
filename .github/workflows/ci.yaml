@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     container: maven:3.8.1-jdk-11
     env:
-      SELENIUM_HUB_HOST: hub
+      SELENIUM_HUB_HOST: localhost
       THREAD_COUNT: 2
     services:
       hub:
