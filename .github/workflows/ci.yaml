@@ -5,6 +5,7 @@ on: [ push ]
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    container: ubuntu:latest
     env:
       SELENIUM_HUB_HOST: hub
       THREAD_COUNT: 2
@@ -35,7 +36,7 @@ jobs:
           HUB_PORT: 4444
     steps:
       - name: test grid
-        run: wget http://localhost:4444
+        run: curl -L http://${SELENIUM_HUB_HOST}:4444/
       - uses: actions/checkout@v2
       - name: Setup JDK 11
         uses: actions/setup-java@v2
@@ -64,7 +65,7 @@ jobs:
             -Dbrowser=chrome \
             -Dheadless \
             -DreuseBrowser \
-            -DgridURL=http://localhost:4444/
+            -DgridURL=http://${SELENIUM_HUB_HOST}:4444/
       - name: Run tests against Firefox grid
         run: |
           mvn verify --batch-mode \
@@ -72,7 +73,7 @@ jobs:
             -Dbrowser=firefox \
             -Dheadless \
             -DreuseBrowser \
-            -DgridURL=http://localhost:4444/
+            -DgridURL=http://${SELENIUM_HUB_HOST}:4444/
       - name: Install chrome and chromedriver locally
         run: |
           wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
