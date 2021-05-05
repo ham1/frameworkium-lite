@@ -1,6 +1,6 @@
 name: FWium-lite CI
 
-on: [push]
+on: [ push ]
 
 jobs:
   build:
@@ -44,10 +44,10 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-#      # Set up code climate test reporter
-#      - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-#      - chmod +x ./cc-test-reporter
-#      - ./cc-test-reporter before-build
+      #      # Set up code climate test reporter
+      #      - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+      #      - chmod +x ./cc-test-reporter
+      #      - ./cc-test-reporter before-build
       - name: Compile and run checkstyle
         run: |
           mvn test-compile \
@@ -61,22 +61,32 @@ jobs:
           unzip chromedriver_linux64.zip
       - name: Run tests against local Chrome
         run: |
-            mvn verify --batch-mode \
-              -Dthreads=${THREAD_COUNT} -Dbrowser=chrome \
-              -Dheadless -DreuseBrowser
+          mvn verify --batch-mode \
+            -Dthreads=${THREAD_COUNT} \
+            -Dbrowser=chrome \
+            -Dheadless \
+            -DreuseBrowser
       - name: Use custom browser impl
         run: |
           mvn verify --batch-mode \
             -Dthreads=${THREAD_COUNT} \
             -DcustomBrowserImpl=com.frameworkium.integration.CustomFirefoxImpl \
-            -Dmaximise=true -Dit.test=DocumentationTest
+            -Dheadless \
+            -Dmaximise=true \
+            -Dit.test=DocumentationTest
       - name: Run tests against Chrome grid
         run: |
           mvn verify --batch-mode \
-            -Dthreads=${THREAD_COUNT} -Dbrowser=chrome \
-            -DreuseBrowser -Dheadless -DgridURL=http://hub:4444/
+            -Dthreads=${THREAD_COUNT} \
+            -Dbrowser=chrome \
+            -Dheadless \
+            -DreuseBrowser \
+            -DgridURL=http://hub:4444/
       - name: Run tests against Firefox grid
         run: |
           mvn verify --batch-mode \
-            -Dthreads=${THREAD_COUNT} -Dbrowser=firefox \
-            -DreuseBrowser -Dheadless -DgridURL=http://hub:4444/
+            -Dthreads=${THREAD_COUNT} \
+            -Dbrowser=firefox \
+            -Dheadless \
+            -DreuseBrowser \
+            -DgridURL=http://hub:4444/
