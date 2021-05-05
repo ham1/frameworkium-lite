@@ -64,7 +64,7 @@ jobs:
             -Dbrowser=chrome \
             -Dheadless \
             -DreuseBrowser \
-            -DgridURL=http://hub:4444/
+            -DgridURL=http://localhost:4444/
       - name: Run tests against Firefox grid
         run: |
           mvn verify --batch-mode \
@@ -72,7 +72,7 @@ jobs:
             -Dbrowser=firefox \
             -Dheadless \
             -DreuseBrowser \
-            -DgridURL=http://hub:4444/
+            -DgridURL=http://localhost:4444/
       - name: Install chrome and chromedriver locally
         run: |
           wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
