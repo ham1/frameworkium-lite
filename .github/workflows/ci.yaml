@@ -5,7 +5,7 @@ on: [ push ]
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    container: ubuntu:latest
+    container: maven:3.8.1-jdk-11
     env:
       SELENIUM_HUB_HOST: hub
       THREAD_COUNT: 2
@@ -38,11 +38,11 @@ jobs:
       - name: test grid
         run: curl -L http://${SELENIUM_HUB_HOST}:4444/
       - uses: actions/checkout@v2
-      - name: Setup JDK 11
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'
-          distribution: 'adopt'
+#      - name: Setup JDK 11
+#        uses: actions/setup-java@v2
+#        with:
+#          java-version: '11'
+#          distribution: 'adopt'
       - name: Cache Maven deps
         uses: actions/cache@v2
         with:
