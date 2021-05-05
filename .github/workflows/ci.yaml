@@ -9,12 +9,14 @@ jobs:
     env:
       HUB_HOST: hub
       HUB_PORT: 4444
+      SE_EVENT_BUS_PUBLISH_PORT: 4442
+      SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
       THREAD_COUNT: 2
     services:
       hub:
         image: selenium/hub:4.0.0-beta-3-20210426
         ports:
-          - 4444:4444
+          - 4442-4:4442-4
       chrome1:
         image: selenium/node-chrome:4.0.0-beta-3-20210426
       chrome2:
@@ -24,8 +26,6 @@ jobs:
       firefox2:
         image: selenium/node-firefox:4.0.0-beta-3-20210426
     steps:
-      - name: test grid
-        run: curl -L http://${HUB_HOST}:4444/status
       - uses: actions/checkout@v2
 #      - name: Setup JDK 11
 #        uses: actions/setup-java@v2
@@ -47,6 +47,8 @@ jobs:
           mvn test-compile \
             --batch-mode --show-version \
             -DskipTests=true -Dmaven.javadoc.skip=true
+      - name: test grid
+        run: curl -L http://${HUB_HOST}:4444/status
       - name: Run tests against Chrome grid
         run: |
           mvn verify --batch-mode \
