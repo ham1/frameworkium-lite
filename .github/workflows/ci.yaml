@@ -53,6 +53,22 @@ jobs:
           mvn test-compile \
             --batch-mode --show-version \
             -DskipTests=true -Dmaven.javadoc.skip=true
+      - name: Run tests against Chrome grid
+        run: |
+          mvn verify --batch-mode \
+            -Dthreads=${THREAD_COUNT} \
+            -Dbrowser=chrome \
+            -Dheadless \
+            -DreuseBrowser \
+            -DgridURL=http://hub:4444/
+      - name: Run tests against Firefox grid
+        run: |
+          mvn verify --batch-mode \
+            -Dthreads=${THREAD_COUNT} \
+            -Dbrowser=firefox \
+            -Dheadless \
+            -DreuseBrowser \
+            -DgridURL=http://hub:4444/
       - name: Install chrome and chromedriver locally
         run: |
           wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -79,19 +95,9 @@ jobs:
             -Dheadless \
             -Dmaximise=true \
             -Dit.test=DocumentationTest
-      - name: Run tests against Chrome grid
-        run: |
-          mvn verify --batch-mode \
-            -Dthreads=${THREAD_COUNT} \
-            -Dbrowser=chrome \
-            -Dheadless \
-            -DreuseBrowser \
-            -DgridURL=http://hub:4444/
-      - name: Run tests against Firefox grid
-        run: |
-          mvn verify --batch-mode \
-            -Dthreads=${THREAD_COUNT} \
-            -Dbrowser=firefox \
-            -Dheadless \
-            -DreuseBrowser \
-            -DgridURL=http://hub:4444/
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: fwium-logs
+          path: logs/
+          retention-days: 7
