@@ -43,10 +43,14 @@ jobs:
           mvn test-compile \
             --batch-mode --show-version \
             -DskipTests=true -Dmaven.javadoc.skip=true
-      - name: Install chrome and chromedriver locally and test
+      - name: Install chrome and chromedriver locally
         run: |
-          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo apt install ./google-chrome-stable_current_amd64.deb
           wget --quiet http://chromedriver.storage.googleapis.com/90.0.4430.24/chromedriver_linux64.zip
           unzip chromedriver_linux64.zip
-          mvn verify --batch-mode -Dthreads=${THREAD_COUNT} -Dbrowser=chrome
+      - name: Run tests against local Chrome
+        run: |
+            mvn verify --batch-mode \
+              -Dthreads=${THREAD_COUNT} -Dbrowser=chrome \
+              -Dheadless -DreuseBrowser
