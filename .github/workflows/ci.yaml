@@ -66,10 +66,13 @@ jobs:
             -Dbrowser=chrome \
             -Dheadless \
             -DreuseBrowser
-      - name: Use custom browser impl
+      - name: Use custom Firefox browser impl
         run: |
+          sudo apt update && sudo apt install -y firefox
+          export GECKO_VER=0.29.1
+          wget --quiet https://github.com/mozilla/geckodriver/releases/download/v${GECKO_VER}/geckodriver-v${GECKO_VER}-linux64.tar.gz
+          tar -xzf geckodriver-v${GECKO_VER}-linux64.tar.gz
           mvn verify --batch-mode \
-            -Dthreads=${THREAD_COUNT} \
             -DcustomBrowserImpl=com.frameworkium.integration.CustomFirefoxImpl \
             -Dheadless \
             -Dmaximise=true \
