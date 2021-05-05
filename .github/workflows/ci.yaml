@@ -32,6 +32,8 @@ jobs:
           HUB_HOST: hub
           HUB_PORT: 4444
     steps:
+      - name: test grid
+        run: wget http://hub:4444
       - uses: actions/checkout@v2
       - name: Setup JDK 11
         uses: actions/setup-java@v2
