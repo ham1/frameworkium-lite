@@ -9,9 +9,6 @@ jobs:
     env:
       HUB_HOST: hub
       HUB_PORT: 4444
-      SE_EVENT_BUS_PUBLISH_PORT: 4442
-      SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
-      SE_EVENT_BUS_HOST: hub
       THREAD_COUNT: 2
     services:
       hub:
@@ -22,8 +19,6 @@ jobs:
         image: selenium/node-chrome:4.0.0-beta-3-20210426
         options: -v /dev/shm:/dev/shm
         env:
-          HUB_HOST: hub
-          HUB_PORT: 4444
           SE_EVENT_BUS_PUBLISH_PORT: 4442
           SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
           SE_EVENT_BUS_HOST: hub
@@ -31,8 +26,6 @@ jobs:
         image: selenium/node-chrome:4.0.0-beta-3-20210426
         options: -v /dev/shm:/dev/shm
         env:
-          HUB_HOST: hub
-          HUB_PORT: 4444
           SE_EVENT_BUS_PUBLISH_PORT: 4442
           SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
           SE_EVENT_BUS_HOST: hub
@@ -40,8 +33,6 @@ jobs:
         image: selenium/node-firefox:4.0.0-beta-3-20210426
         options: -v /dev/shm:/dev/shm
         env:
-          HUB_HOST: hub
-          HUB_PORT: 4444
           SE_EVENT_BUS_PUBLISH_PORT: 4442
           SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
           SE_EVENT_BUS_HOST: hub
@@ -49,8 +40,6 @@ jobs:
         image: selenium/node-firefox:4.0.0-beta-3-20210426
         options: -v /dev/shm:/dev/shm
         env:
-          HUB_HOST: hub
-          HUB_PORT: 4444
           SE_EVENT_BUS_PUBLISH_PORT: 4442
           SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
           SE_EVENT_BUS_HOST: hub
@@ -97,7 +86,7 @@ jobs:
       - name: Install chrome and chromedriver locally
         run: |
           wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo apt install ./google-chrome-stable_current_amd64.deb
+          apt install ./google-chrome-stable_current_amd64.deb
           wget --quiet http://chromedriver.storage.googleapis.com/90.0.4430.24/chromedriver_linux64.zip
           unzip chromedriver_linux64.zip
       - name: Run tests against local Chrome
@@ -109,7 +98,7 @@ jobs:
             -DreuseBrowser
       - name: Install Firefox and Gecko Driver
         run: |
-          sudo apt update && sudo apt install -y firefox
+          apt update && apt install -y firefox
           export GECKO_VER=0.29.1
           wget --quiet https://github.com/mozilla/geckodriver/releases/download/v${GECKO_VER}/geckodriver-v${GECKO_VER}-linux64.tar.gz
           tar -xzf geckodriver-v${GECKO_VER}-linux64.tar.gz
