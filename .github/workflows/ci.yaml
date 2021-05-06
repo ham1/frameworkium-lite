@@ -150,6 +150,7 @@ jobs:
         run: |
           mvn verify --batch-mode \
             -Dskip.surefire.tests=true \
+            -Dthreads=${THREAD_COUNT} \
             -Dit.test=EnglishCountiesTest \
             -Dconfig=FirefoxGrid.yaml
       - name: Run tests against Firefox grid

@@ -9,4 +9,3 @@ maxRetryCount: 1
 reuseBrowser: true
 sutName:
 sutVersion:
-threads: 2
