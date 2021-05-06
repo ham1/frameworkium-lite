@@ -67,7 +67,6 @@ jobs:
       image: maven:3.8.1-jdk-11
     env:
       HUB_HOST: hub
-      HUB_PORT: 4444
       THREAD_COUNT: 2
     services:
       hub:
@@ -96,11 +95,10 @@ jobs:
           path: /root/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: test grid
-        run: curl -L http://${HUB_HOST}:4444/status
       - name: Run tests against Chrome grid
         run: |
           mvn verify --batch-mode \
+            -Dskip.surefire.tests=true \
             -Dthreads=${THREAD_COUNT} \
             -Dbrowser=chrome \
             -Dheadless \
@@ -120,7 +118,6 @@ jobs:
       image: maven:3.8.1-jdk-11
     env:
       HUB_HOST: hub
-      HUB_PORT: 4444
       THREAD_COUNT: 2
     services:
       hub:
@@ -149,16 +146,17 @@ jobs:
           path: /root/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Compile and run checkstyle
+      - name: Run using yaml FirefoxGrid config
         run: |
-          mvn test-compile \
-            --batch-mode --show-version \
-            -DskipTests=true -Dmaven.javadoc.skip=true
-      - name: test grid
-        run: curl -L http://${HUB_HOST}:4444/status
+          mvn verify --batch-mode \
+            -Dskip.surefire.tests=true \
+            -Dit.test=EnglishCountiesTest \
+            -Dconfig=FirefoxGrid.yaml
       - name: Run tests against Firefox grid
         run: |
           mvn verify --batch-mode \
+            -Dskip.surefire.tests=true \
+            -Dit.test=TheInternetExampleTests \
             -Dthreads=${THREAD_COUNT} \
             -Dbrowser=firefox \
             -Dheadless \
