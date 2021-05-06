@@ -20,16 +20,16 @@ jobs:
           - 4442-4444:4442-4444
       chrome1:
         image: selenium/node-chrome:4.0.0-beta-3-20210426
-        options: --shm-size 2g
+        options: -v /dev/shm:/dev/shm
       chrome2:
         image: selenium/node-chrome:4.0.0-beta-3-20210426
-        options: --shm-size 2g
+        options: -v /dev/shm:/dev/shm
       firefox1:
         image: selenium/node-firefox:4.0.0-beta-3-20210426
-        options: --shm-size 2g
+        options: -v /dev/shm:/dev/shm
       firefox2:
         image: selenium/node-firefox:4.0.0-beta-3-20210426
-        options: --shm-size 2g
+        options: -v /dev/shm:/dev/shm
     steps:
       - uses: actions/checkout@v2
 #      - name: Setup JDK 11
