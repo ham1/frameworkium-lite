@@ -23,8 +23,7 @@ jobs:
       - name: Compile, run checkstyle and unit tests
         run: |
           mvn test-compile surefire:test \
-            --batch-mode --show-version \
-            -Dmaven.javadoc.skip=true
+            --batch-mode --show-version
       - name: Install Firefox and Gecko Driver
         run: |
           sudo apt update && sudo apt install -y firefox
@@ -42,9 +41,10 @@ jobs:
       - name: Test Groups using Firefox
         run: |
           mvn verify --batch-mode \
-            -Dbrowser=firefox \
             -Dskip.surefire.tests=true \
+            -Dbrowser=firefox \
             -Dheadless \
+            -DreuseBrowser \
             -Dgroups=fw-bugs
       - name: Install chrome and chromedriver locally
         run: |
