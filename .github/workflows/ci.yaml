@@ -20,7 +20,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Install Firefox and Gecko Driver
         run: |
-          sudo apt update && apt install -y firefox
+          sudo apt update && sudo apt install -y firefox
           export GECKO_VER=0.29.1
           wget --quiet https://github.com/mozilla/geckodriver/releases/download/v${GECKO_VER}/geckodriver-v${GECKO_VER}-linux64.tar.gz
           tar -xzf geckodriver-v${GECKO_VER}-linux64.tar.gz
