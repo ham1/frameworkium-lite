@@ -42,6 +42,7 @@ jobs:
       - name: Test Groups using Firefox
         run: |
           mvn verify --batch-mode \
+            -Dbrowser=firefox \
             -Dskip.surefire.tests=true \
             -Dheadless \
             -Dgroups=fw-bugs
