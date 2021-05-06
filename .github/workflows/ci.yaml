@@ -3,9 +3,54 @@ name: FWium-lite CI
 on: [ push ]
 
 jobs:
-  build-and-test:
+  test-local:
     runs-on: ubuntu-latest
-    container: maven:3.8.1-jdk-11
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Cache Maven deps
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Install Firefox and Gecko Driver
+        run: |
+          sudo apt update && apt install -y firefox
+          export GECKO_VER=0.29.1
+          wget --quiet https://github.com/mozilla/geckodriver/releases/download/v${GECKO_VER}/geckodriver-v${GECKO_VER}-linux64.tar.gz
+          tar -xzf geckodriver-v${GECKO_VER}-linux64.tar.gz
+      - name: Use custom Firefox browser impl
+        run: |
+          mvn verify --batch-mode \
+            -DcustomBrowserImpl=com.frameworkium.integration.CustomFirefoxImpl \
+            -Dheadless \
+            -Dmaximise=true \
+            -Dit.test=DocumentationTest
+      - name: Install chrome and chromedriver locally
+        run: |
+          wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt install ./google-chrome-stable_current_amd64.deb
+          wget --quiet http://chromedriver.storage.googleapis.com/90.0.4430.24/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip
+      - name: Run tests against local Chrome
+        run: |
+          mvn verify --batch-mode \
+            -Dthreads=${THREAD_COUNT} \
+            -Dbrowser=chrome \
+            -Dheadless \
+            -DreuseBrowser
+
+  test-grid:
+    runs-on: ubuntu-latest
+    container:
+      image: maven:3.8.1-jdk-11
+#      volumes:
+#        - ~/.m2:/root/.m2
     env:
       HUB_HOST: hub
       HUB_PORT: 4444
@@ -53,7 +98,7 @@ jobs:
       - name: Cache Maven deps
         uses: actions/cache@v2
         with:
-          path: ~/.m2
+          path: /root/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       #      # Set up code climate test reporter
@@ -83,32 +128,6 @@ jobs:
             -Dheadless \
             -DreuseBrowser \
             -DgridURL=http://${HUB_HOST}:4444/
-      - name: Install chrome and chromedriver locally
-        run: |
-          wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          apt install ./google-chrome-stable_current_amd64.deb
-          wget --quiet http://chromedriver.storage.googleapis.com/90.0.4430.24/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip
-      - name: Run tests against local Chrome
-        run: |
-          mvn verify --batch-mode \
-            -Dthreads=${THREAD_COUNT} \
-            -Dbrowser=chrome \
-            -Dheadless \
-            -DreuseBrowser
-      - name: Install Firefox and Gecko Driver
-        run: |
-          apt update && apt install -y firefox
-          export GECKO_VER=0.29.1
-          wget --quiet https://github.com/mozilla/geckodriver/releases/download/v${GECKO_VER}/geckodriver-v${GECKO_VER}-linux64.tar.gz
-          tar -xzf geckodriver-v${GECKO_VER}-linux64.tar.gz
-      - name: Use custom Firefox browser impl
-        run: |
-          mvn verify --batch-mode \
-            -DcustomBrowserImpl=com.frameworkium.integration.CustomFirefoxImpl \
-            -Dheadless \
-            -Dmaximise=true \
-            -Dit.test=DocumentationTest
       - uses: actions/upload-artifact@v2
         if: failure()
         with:
