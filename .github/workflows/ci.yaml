@@ -20,6 +20,11 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      - name: Compile, run checkstyle and unit tests
+        run: |
+          mvn test-compile surefire:test \
+            --batch-mode --show-version \
+            -Dmaven.javadoc.skip=true
       - name: Install Firefox and Gecko Driver
         run: |
           sudo apt update && sudo apt install -y firefox
@@ -29,8 +34,9 @@ jobs:
       - name: Use custom Firefox browser impl
         run: |
           mvn verify --batch-mode \
+            -Dskip.surefire.tests=true \
             -DcustomBrowserImpl=com.frameworkium.integration.CustomFirefoxImpl \
-            -Dheadless \
+            -Dheadless=true \
             -Dmaximise=true \
             -Dit.test=DocumentationTest
       - name: Install chrome and chromedriver locally
@@ -42,6 +48,7 @@ jobs:
       - name: Run tests against local Chrome
         run: |
           mvn verify --batch-mode \
+            -Dskip.surefire.tests=true \
             -Dthreads=${THREAD_COUNT} \
             -Dbrowser=chrome \
             -Dheadless \
@@ -52,6 +59,7 @@ jobs:
           name: fwium-logs
           path: logs/
           retention-days: 7
+      - uses: codecov/codecov-action@v1
 
   test-chrome-grid:
     runs-on: ubuntu-latest
@@ -88,15 +96,6 @@ jobs:
           path: /root/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      #      # Set up code climate test reporter
-      #      - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-      #      - chmod +x ./cc-test-reporter
-      #      - ./cc-test-reporter before-build
-      - name: Compile and run checkstyle
-        run: |
-          mvn test-compile \
-            --batch-mode --show-version \
-            -DskipTests=true -Dmaven.javadoc.skip=true
       - name: test grid
         run: curl -L http://${HUB_HOST}:4444/status
       - name: Run tests against Chrome grid
@@ -113,6 +112,7 @@ jobs:
           name: fwium-logs
           path: logs/
           retention-days: 7
+      - uses: codecov/codecov-action@v1
 
   test-firefox-grid:
     runs-on: ubuntu-latest
@@ -149,10 +149,6 @@ jobs:
           path: /root/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      #      # Set up code climate test reporter
-      #      - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-      #      - chmod +x ./cc-test-reporter
-      #      - ./cc-test-reporter before-build
       - name: Compile and run checkstyle
         run: |
           mvn test-compile \
@@ -174,3 +170,4 @@ jobs:
           name: fwium-logs
           path: logs/
           retention-days: 7
+      - uses: codecov/codecov-action@v1
