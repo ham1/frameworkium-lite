@@ -5,6 +5,8 @@ on: [ push ]
 jobs:
   test-local:
     runs-on: ubuntu-latest
+    env:
+      THREAD_COUNT: 2
     steps:
       - uses: actions/checkout@v2
       - name: Setup JDK 11
@@ -44,13 +46,17 @@ jobs:
             -Dbrowser=chrome \
             -Dheadless \
             -DreuseBrowser
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: fwium-logs
+          path: logs/
+          retention-days: 7
 
-  test-grid:
+  test-chrome-grid:
     runs-on: ubuntu-latest
     container:
       image: maven:3.8.1-jdk-11
-#      volumes:
-#        - ~/.m2:/root/.m2
     env:
       HUB_HOST: hub
       HUB_PORT: 4444
@@ -74,27 +80,8 @@ jobs:
           SE_EVENT_BUS_PUBLISH_PORT: 4442
           SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
           SE_EVENT_BUS_HOST: hub
-      firefox1:
-        image: selenium/node-firefox:4.0.0-beta-3-20210426
-        options: -v /dev/shm:/dev/shm
-        env:
-          SE_EVENT_BUS_PUBLISH_PORT: 4442
-          SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
-          SE_EVENT_BUS_HOST: hub
-      firefox2:
-        image: selenium/node-firefox:4.0.0-beta-3-20210426
-        options: -v /dev/shm:/dev/shm
-        env:
-          SE_EVENT_BUS_PUBLISH_PORT: 4442
-          SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
-          SE_EVENT_BUS_HOST: hub
     steps:
       - uses: actions/checkout@v2
-#      - name: Setup JDK 11
-#        uses: actions/setup-java@v2
-#        with:
-#          java-version: '11'
-#          distribution: 'adopt'
       - name: Cache Maven deps
         uses: actions/cache@v2
         with:
@@ -120,6 +107,59 @@ jobs:
             -Dheadless \
             -DreuseBrowser \
             -DgridURL=http://${HUB_HOST}:4444/
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: fwium-logs
+          path: logs/
+          retention-days: 7
+
+  test-firefox-grid:
+    runs-on: ubuntu-latest
+    container:
+      image: maven:3.8.1-jdk-11
+    env:
+      HUB_HOST: hub
+      HUB_PORT: 4444
+      THREAD_COUNT: 2
+    services:
+      hub:
+        image: selenium/hub:4.0.0-beta-3-20210426
+        ports:
+          - 4442-4444:4442-4444
+      firefox1:
+        image: selenium/node-firefox:4.0.0-beta-3-20210426
+        options: -v /dev/shm:/dev/shm
+        env:
+          SE_EVENT_BUS_PUBLISH_PORT: 4442
+          SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
+          SE_EVENT_BUS_HOST: hub
+      firefox2:
+        image: selenium/node-firefox:4.0.0-beta-3-20210426
+        options: -v /dev/shm:/dev/shm
+        env:
+          SE_EVENT_BUS_PUBLISH_PORT: 4442
+          SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
+          SE_EVENT_BUS_HOST: hub
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache Maven deps
+        uses: actions/cache@v2
+        with:
+          path: /root/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      #      # Set up code climate test reporter
+      #      - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+      #      - chmod +x ./cc-test-reporter
+      #      - ./cc-test-reporter before-build
+      - name: Compile and run checkstyle
+        run: |
+          mvn test-compile \
+            --batch-mode --show-version \
+            -DskipTests=true -Dmaven.javadoc.skip=true
+      - name: test grid
+        run: curl -L http://${HUB_HOST}:4444/status
       - name: Run tests against Firefox grid
         run: |
           mvn verify --batch-mode \
