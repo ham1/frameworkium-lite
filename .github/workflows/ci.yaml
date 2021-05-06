@@ -39,6 +39,12 @@ jobs:
             -Dheadless=true \
             -Dmaximise=true \
             -Dit.test=DocumentationTest
+      - name: Test Groups using Firefox
+        run: |
+          mvn verify --batch-mode \
+            -Dskip.surefire.tests=true \
+            -Dheadless \
+            -Dgroups=fw-bugs
       - name: Install chrome and chromedriver locally
         run: |
           wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
