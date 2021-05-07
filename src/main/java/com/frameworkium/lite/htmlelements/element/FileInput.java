@@ -61,8 +61,7 @@ public class FileInput extends TypifiedElement {
     private void setLocalFileDetectorIfRequired() {
         if (Property.GRID_URL.isSpecified()) {
             var webDriver = UITestLifecycle.get().getWebDriver();
-            var efDriver = (EventFiringWebDriver) webDriver;
-            var remoteDriver = (RemoteWebDriver) efDriver.getWrappedDriver();
+            var remoteDriver = (RemoteWebDriver) webDriver;
             remoteDriver.setFileDetector(new LocalFileDetector());
         }
     }
