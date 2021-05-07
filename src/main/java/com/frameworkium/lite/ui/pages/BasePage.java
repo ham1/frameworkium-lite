@@ -132,8 +132,8 @@ public abstract class BasePage<T extends BasePage<T>> {
         if (ScreenshotCapture.isRequired()) {
             Command pageLoadCommand = new Command(
                     "load", "page", getSimplePageObjectName());
-            UITestLifecycle.get().getCapture().takeAndSendScreenshot(
-                    pageLoadCommand, driver);
+            UITestLifecycle.get().getCapture()
+                    .takeAndSendScreenshot(pageLoadCommand, driver);
         }
     }
 
@@ -144,23 +144,13 @@ public abstract class BasePage<T extends BasePage<T>> {
                 + getClass().getSimpleName();
     }
 
-    /** Get title of the web page. */
-    public String getTitle() {
-        return driver.getTitle();
-    }
-
-    /** Get page source code of the current page. */
-    public String getSource() {
-        return driver.getPageSource();
-    }
-
     /**
      * @param javascript the Javascript to execute on the current page
      * @return One of Boolean, Long, String, List or WebElement. Or null.
      * @see JavascriptExecutor#executeScript(String, Object...)
      */
     protected Object executeJS(String javascript, Object... objects) {
-        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+        var jsExecutor = (JavascriptExecutor) driver;
         try {
             return jsExecutor.executeScript(javascript, objects);
         } catch (Exception e) {

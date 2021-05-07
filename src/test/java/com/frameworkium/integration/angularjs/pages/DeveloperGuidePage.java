@@ -38,6 +38,6 @@ public class DeveloperGuidePage extends BasePage<DeveloperGuidePage> {
     }
 
     public String getGuideTitle() {
-        return getTitle();
+        return driver.getTitle();
     }
 }
