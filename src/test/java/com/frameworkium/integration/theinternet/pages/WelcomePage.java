@@ -58,11 +58,6 @@ public class WelcomePage extends BasePage<WelcomePage> {
         return PageFactory.newInstance(DragAndDropPage.class);
     }
 
-    public HoversPage clickHoversLink() {
-        hoversLink.click();
-        return PageFactory.newInstance(HoversPage.class);
-    }
-
     public DropDownPage clickDropDownLink() {
         dropdownLink.click();
         return new DropDownPage().get();

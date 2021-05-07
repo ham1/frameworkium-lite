@@ -26,19 +26,15 @@ public class FrameworkiumBugsTest extends BaseUITest {
         assertThat(headingText).isEqualTo("jQuery UI Demos");
     }
 
-    public void use_base_page_visibility() {
-        SeleniumDownloadPage.open().waitForContent();
-    }
-
-    @Test(dependsOnMethods = {"use_base_page_visibility"})
-    public void ensure_BaseUITest_wait_is_updated_after_browser_reset() {
-        // tests bug whereby BasePage.wait wasn't updated after browser reset
-        SeleniumDownloadPage.open().waitForContent();
-    }
-
     public void use_various_loggers() {
         logger.info("Using BaseUITest logger");
         SeleniumDownloadPage.open().log();
+    }
+
+    @Test(dependsOnMethods = {"use_various_loggers"})
+    public void ensure_BaseUITest_wait_is_updated_after_browser_reset() {
+        // tests bug whereby BasePage.wait wasn't updated after browser reset
+        SeleniumDownloadPage.open().waitForContent();
     }
 
 }

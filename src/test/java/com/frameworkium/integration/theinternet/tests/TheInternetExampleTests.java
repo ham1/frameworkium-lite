@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Test
@@ -50,8 +51,7 @@ public class TheInternetExampleTests extends BaseUITest {
     }
 
     public void dropdowns() {
-        var dropDownPage = WelcomePage.open()
-                .clickDropDownLink();
+        var dropDownPage = WelcomePage.open().clickDropDownLink();
 
         assertThat(dropDownPage.getAllOptions())
                 .isEqualTo(List.of("Please select an option", "Option 1", "Option 2"));
@@ -62,12 +62,8 @@ public class TheInternetExampleTests extends BaseUITest {
     }
 
     public void hovers() {
-
-        String firstFigureCaption = WelcomePage.open()
-                .clickHoversLink()
-                .getFirstFigureCaption();
-
-        assertThat(firstFigureCaption).contains("name: user1");
+        assertThat(HoversPage.open().getFirstFigureCaption())
+                .contains("name: user1");
     }
 
     public void javascriptAlerts() {
@@ -99,10 +95,10 @@ public class TheInternetExampleTests extends BaseUITest {
         assertThat(tablesPage.getTable1ColumnContents("Web Site"))
                 .contains("http://www.jdoe.com");
 
-        List<String> sortedLastNameColumn =
+        var sortedLastNameColumn =
                 tablesPage.sortTable2ByColumnName("Last Name")
                         .getTable2ColumnContents("Last Name")
-                        .collect(Collectors.toList());
+                        .collect(toList());
 
         assertThat(sortedLastNameColumn.get(0)).isEqualTo("Bach");
         assertThat(sortedLastNameColumn).isSorted();

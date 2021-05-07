@@ -2,16 +2,12 @@ package com.frameworkium.integration.seleniumhq.pages;
 
 import com.frameworkium.lite.ui.annotations.Visible;
 import com.frameworkium.lite.ui.pages.BasePage;
-import com.frameworkium.integration.seleniumhq.components.HeaderComponent;
 import org.openqa.selenium.support.FindBy;
 import com.frameworkium.lite.htmlelements.element.Link;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 
 public class SeleniumDownloadPage extends BasePage<SeleniumDownloadPage> {
-
-    @Visible
-    private HeaderComponent header;
 
     @Visible
     @FindBy(css = "main > div:nth-child(3) p:nth-child(1) > a")
