@@ -4,7 +4,6 @@ import com.frameworkium.lite.common.properties.Property;
 import com.frameworkium.lite.ui.UITestLifecycle;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.*;
-import org.openqa.selenium.support.events.EventFiringWebDriver;
 
 import java.io.File;
 import java.util.List;

@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.Wait;
 
 import java.time.Duration;
@@ -146,17 +147,37 @@ public abstract class BasePage<T extends BasePage<T>> {
     }
 
     /**
+     * Currently broken with Selenium 4.0.0-beta-3.
+     * WebElementToJsonConverter.apply fails to convert our proxied WebElements
+     * to {@link RemoteWebElement}.
+     *
      * @param javascript the Javascript to execute on the current page
      * @return One of Boolean, Long, String, List or WebElement. Or null.
      * @see JavascriptExecutor#executeScript(String, Object...)
      */
-    protected Object executeJS(String javascript, Object... objects) {
+    private Object executeJS(String javascript, Object... objects) {
         var jsExecutor = (JavascriptExecutor) driver;
         try {
             return jsExecutor.executeScript(javascript, objects);
         } catch (Exception e) {
             logger.error("Javascript execution failed!");
             logger.debug("Failed Javascript:\n{}", javascript, e);
+            throw e;
+        }
+    }
+
+    /**
+     * @param javascript the Javascript to execute on the current page
+     * @return One of Boolean, Long, String, List or WebElement. Or null.
+     * @see JavascriptExecutor#executeScript(String, Object...)
+     */
+    protected Object executeJS(String javascript) {
+        var jsExecutor = (JavascriptExecutor) driver;
+        try {
+            return jsExecutor.executeScript(javascript);
+        } catch (Exception e) {
+            logger.error("Javascript execution failed!", e);
+            logger.debug("Failed Javascript: {}", javascript, e);
             throw e;
         }
     }

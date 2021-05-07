@@ -38,7 +38,10 @@ public class HtmlElementLocatorFactory implements CustomElementLocatorFactory {
      */
     @SuppressWarnings("rawtypes")
     public ElementLocator createLocator(Class<?> clazz) {
-        return new AjaxElementLocator(searchContext, getTimeOut(clazz), new HtmlElementClassAnnotationsHandler(clazz));
+        return new AjaxElementLocator(
+                searchContext,
+                getTimeOut(clazz),
+                new HtmlElementClassAnnotationsHandler(clazz));
     }
 
     public int getTimeOut(Field field) {
