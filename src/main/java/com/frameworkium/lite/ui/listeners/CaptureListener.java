@@ -3,6 +3,7 @@ package com.frameworkium.lite.ui.listeners;
 import com.frameworkium.lite.ui.ExtraExpectedConditions;
 import com.frameworkium.lite.ui.UITestLifecycle;
 import com.frameworkium.lite.ui.browsers.UserAgent;
+import com.frameworkium.lite.ui.capture.ElementHighlighter;
 import com.frameworkium.lite.ui.capture.ScreenshotCapture;
 import com.frameworkium.lite.ui.capture.model.Command;
 import com.frameworkium.lite.ui.tests.BaseUITest;
@@ -89,10 +90,10 @@ public class CaptureListener implements WebDriverListener, ITestListener {
             return;
         }
         // ElementHighlighter does not work with Selenium 4.0.0-beta-3 and RemoteWebDriver
-        //        ElementHighlighter highlighter = new ElementHighlighter(getWebDriver());
-        //        highlighter.highlightElement(element);
+        var highlighter = new ElementHighlighter(getWebDriver());
+        highlighter.highlightElement(element);
         takeScreenshotAndSend(new Command("click", element));
-        //        highlighter.unhighlightPrevious();
+        highlighter.unhighlightPrevious();
     }
 
     private WebDriver getWebDriver() {
