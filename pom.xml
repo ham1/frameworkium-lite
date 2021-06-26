@@ -219,7 +219,7 @@
             </goals>
             <configuration>
               <!-- Property for JaCoCo runtime agent, passed to Failsafe plugin -->
-              <propertyName>failsafeArgLine</propertyName>
+              <propertyName>jacocoArgLine</propertyName>
             </configuration>
           </execution>
           <!-- Create coverage report after running integration tests -->
@@ -254,7 +254,7 @@
         <version>3.0.0-M5</version>
         <configuration>
           <!-- Sets arg line for Jacoco agent when unit tests are run -->
-          <argLine>${surefireArgLine}</argLine>
+          <argLine>${jacocoArgLine}</argLine>
           <failIfNoTests>true</failIfNoTests>
           <includes>
             <include>**/*Spec.*</include>
@@ -284,7 +284,7 @@
           </includes>
           <groups>${groups}</groups>
           <!-- required for Jacoco code coverage -->
-          <argLine>${failsafeArgLine}</argLine>
+          <argLine>${jacocoArgLine}</argLine>
         </configuration>
         <dependencies>
           <dependency>
