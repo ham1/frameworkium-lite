@@ -50,8 +50,7 @@ jobs:
         run: |
           wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo apt install ./google-chrome-stable_current_amd64.deb
-          wget --quiet http://chromedriver.storage.googleapis.com/91.0.4472.101/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip
+          ./ensure-chromedriver.sh
       - name: Run tests against local Chrome
         run: |
           mvn verify --batch-mode \
