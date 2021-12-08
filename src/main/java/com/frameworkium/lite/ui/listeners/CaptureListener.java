@@ -45,7 +45,10 @@ public class CaptureListener implements WebDriverEventListener, ITestListener {
     }
 
     private void takeScreenshotAndSend(String action, WebDriver driver, Throwable thrw) {
-
+        if (thrw.getMessage().contains("Skipped after failure")) {
+            logger.info("Not sending screenshot due to test being skipped.");
+            return;
+        }
         UITestLifecycle.get().getCapture().takeAndSendScreenshotWithError(
                 new Command(action, "n/a", "n/a"),
                 driver,
@@ -57,6 +60,11 @@ public class CaptureListener implements WebDriverEventListener, ITestListener {
                 || !isUITest(result.getTestClass().getRealClass())) {
             return;
         }
+
+//        if (result.getStatus() == 2) {
+//            logger.info("not sending screenshot as test is being skipped");
+//            return;
+//        }
 
         var thrw = result.getThrowable();
         var driver = UITestLifecycle.get().getWebDriver();

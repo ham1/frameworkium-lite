@@ -120,11 +120,6 @@ public class ScreenshotCapture {
                     + "Capture didn't initialise execution for test: {}", testID);
             return;
         }
-        
-        if (errorMessage.contains("Skipped after failure")) {
-            logger.info("Not sending screenshot due to test being skipped.");
-            return;
-        }
 
         var createScreenshotMessage =
                 new CreateScreenshot(
@@ -133,6 +128,7 @@ public class ScreenshotCapture {
                         driver.getCurrentUrl(),
                         errorMessage,
                         getBase64Screenshot((TakesScreenshot) driver));
+
         addScreenshotToSendQueue(createScreenshotMessage);
     }
 
