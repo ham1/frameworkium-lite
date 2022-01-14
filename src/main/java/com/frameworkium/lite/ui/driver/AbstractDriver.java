@@ -27,7 +27,7 @@ public abstract class AbstractDriver implements Driver {
      */
     public void initialise() {
         WebDriver webDriver = getWebDriver(getCapabilities());
-        webDriver.manage().timeouts().setScriptTimeout(Duration.ofSeconds(21));
+        webDriver.manage().timeouts().scriptTimeout(Duration.ofSeconds(21));
 
         if (Property.MAXIMISE.getBoolean()) {
             webDriver.manage().window().maximize();

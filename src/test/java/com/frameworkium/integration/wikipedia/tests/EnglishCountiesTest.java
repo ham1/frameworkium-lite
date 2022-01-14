@@ -32,7 +32,6 @@ public class EnglishCountiesTest extends BaseUITest {
                 .isEqualTo(2L);
     }
 
-
     public void exploring_english_counties_data_with_lists() {
         var page = EnglishCountiesUsingListsPage.open();
 

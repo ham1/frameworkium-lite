@@ -119,15 +119,13 @@ public class CaptureListener implements WebDriverListener, ITestListener {
     }
 
     @Override
-    public void beforeNavigateTo(String url, WebDriver driver) {
-        var command = new Command("nav", "url", url);
-        takeScreenshotAndSend(command, driver);
+    public void beforeTo(WebDriver.Navigation navigation, String url) {
+        takeScreenshotAndSend(new Command("nav", "url", url));
     }
 
     @Override
-    public void afterSwitchToWindow(String windowName, WebDriver driver) {
-        var command = new Command("nav", "window", windowName);
-        takeScreenshotAndSend(command, driver);
+    public void beforeTo(WebDriver.Navigation navigation, URL url) {
+        beforeTo(navigation, url.toString());
     }
 
     @Override
