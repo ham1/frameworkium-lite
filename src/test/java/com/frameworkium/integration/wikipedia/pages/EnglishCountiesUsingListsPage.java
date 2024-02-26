@@ -34,7 +34,7 @@ public class EnglishCountiesUsingListsPage extends BasePage<EnglishCountiesUsing
     private List<WebElement> populationColumn;
 
     @CacheLookup
-    @FindBy(css = "table.wikitable > tbody > tr > td:nth-child(7)")
+    @FindBy(css = "table.wikitable > tbody > tr > td:nth-child(6)")
     private List<WebElement> densityColumn;
 
     public static EnglishCountiesUsingListsPage open() {
