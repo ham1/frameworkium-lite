@@ -1,11 +1,9 @@
 package com.frameworkium.lite.ui.pages
 
 import com.frameworkium.lite.ui.pages.pageobjects.PageObjects
-import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.TimeoutException
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
-import org.openqa.selenium.support.events.EventFiringWebDriver
 import org.openqa.selenium.support.ui.FluentWait
 import org.openqa.selenium.support.ui.Sleeper
 import org.openqa.selenium.support.ui.Wait
@@ -23,7 +21,7 @@ class VisibilitySpec extends Specification {
                     .pollingEvery(Duration.ofMillis(1))
                     // -1 prevents polling (because FluentWait uses `isBefore`)
                     .withTimeout(Duration.ofSeconds(-1))
-    WebDriver mockDriver = Mock(EventFiringWebDriver, constructorArgs: [Mock(WebDriver)])
+    WebDriver mockDriver = Mock(WebDriver)
 
     def sut = new Visibility(wait)
 

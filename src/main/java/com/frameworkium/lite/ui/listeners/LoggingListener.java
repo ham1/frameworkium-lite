@@ -3,13 +3,18 @@ package com.frameworkium.lite.ui.listeners;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.*;
-import org.openqa.selenium.support.events.WebDriverEventListener;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.events.WebDriverListener;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LoggingListener implements WebDriverEventListener {
+public class LoggingListener implements WebDriverListener {
 
     private static final Logger logger = LogManager.getLogger();
 
@@ -23,100 +28,84 @@ public class LoggingListener implements WebDriverEventListener {
     }
 
     @Override
-    public void afterChangeValueOf(WebElement element, WebDriver driver, CharSequence[] keysSent) {
-        logger.debug("changed value of element with {}", () -> getLocatorFromElement(element));
-    }
-
-    @Override
-    public void afterClickOn(WebElement element, WebDriver driver) {
+    public void afterClick(WebElement element) {
         logger.debug("clicked element with {}", () -> getLocatorFromElement(element));
     }
 
     @Override
-    public void afterFindBy(By by, WebElement element, WebDriver driver) {
-        logger.debug("found element {}", by);
+    public void afterSendKeys(WebElement element, CharSequence... keysToSend) {
+        logger.debug("changed value of element with {}", () -> getLocatorFromElement(element));
     }
 
     @Override
-    public void afterNavigateBack(WebDriver driver) {
+    public void afterFindElement(WebDriver driver, By locator, WebElement result) {
+        logger.debug("found element {}", locator);
+    }
+
+    @Override
+    public void afterBack(WebDriver.Navigation navigation) {
         logger.debug("after back");
     }
 
     @Override
-    public void afterNavigateForward(WebDriver driver) {
+    public void afterForward(WebDriver.Navigation navigation) {
         logger.debug("after forward");
     }
 
     @Override
-    public void beforeNavigateRefresh(WebDriver webDriver) {
+    public void beforeRefresh(WebDriver.Navigation navigation) {
         logger.debug("before Navigate Refresh");
     }
 
     @Override
-    public void afterNavigateRefresh(WebDriver webDriver) {
+    public void afterRefresh(WebDriver.Navigation navigation) {
         logger.debug("after Navigate Refresh");
     }
 
     @Override
-    public void afterNavigateTo(String url, WebDriver driver) {
+    public void afterTo(WebDriver.Navigation navigation, String url) {
         logger.debug("navigated to {}", url);
     }
 
     @Override
-    public void afterScript(String script, WebDriver driver) {
-        // Only log part of a long script
-        // We log more of script in beforeScript
+    public void afterExecuteScript(WebDriver driver, String script, Object[] args, Object result) {
         logger.debug("ran script {}", () -> StringUtils.abbreviate(script, 128));
     }
 
     @Override
-    public void beforeSwitchToWindow(String windowName, WebDriver driver) {
-        logger.debug("before switch to window {}", windowName);
+    public void beforeSendKeys(WebElement element, CharSequence... keysToSend) {
+        logger.debug("before send keys to element with {}", () -> getLocatorFromElement(element));
     }
 
     @Override
-    public void afterSwitchToWindow(String windowName, WebDriver driver) {
-        logger.debug("after switch to window {}", windowName);
-    }
-
-    @Override
-    public void beforeChangeValueOf(WebElement element, WebDriver driver, CharSequence[] keysToSend) {
-        logger.debug("change value of element with {}", () -> getLocatorFromElement(element));
-    }
-
-    @Override
-    public void beforeClickOn(WebElement element, WebDriver driver) {
+    public void beforeClick(WebElement element) {
         logger.debug("click element with {}", () -> getLocatorFromElement(element));
     }
 
     @Override
-    public void beforeFindBy(By by, WebElement element, WebDriver driver) {
-        logger.debug("before find element by {}", by);
+    public void beforeFindElement(WebDriver driver, By locator) {
+        logger.debug("before find element by {}", locator);
     }
 
     @Override
-    public void beforeNavigateBack(WebDriver driver) {
+    public void beforeBack(WebDriver.Navigation navigation) {
         logger.debug("before back");
     }
 
     @Override
-    public void beforeNavigateForward(WebDriver driver) {
+    public void beforeForward(WebDriver.Navigation navigation) {
         logger.debug("before forward");
     }
 
     @Override
-    public void beforeNavigateTo(String url, WebDriver driver) {
-        logger.debug("navigate to {}", url);
-    }
-
-    @Override
-    public void beforeScript(String script, WebDriver driver) {
+    public void beforeExecuteScript(WebDriver driver, String script, Object[] args) {
         // Only log part of a long script
         logger.debug("running script {}", () -> StringUtils.abbreviate(script, 512));
     }
 
     @Override
-    public void onException(Throwable thrw, WebDriver driver) {
+    public void onError(Object target, Method method, Object[] args, InvocationTargetException e) {
+        var thrw = e.getTargetException();
         // Lots of caught exceptions being logged here
         if (thrw instanceof NoSuchElementException) {
             // Don't log entire stack trace and message as it's too frequent
@@ -127,43 +116,4 @@ public class LoggingListener implements WebDriverEventListener {
         }
     }
 
-    @Override
-    public <X> void beforeGetScreenshotAs(OutputType<X> outputType) {
-        logger.trace("Before get screenshot as");
-    }
-
-    @Override
-    public <X> void afterGetScreenshotAs(OutputType<X> outputType, X x) {
-        logger.trace("After get screenshot as");
-    }
-
-    @Override
-    public void beforeGetText(WebElement webElement, WebDriver webDriver) {
-        logger.trace("Before get text");
-    }
-
-    @Override
-    public void afterGetText(WebElement webElement, WebDriver webDriver, String s) {
-        logger.trace("After get text");
-    }
-
-    @Override
-    public void beforeAlertAccept(WebDriver webDriver) {
-        logger.debug("before alert accept");
-    }
-
-    @Override
-    public void afterAlertAccept(WebDriver webDriver) {
-        logger.debug("after alert accept");
-    }
-
-    @Override
-    public void beforeAlertDismiss(WebDriver webDriver) {
-        logger.debug("before alert dismiss");
-    }
-
-    @Override
-    public void afterAlertDismiss(WebDriver webDriver) {
-        logger.debug("after alert accept");
-    }
 }

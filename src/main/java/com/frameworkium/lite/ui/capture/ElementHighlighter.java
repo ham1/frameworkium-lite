@@ -11,6 +11,10 @@ public class ElementHighlighter {
         js = (JavascriptExecutor) driver;
     }
 
+    ElementHighlighter(JavascriptExecutor javascriptExecutor) {
+        js = javascriptExecutor;
+    }
+
     /**
      * Highlight a WebElement.
      *

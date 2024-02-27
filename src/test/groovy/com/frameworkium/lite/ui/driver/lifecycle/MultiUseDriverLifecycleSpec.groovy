@@ -2,16 +2,11 @@ package com.frameworkium.lite.ui.driver.lifecycle
 
 import com.frameworkium.lite.ui.driver.Driver
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.support.events.EventFiringWebDriver
 import spock.lang.Specification
 
 class MultiUseDriverLifecycleSpec extends Specification {
 
-    def webDriverStub = Mock(WebDriver)
-    def EFWebDriverMock =
-            Mock(constructorArgs: [webDriverStub], EventFiringWebDriver) {
-                getWrappedDriver() >> webDriverStub
-            }
+    WebDriver EFWebDriverMock = Mock(WebDriver)
     def driverMock = Mock(Driver) {
         getWebDriver() >> EFWebDriverMock
     }

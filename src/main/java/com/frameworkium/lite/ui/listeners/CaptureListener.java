@@ -10,9 +10,11 @@ import com.frameworkium.lite.ui.tests.BaseUITest;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.*;
-import org.openqa.selenium.support.events.WebDriverEventListener;
-import org.testng.*;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.events.WebDriverListener;
+import org.testng.ITestListener;
+import org.testng.ITestResult;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +24,7 @@ import static org.apache.commons.lang3.StringUtils.abbreviate;
 /**
  * Assumes {@link ScreenshotCapture#isRequired()} is true for WebDriver events.
  */
-public class CaptureListener implements WebDriverEventListener, ITestListener {
+public class CaptureListener implements WebDriverListener, ITestListener {
 
     private final Logger logger = LogManager.getLogger(this);
 
@@ -31,25 +33,27 @@ public class CaptureListener implements WebDriverEventListener, ITestListener {
             ExtraExpectedConditions.JQUERY_AJAX_DONE_SCRIPT
     );
 
-    private void takeScreenshotAndSend(Command command, WebDriver driver) {
+    private void takeScreenshotAndSend(Command command) {
         try {
-            UITestLifecycle.get().getCapture().takeAndSendScreenshot(command, driver);
+            UITestLifecycle.get()
+                    .getCapture()
+                    .takeAndSendScreenshot(
+                            command,
+                            UITestLifecycle.get().getWebDriver());
         } catch (Exception e) {
             logger.warn("Screenshot not sent, see trace log for details");
             logger.trace(e);
         }
     }
 
-    private void takeScreenshotAndSend(String action, WebDriver driver) {
-        takeScreenshotAndSend(new Command(action, "n/a", "n/a"), driver);
-    }
-
-    private void takeScreenshotAndSend(String action, WebDriver driver, Throwable thrw) {
-
-        UITestLifecycle.get().getCapture().takeAndSendScreenshotWithError(
-                new Command(action, "n/a", "n/a"),
-                driver,
-                thrw.getMessage() + "\n" + ExceptionUtils.getStackTrace(thrw));
+    private void takeScreenshotAndSend(String action, Throwable thrw) {
+        var errorMessage = thrw.getMessage() + "\n" + ExceptionUtils.getStackTrace(thrw);
+        UITestLifecycle.get()
+                .getCapture()
+                .takeAndSendScreenshotWithError(
+                        new Command(action, "n/a", "n/a"),
+                        UITestLifecycle.get().getWebDriver(),
+                        errorMessage);
     }
 
     private void sendFinalScreenshot(ITestResult result, String action) {
@@ -70,10 +74,10 @@ public class CaptureListener implements WebDriverEventListener, ITestListener {
 
             var thrw = result.getThrowable();
             if (thrw != null) {
-                takeScreenshotAndSend(action, driver, thrw);
+                takeScreenshotAndSend(action, thrw);
             } else {
                 var command = new Command(action, "n/a", "n/a");
-                takeScreenshotAndSend(command, driver);
+                takeScreenshotAndSend(command);
             }
         } catch (Exception e) {
             logger.debug("Failed to send final screenshot", e);
@@ -92,55 +96,43 @@ public class CaptureListener implements WebDriverEventListener, ITestListener {
         ElementHighlighter highlighter = new ElementHighlighter(driver);
         highlighter.highlightElement(element);
         var command = new Command("click", element);
-        takeScreenshotAndSend(command, driver);
+        takeScreenshotAndSend(command);
         highlighter.unhighlightPrevious();
     }
 
     /* WebDriver events */
     @Override
-    public void beforeClickOn(WebElement element, WebDriver driver) {
+    public void beforeClick(WebElement element) {
         try {
-            highlightElementOnClickAndSendScreenshot(driver, element);
+            highlightElementOnClickAndSendScreenshot(
+                    UITestLifecycle.get().getWebDriver(),
+                    element);
         } catch (Exception e) {
             logger.trace("Failed to highlight element before click and send screenshot", e);
         }
     }
 
     @Override
-    public void afterChangeValueOf(WebElement element, WebDriver driver, CharSequence[] keysSent) {
-        takeScreenshotAndSend("change", driver);
+    public void afterSendKeys(WebElement element, CharSequence... keysToSend) {
+        takeScreenshotAndSend(new Command("change", "n/a", "n/a"));
     }
 
     @Override
-    public void beforeNavigateBack(WebDriver driver) {
-        takeScreenshotAndSend("nav back", driver);
+    public void beforeTo(WebDriver.Navigation navigation, String url) {
+        takeScreenshotAndSend(new Command("nav", "url", url));
     }
 
     @Override
-    public void beforeNavigateForward(WebDriver driver) {
-        takeScreenshotAndSend("nav forward", driver);
+    public void beforeGet(WebDriver driver, String url) {
+        takeScreenshotAndSend(new Command("nav", "url", url));
     }
 
     @Override
-    public void beforeNavigateTo(String url, WebDriver driver) {
-        var command = new Command("nav", "url", url);
-        takeScreenshotAndSend(command, driver);
-    }
-
-    @Override
-    public void afterSwitchToWindow(String windowName, WebDriver driver) {
-        var command = new Command("nav", "window", windowName);
-        takeScreenshotAndSend(command, driver);
-    }
-
-    @Override
-    public void beforeScript(String script, WebDriver driver) {
-        // ignore scripts which are part of Frameworkium
-        if (!isFrameworkiumScript(script)) {
-            takeScreenshotAndSend(
-                    new Command("script", "n/a", abbreviate(script, 42)),
-                    driver);
+    public void beforeExecuteScript(WebDriver driver, String script, Object[] args) {
+        if (isFrameworkiumScript(script)) {
+            return; // ignore scripts that are part of Frameworkium
         }
+        takeScreenshotAndSend(new Command("script", "n/a", abbreviate(script, 42)));
     }
 
     private boolean isFrameworkiumScript(String script) {
@@ -164,77 +156,4 @@ public class CaptureListener implements WebDriverEventListener, ITestListener {
         sendFinalScreenshot(result, "skip");
     }
 
-    /* Methods we don't really want screenshots for. */
-
-    @Override
-    public void onException(Throwable thrw, WebDriver driver) {}
-
-    @Override
-    public <X> void beforeGetScreenshotAs(OutputType<X> outputType) {}
-
-    @Override
-    public <X> void afterGetScreenshotAs(OutputType<X> outputType, X x) {}
-
-    @Override
-    public void beforeGetText(WebElement webElement, WebDriver webDriver) {}
-
-    @Override
-    public void afterGetText(WebElement webElement, WebDriver webDriver, String s) {}
-
-    @Override
-    public void afterClickOn(WebElement element, WebDriver driver) {}
-
-    @Override
-    public void beforeChangeValueOf(WebElement element, WebDriver driver, CharSequence[] keysToSend) {}
-
-    @Override
-    public void afterFindBy(By by, WebElement arg1, WebDriver arg2) {}
-
-    @Override
-    public void afterNavigateBack(WebDriver driver) {}
-
-    @Override
-    public void afterNavigateForward(WebDriver driver) {}
-
-    @Override
-    public void beforeNavigateRefresh(WebDriver webDriver) {}
-
-    @Override
-    public void afterNavigateRefresh(WebDriver webDriver) {}
-
-    @Override
-    public void afterNavigateTo(String url, WebDriver driver) {}
-
-    @Override
-    public void afterScript(String script, WebDriver driver) {}
-
-    @Override
-    public void beforeSwitchToWindow(String windowName, WebDriver driver) {}
-
-    @Override
-    public void beforeFindBy(By by, WebElement element, WebDriver arg2) {}
-
-    @Override
-    public void beforeAlertAccept(WebDriver webDriver) {}
-
-    @Override
-    public void afterAlertAccept(WebDriver webDriver) {}
-
-    @Override
-    public void beforeAlertDismiss(WebDriver webDriver) {}
-
-    @Override
-    public void afterAlertDismiss(WebDriver webDriver) {}
-
-    @Override
-    public void onTestStart(ITestResult result) {}
-
-    @Override
-    public void onTestFailedButWithinSuccessPercentage(ITestResult result) {}
-
-    @Override
-    public void onStart(ITestContext context) {}
-
-    @Override
-    public void onFinish(ITestContext context) {}
 }

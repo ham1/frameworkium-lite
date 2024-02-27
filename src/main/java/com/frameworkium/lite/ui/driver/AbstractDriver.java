@@ -6,9 +6,8 @@ import com.frameworkium.lite.ui.listeners.CaptureListener;
 import com.frameworkium.lite.ui.listeners.LoggingListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.events.EventFiringWebDriver;
+import org.openqa.selenium.support.events.EventFiringDecorator;
 
 import java.time.Duration;
 
@@ -16,31 +15,32 @@ public abstract class AbstractDriver implements Driver {
 
     protected static final Logger logger = LogManager.getLogger();
 
-    private EventFiringWebDriver webDriverWrapper;
+    private WebDriver webDriver;
 
     @Override
-    public EventFiringWebDriver getWebDriver() {
-        return this.webDriverWrapper;
+    public WebDriver getWebDriver() {
+        return this.webDriver;
     }
 
-    /** Creates the Wrapped Driver object and maximises if required. */
+    /** Creates the Decorated {@link WebDriver} object and maximises if required. */
     public void initialise() {
-        this.webDriverWrapper = setupEventFiringWebDriver(getCapabilities());
+        var capabilities = getCapabilities();
+        logger.debug("Browser Capabilities: {}", capabilities);
+        var webDriver = getWebDriver(capabilities);
+        this.webDriver = decorateWebDriver(webDriver);
+        this.webDriver.manage().timeouts().scriptTimeout(Duration.ofSeconds(21));
         if (Property.MAXIMISE.getBoolean()) {
-            this.webDriverWrapper.manage().window().maximize();
+            this.webDriver.manage().window().maximize();
         }
     }
 
-    private EventFiringWebDriver setupEventFiringWebDriver(Capabilities capabilities) {
-        logger.debug("Browser Capabilities: {}", capabilities);
-        WebDriver webDriver = getWebDriver(capabilities);
-        EventFiringWebDriver eventFiringDriver = new EventFiringWebDriver(webDriver);
-        eventFiringDriver.register(new LoggingListener());
+    private WebDriver decorateWebDriver(WebDriver driverToBeDecorated) {
+        var decoratedDriver = new EventFiringDecorator<>(new LoggingListener()).decorate(driverToBeDecorated);
         if (ScreenshotCapture.isRequired()) {
-            eventFiringDriver.register(new CaptureListener());
+            var captureListener = new CaptureListener();
+            decoratedDriver = new EventFiringDecorator<>(captureListener).decorate(decoratedDriver);
         }
-        eventFiringDriver.manage().timeouts().setScriptTimeout(Duration.ofSeconds(21));
-        return eventFiringDriver;
+        return decoratedDriver;
     }
 
 }

@@ -2,15 +2,17 @@ package com.frameworkium.lite.htmlelements.element;
 
 import com.frameworkium.lite.common.properties.Property;
 import com.frameworkium.lite.ui.UITestLifecycle;
-import org.openqa.selenium.*;
-import org.openqa.selenium.remote.*;
-import org.openqa.selenium.support.events.EventFiringWebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WrapsDriver;
+import org.openqa.selenium.remote.LocalFileDetector;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.frameworkium.lite.htmlelements.utils.HtmlElementUtils.*;
+import static com.frameworkium.lite.htmlelements.utils.HtmlElementUtils.existsInClasspath;
+import static com.frameworkium.lite.htmlelements.utils.HtmlElementUtils.getResourceFromClasspath;
 
 /** Represents web page file upload element. */
 public class FileInput extends TypifiedElement {
@@ -61,8 +63,8 @@ public class FileInput extends TypifiedElement {
     private void setLocalFileDetectorIfRequired() {
         if (Property.GRID_URL.isSpecified()) {
             var webDriver = UITestLifecycle.get().getWebDriver();
-            var efDriver = (EventFiringWebDriver) webDriver;
-            var remoteDriver = (RemoteWebDriver) efDriver.getWrappedDriver();
+            var wrapperAccess = (WrapsDriver) webDriver;
+            var remoteDriver = (RemoteWebDriver) wrapperAccess.getWrappedDriver();
             remoteDriver.setFileDetector(new LocalFileDetector());
         }
     }

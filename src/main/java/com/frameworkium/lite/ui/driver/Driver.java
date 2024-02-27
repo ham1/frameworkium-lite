@@ -2,11 +2,10 @@ package com.frameworkium.lite.ui.driver;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.events.EventFiringWebDriver;
 
 public interface Driver {
 
-    /** Method to set-up the driver object. */
+    /** Method to set up the driver object. */
     void initialise();
 
     /**
@@ -27,7 +26,7 @@ public interface Driver {
     /**
      * Getter for the driver that wraps the initialised driver.
      *
-     * @return EventFiringWebDriver
+     * @return WebDriver
      */
-    EventFiringWebDriver getWebDriver();
+    WebDriver getWebDriver();
 }
