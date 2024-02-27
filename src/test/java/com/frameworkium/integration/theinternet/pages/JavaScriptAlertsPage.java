@@ -1,12 +1,13 @@
 package com.frameworkium.integration.theinternet.pages;
 
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
+
+import com.frameworkium.lite.htmlelements.element.Button;
 import com.frameworkium.lite.ui.annotations.Visible;
 import com.frameworkium.lite.ui.pages.BasePage;
+
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import com.frameworkium.lite.htmlelements.element.Button;
-
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 
 public class JavaScriptAlertsPage extends BasePage<JavaScriptAlertsPage> {
 

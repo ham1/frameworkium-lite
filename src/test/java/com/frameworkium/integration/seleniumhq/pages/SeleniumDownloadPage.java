@@ -1,12 +1,13 @@
 package com.frameworkium.integration.seleniumhq.pages;
 
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
+
+import com.frameworkium.integration.seleniumhq.components.HeaderComponent;
+import com.frameworkium.lite.htmlelements.element.Link;
 import com.frameworkium.lite.ui.annotations.Visible;
 import com.frameworkium.lite.ui.pages.BasePage;
-import com.frameworkium.integration.seleniumhq.components.HeaderComponent;
-import org.openqa.selenium.support.FindBy;
-import com.frameworkium.lite.htmlelements.element.Link;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
+import org.openqa.selenium.support.FindBy;
 
 public class SeleniumDownloadPage extends BasePage<SeleniumDownloadPage> {
 
@@ -18,8 +19,7 @@ public class SeleniumDownloadPage extends BasePage<SeleniumDownloadPage> {
     private Link latestDownloadLink;
 
     public static SeleniumDownloadPage open() {
-        return new SeleniumDownloadPage()
-                .get("https://selenium.dev/downloads/");
+        return new SeleniumDownloadPage().get("https://selenium.dev/downloads/");
     }
 
     public String getLatestVersion() {

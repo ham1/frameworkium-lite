@@ -2,6 +2,7 @@ package com.frameworkium.lite.ui.element;
 
 import com.frameworkium.lite.htmlelements.element.HtmlElement;
 import com.google.common.collect.Streams;
+
 import org.openqa.selenium.*;
 
 import java.util.Objects;
@@ -96,8 +97,7 @@ public abstract class AbstractStreamTable extends HtmlElement {
      * @return {@link Stream} of {@link Stream} of row cell {@link WebElement}s
      */
     public Stream<Stream<WebElement>> getRows() {
-        return rows()
-                .map(row -> row.findElements(cellLocator()).stream());
+        return rows().map(row -> row.findElements(cellLocator()).stream());
     }
 
     /**
@@ -163,8 +163,7 @@ public abstract class AbstractStreamTable extends HtmlElement {
         return getCellsByLookup(
                 element -> element.getText().trim().equals(lookupColHeaderText),
                 element -> element.getText().trim().equals(lookupCellText),
-                element -> element.getText().trim().equals(targetColHeaderText)
-        );
+                element -> element.getText().trim().equals(targetColHeaderText));
     }
 
     /**
@@ -241,17 +240,15 @@ public abstract class AbstractStreamTable extends HtmlElement {
     @SuppressWarnings("UnstableApiUsage")
     protected long getHeaderIndex(Predicate<WebElement> headerPredicate) {
         return Streams.mapWithIndex(
-                        getHeadings(), (webElement, i) -> headerPredicate.test(webElement) ? i : null)
+                        getHeadings(),
+                        (webElement, i) -> headerPredicate.test(webElement) ? i : null)
                 .filter(Objects::nonNull)
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("No header found."));
     }
 
-    private BiFunction<WebElement, WebElement, WebElement> targetOrNull(Predicate<WebElement> lookupCellMatcher) {
-        return (lookupCell, targetCell) ->
-                lookupCellMatcher.test(lookupCell)
-                        ? targetCell
-                        : null;
+    private BiFunction<WebElement, WebElement, WebElement> targetOrNull(
+            Predicate<WebElement> lookupCellMatcher) {
+        return (lookupCell, targetCell) -> lookupCellMatcher.test(lookupCell) ? targetCell : null;
     }
-
 }

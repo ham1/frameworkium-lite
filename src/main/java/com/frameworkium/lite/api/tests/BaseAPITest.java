@@ -1,6 +1,7 @@
 package com.frameworkium.lite.api.tests;
 
 import com.frameworkium.lite.common.listeners.*;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.annotations.*;
@@ -10,5 +11,4 @@ import org.testng.annotations.*;
 public abstract class BaseAPITest {
 
     protected final Logger logger = LogManager.getLogger(this);
-
 }

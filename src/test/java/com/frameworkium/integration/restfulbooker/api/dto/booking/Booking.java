@@ -25,4 +25,3 @@ public class Booking extends AbstractDTO<Booking> {
         return booking;
     }
 }
-

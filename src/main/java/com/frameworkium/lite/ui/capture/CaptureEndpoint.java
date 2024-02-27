@@ -5,7 +5,6 @@ import com.frameworkium.lite.common.properties.Property;
 
 /** The various Endpoints of Capture. */
 enum CaptureEndpoint implements Endpoint {
-
     BASE_URI(Property.CAPTURE_URL.getValue()),
     EXECUTIONS(BASE_URI.urlFormat + "/executions"),
     SCREENSHOT(BASE_URI.urlFormat + "/screenshot");
@@ -20,5 +19,4 @@ enum CaptureEndpoint implements Endpoint {
     public String getUrl(Object... params) {
         return String.format(urlFormat, params);
     }
-
 }

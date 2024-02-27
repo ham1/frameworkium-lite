@@ -16,13 +16,12 @@ public class ExecutionService extends BaseCaptureService {
 
     public ExecutionResults getExecutions(int page, int pageSize) {
         return get(
-                CaptureEndpoint.EXECUTIONS.getUrl(),
-                ImmutableMap.of("page", page, "pageSize", pageSize))
+                        CaptureEndpoint.EXECUTIONS.getUrl(),
+                        ImmutableMap.of("page", page, "pageSize", pageSize))
                 .as(ExecutionResults.class);
     }
 
     public ExecutionResponse getExecution(String executionID) {
-        return get(CaptureEndpoint.GET_EXECUTION.getUrl(executionID))
-                .as(ExecutionResponse.class);
+        return get(CaptureEndpoint.GET_EXECUTION.getUrl(executionID)).as(ExecutionResponse.class);
     }
 }

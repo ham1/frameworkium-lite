@@ -12,7 +12,6 @@ import java.util.Properties;
  * TODO: use TypeSafe config
  */
 public enum Property {
-
     THREADS("threads"),
 
     // Capture
@@ -32,8 +31,7 @@ public enum Property {
     HEADLESS("headless"),
     CUSTOM_BROWSER_IMPL("customBrowserImpl"),
 
-    REMOTE_OTEL_TRACING("remotewebdriver.tracing")
-    ;
+    REMOTE_OTEL_TRACING("remotewebdriver.tracing");
 
     private static Properties properties = null;
     private final String value;
@@ -73,8 +71,7 @@ public enum Property {
         }
 
         try (InputStream configFileStream =
-                     ClassLoader.getSystemClassLoader()
-                             .getResourceAsStream(configFileName)) {
+                ClassLoader.getSystemClassLoader().getResourceAsStream(configFileName)) {
             var properties = new Properties();
             properties.load(configFileStream);
             return properties;
@@ -105,8 +102,6 @@ public enum Property {
     }
 
     public int getIntWithDefault(int defaultValue) {
-        return isSpecified()
-                ? Integer.parseInt(value)
-                : defaultValue;
+        return isSpecified() ? Integer.parseInt(value) : defaultValue;
     }
 }

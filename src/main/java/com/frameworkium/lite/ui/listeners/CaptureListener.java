@@ -1,5 +1,7 @@
 package com.frameworkium.lite.ui.listeners;
 
+import static org.apache.commons.lang3.StringUtils.abbreviate;
+
 import com.frameworkium.lite.ui.ExtraExpectedConditions;
 import com.frameworkium.lite.ui.UITestLifecycle;
 import com.frameworkium.lite.ui.browsers.UserAgent;
@@ -7,6 +9,7 @@ import com.frameworkium.lite.ui.capture.ElementHighlighter;
 import com.frameworkium.lite.ui.capture.ScreenshotCapture;
 import com.frameworkium.lite.ui.capture.model.Command;
 import com.frameworkium.lite.ui.tests.BaseUITest;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,8 +22,6 @@ import org.testng.ITestResult;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.apache.commons.lang3.StringUtils.abbreviate;
-
 /**
  * Assumes {@link ScreenshotCapture#isRequired()} is true for WebDriver events.
  */
@@ -28,18 +29,14 @@ public class CaptureListener implements WebDriverListener, ITestListener {
 
     private final Logger logger = LogManager.getLogger(this);
 
-    private static final List<String> FRAMEWORKIUM_SCRIPTS = Arrays.asList(
-            UserAgent.SCRIPT,
-            ExtraExpectedConditions.JQUERY_AJAX_DONE_SCRIPT
-    );
+    private static final List<String> FRAMEWORKIUM_SCRIPTS =
+            Arrays.asList(UserAgent.SCRIPT, ExtraExpectedConditions.JQUERY_AJAX_DONE_SCRIPT);
 
     private void takeScreenshotAndSend(Command command) {
         try {
             UITestLifecycle.get()
                     .getCapture()
-                    .takeAndSendScreenshot(
-                            command,
-                            UITestLifecycle.get().getWebDriver());
+                    .takeAndSendScreenshot(command, UITestLifecycle.get().getWebDriver());
         } catch (Exception e) {
             logger.warn("Screenshot not sent, see trace log for details");
             logger.trace(e);
@@ -88,8 +85,7 @@ public class CaptureListener implements WebDriverListener, ITestListener {
         return BaseUITest.class.isAssignableFrom(result.getTestClass().getRealClass());
     }
 
-    private void highlightElementOnClickAndSendScreenshot(
-            WebDriver driver, WebElement element) {
+    private void highlightElementOnClickAndSendScreenshot(WebDriver driver, WebElement element) {
         if (!ScreenshotCapture.isRequired()) {
             return;
         }
@@ -104,9 +100,7 @@ public class CaptureListener implements WebDriverListener, ITestListener {
     @Override
     public void beforeClick(WebElement element) {
         try {
-            highlightElementOnClickAndSendScreenshot(
-                    UITestLifecycle.get().getWebDriver(),
-                    element);
+            highlightElementOnClickAndSendScreenshot(UITestLifecycle.get().getWebDriver(), element);
         } catch (Exception e) {
             logger.trace("Failed to highlight element before click and send screenshot", e);
         }
@@ -155,5 +149,4 @@ public class CaptureListener implements WebDriverListener, ITestListener {
     public void onTestSkipped(ITestResult result) {
         sendFinalScreenshot(result, "skip");
     }
-
 }

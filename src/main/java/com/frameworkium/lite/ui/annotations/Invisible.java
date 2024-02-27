@@ -15,4 +15,3 @@ public @interface Invisible {
      */
     int checkAtMost() default -1;
 }
-

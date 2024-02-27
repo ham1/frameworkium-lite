@@ -1,11 +1,13 @@
 package com.frameworkium.integration.restfulbooker.api.service;
 
-import com.frameworkium.lite.api.services.BaseService;
 import com.frameworkium.integration.restfulbooker.api.constant.BookerEndpoint;
+import com.frameworkium.lite.api.services.BaseService;
+
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
+
 import org.apache.http.HttpStatus;
 
 /** Base Service for RestfulBooker specific services. */
@@ -31,8 +33,7 @@ public abstract class AbstractBookerService extends BaseService {
      */
     @Override
     protected ResponseSpecification getResponseSpec() {
-        return RestAssured.expect().response()
-                .statusCode(HttpStatus.SC_OK);
+        return RestAssured.expect().response().statusCode(HttpStatus.SC_OK);
     }
 
     protected ExtractableResponse post(Object body, String url) {
@@ -44,5 +45,4 @@ public abstract class AbstractBookerService extends BaseService {
                 .spec(getResponseSpec())
                 .extract();
     }
-
 }

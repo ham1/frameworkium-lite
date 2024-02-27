@@ -37,8 +37,7 @@ public class TestListener implements ITestListener {
     }
 
     private String getTestIdentifier(ITestResult result) {
-        return String.format("%s.%s",
-                result.getInstanceName(),
-                result.getMethod().getMethodName());
+        return String.format(
+                "%s.%s", result.getInstanceName(), result.getMethod().getMethodName());
     }
 }

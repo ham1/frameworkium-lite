@@ -31,7 +31,6 @@ public abstract class AbstractDTO<T> implements Serializable, Cloneable {
 
     @Override
     public String toString() {
-        return ReflectionToStringBuilder.toString(
-                this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

@@ -2,6 +2,7 @@ package com.frameworkium.lite.ui.capture.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.frameworkium.lite.ui.listeners.LoggingListener;
+
 import org.openqa.selenium.WebElement;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -22,5 +23,4 @@ public class Command {
         this.using = "n/a";
         this.value = LoggingListener.getLocatorFromElement(element);
     }
-
 }

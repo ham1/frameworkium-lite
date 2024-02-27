@@ -4,7 +4,6 @@ import com.frameworkium.lite.api.Endpoint;
 
 /** The various Endpoints of Capture. */
 public enum CaptureEndpoint implements Endpoint {
-
     BASE_URI("http://capture-6c06138r.cloudapp.net"),
     EXECUTIONS("/executions"),
     GET_EXECUTION("/executions/%s"),
@@ -26,5 +25,4 @@ public enum CaptureEndpoint implements Endpoint {
     public String getUrl(Object... params) {
         return String.format(urlFormat, params);
     }
-
 }

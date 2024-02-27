@@ -26,5 +26,4 @@ public class Image extends TypifiedElement {
     public String getAlt() {
         return getWrappedElement().getAttribute("alt");
     }
-
 }

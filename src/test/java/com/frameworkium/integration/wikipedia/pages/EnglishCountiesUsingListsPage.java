@@ -3,6 +3,7 @@ package com.frameworkium.integration.wikipedia.pages;
 import com.frameworkium.lite.ui.annotations.Visible;
 import com.frameworkium.lite.ui.pages.BasePage;
 import com.frameworkium.lite.ui.pages.PageFactory;
+
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
@@ -38,15 +39,14 @@ public class EnglishCountiesUsingListsPage extends BasePage<EnglishCountiesUsing
     private List<WebElement> densityColumn;
 
     public static EnglishCountiesUsingListsPage open() {
-        return PageFactory.newInstance(EnglishCountiesUsingListsPage.class,
+        return PageFactory.newInstance(
+                EnglishCountiesUsingListsPage.class,
                 "https://en.wikipedia.org/wiki/List_of_ceremonial_counties_of_England");
     }
 
     public int populationOf(String countyName) {
         String population =
-                populationColumn.get(findCountyIndex(countyName))
-                        .getText()
-                        .replaceAll(",", "");
+                populationColumn.get(findCountyIndex(countyName)).getText().replaceAll(",", "");
         return Integer.parseInt(population);
     }
 
@@ -54,8 +54,8 @@ public class EnglishCountiesUsingListsPage extends BasePage<EnglishCountiesUsing
         return IntStream.range(0, countyColumn.size())
                 .filter(i -> Objects.equals(countyColumn.get(i).getText(), countyName))
                 .findFirst()
-                .orElseThrow(() -> new NoSuchElementException(
-                        "County name '" + countyName + "' not found"));
+                .orElseThrow(() ->
+                        new NoSuchElementException("County name '" + countyName + "' not found"));
     }
 
     public Stream<Integer> densities() {
@@ -64,5 +64,4 @@ public class EnglishCountiesUsingListsPage extends BasePage<EnglishCountiesUsing
                 .map(density -> density.replaceAll(",", ""))
                 .map(Integer::parseInt);
     }
-
 }

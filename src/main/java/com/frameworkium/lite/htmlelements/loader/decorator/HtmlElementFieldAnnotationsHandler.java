@@ -1,5 +1,7 @@
 package com.frameworkium.lite.htmlelements.loader.decorator;
 
+import static com.frameworkium.lite.htmlelements.utils.HtmlElementUtils.*;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
@@ -7,8 +9,6 @@ import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.pagefactory.Annotations;
 
 import java.lang.reflect.Field;
-
-import static com.frameworkium.lite.htmlelements.utils.HtmlElementUtils.*;
 
 /**
  * Extends default field annotations handling mechanism with processing

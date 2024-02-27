@@ -2,7 +2,9 @@ package com.frameworkium.integration.theinternet.pages;
 
 import com.frameworkium.lite.ui.annotations.Visible;
 import com.frameworkium.lite.ui.pages.BasePage;
+
 import io.restassured.RestAssured;
+
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -26,19 +28,19 @@ public class DragAndDropPage extends BasePage<DragAndDropPage> {
     // Acts as a cache to prevent multiple fetches of the same libraries from the Internet
     private static String jQueryJS = "";
     // https://gist.githubusercontent.com/rcorreia/2362544/raw/3319e506e204af262d27f7ff9fca311e693dc342/drag_and_drop_helper.js
-    private static final String dragDropHelperJS = "!function(t){t.fn.simulateDragDrop=function(a)" +
-            "{return this.each(function(){new t.simulateDragDrop(this,a)})}," +
-            "t.simulateDragDrop=function(t,a){this.options=a,this.simulateEvent(t,a)}," +
-            "t.extend(t.simulateDragDrop.prototype,{simulateEvent:function(a,e){var " +
-            "n=\"dragstart\",r=this.createEvent(n);this.dispatchEvent(a,n,r)," +
-            "n=\"drop\";var i=this.createEvent(n,{});i.dataTransfer=r.dataTransfer," +
-            "this.dispatchEvent(t(e.dropTarget)[0],n,i),n=\"dragend\";" +
-            "var s=this.createEvent(n,{});s.dataTransfer=r.dataTransfer,this." +
-            "dispatchEvent(a,n,s)},createEvent:function(t){var a=document." +
-            "createEvent(\"CustomEvent\");return a.initCustomEvent(t,!0,!0,null)," +
-            "a.dataTransfer={data:{},setData:function(t,a){this.data[t]=a}," +
-            "getData:function(t){return this.data[t]}},a},dispatchEvent:" +
-            "function(t,a,e){t.dispatchEvent?t.dispatchEvent(e):t.fireEvent&&t.fireEvent(\"on\"+a,e)}})}(jQuery);";
+    private static final String dragDropHelperJS = "!function(t){t.fn.simulateDragDrop=function(a)"
+            + "{return this.each(function(){new t.simulateDragDrop(this,a)})},"
+            + "t.simulateDragDrop=function(t,a){this.options=a,this.simulateEvent(t,a)},"
+            + "t.extend(t.simulateDragDrop.prototype,{simulateEvent:function(a,e){var "
+            + "n=\"dragstart\",r=this.createEvent(n);this.dispatchEvent(a,n,r),"
+            + "n=\"drop\";var i=this.createEvent(n,{});i.dataTransfer=r.dataTransfer,"
+            + "this.dispatchEvent(t(e.dropTarget)[0],n,i),n=\"dragend\";"
+            + "var s=this.createEvent(n,{});s.dataTransfer=r.dataTransfer,this."
+            + "dispatchEvent(a,n,s)},createEvent:function(t){var a=document."
+            + "createEvent(\"CustomEvent\");return a.initCustomEvent(t,!0,!0,null),"
+            + "a.dataTransfer={data:{},setData:function(t,a){this.data[t]=a},"
+            + "getData:function(t){return this.data[t]}},a},dispatchEvent:"
+            + "function(t,a,e){t.dispatchEvent?t.dispatchEvent(e):t.fireEvent&&t.fireEvent(\"on\"+a,e)}})}(jQuery);";
 
     /**
      * Fetches Javascript from the Internet used to be able to simulate Drag and Drop.
@@ -72,9 +74,6 @@ public class DragAndDropPage extends BasePage<DragAndDropPage> {
     }
 
     public List<String> getListOfHeadings() {
-        return boxes.stream()
-                .map(WebElement::getText)
-                .collect(Collectors.toList());
+        return boxes.stream().map(WebElement::getText).collect(Collectors.toList());
     }
-
 }

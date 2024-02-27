@@ -28,7 +28,7 @@ public class Radio extends TypifiedElement {
 
         String xpath;
         if (radioName == null) {
-            xpath = "self::* | following::input[@type = 'radio'] | preceding::input[@type = 'radio']";
+            xpath = "self::* | following::input[@type='radio'] | preceding::input[@type='radio']";
         } else {
             xpath = String.format(
                     "self::* | following::input[@type = 'radio' and @name = '%s'] | "
@@ -45,9 +45,7 @@ public class Radio extends TypifiedElement {
      * @return Optional {@code WebElement} representing selected radio button.
      */
     public Optional<WebElement> getSelectedButton() {
-        return getButtons().stream()
-                .filter(WebElement::isSelected)
-                .findAny();
+        return getButtons().stream().filter(WebElement::isSelected).findAny();
     }
 
     /**
@@ -56,8 +54,7 @@ public class Radio extends TypifiedElement {
      * @return {@code true} if radio has selected button and {@code false} otherwise.
      */
     public boolean hasSelectedButton() {
-        return getButtons().stream()
-                .anyMatch(WebElement::isSelected);
+        return getButtons().stream().anyMatch(WebElement::isSelected);
     }
 
     /**

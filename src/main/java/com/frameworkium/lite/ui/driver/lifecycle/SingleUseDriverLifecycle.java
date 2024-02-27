@@ -1,6 +1,7 @@
 package com.frameworkium.lite.ui.driver.lifecycle;
 
 import com.frameworkium.lite.ui.driver.Driver;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
@@ -61,4 +62,3 @@ public class SingleUseDriverLifecycle implements DriverLifecycle {
         }
     }
 }
-

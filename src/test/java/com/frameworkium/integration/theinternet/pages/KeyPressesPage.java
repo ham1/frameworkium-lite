@@ -2,6 +2,7 @@ package com.frameworkium.integration.theinternet.pages;
 
 import com.frameworkium.lite.ui.annotations.Visible;
 import com.frameworkium.lite.ui.pages.BasePage;
+
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -24,5 +25,4 @@ public class KeyPressesPage extends BasePage<KeyPressesPage> {
     public String getResultText() {
         return result.getText();
     }
-
 }

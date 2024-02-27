@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * The base class to be used for making classes representing typified elements
- * i.e web page controls such as text inputs, buttons or more complex elements.
+ * i.e. web page controls such as text inputs, buttons or more complex elements.
  * <p/>
  * There are several already written classes representing standard web page controls:
  * <ul>
@@ -36,7 +36,7 @@ public abstract class TypifiedElement implements WrapsElement, WebElement {
     }
 
     /**
-     * Determines whether or not this element exists on page.
+     * Determines whether this element exists on page.
      *
      * @return True if the element exists on page, false otherwise.
      */

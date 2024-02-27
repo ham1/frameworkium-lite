@@ -3,6 +3,7 @@ package com.frameworkium.lite.ui.listeners;
 import com.frameworkium.lite.ui.UITestLifecycle;
 import com.frameworkium.lite.ui.capture.ScreenshotCapture;
 import com.frameworkium.lite.ui.tests.BaseUITest;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
@@ -42,10 +43,7 @@ public class ScreenshotListener extends TestListenerAdapter {
         if (screenshotDirectory == null) {
             screenshotDirectory = "screenshots";
         }
-        String fileName = String.format(
-                "%s_%s.png",
-                System.currentTimeMillis(),
-                testName);
+        String fileName = String.format("%s_%s.png", System.currentTimeMillis(), testName);
         Path screenshotPath = Paths.get(screenshotDirectory);
         Path absolutePath = screenshotPath.resolve(fileName);
         if (createScreenshotDirectory(screenshotPath)) {

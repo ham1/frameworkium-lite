@@ -23,7 +23,8 @@ public class CheckBox extends TypifiedElement {
      */
     public Optional<WebElement> getLabel() {
         try {
-            return Optional.of(getWrappedElement().findElement(By.xpath("following-sibling::label")));
+            return Optional.of(
+                    getWrappedElement().findElement(By.xpath("following-sibling::label")));
         } catch (NoSuchElementException e) {
             return Optional.empty();
         }

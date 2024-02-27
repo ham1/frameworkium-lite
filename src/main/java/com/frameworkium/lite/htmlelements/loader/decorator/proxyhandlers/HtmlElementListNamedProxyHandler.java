@@ -1,6 +1,9 @@
 package com.frameworkium.lite.htmlelements.loader.decorator.proxyhandlers;
 
+import static com.frameworkium.lite.htmlelements.loader.HtmlElementLoader.createHtmlElement;
+
 import com.frameworkium.lite.htmlelements.element.HtmlElement;
+
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import java.lang.reflect.*;
@@ -8,15 +11,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.frameworkium.lite.htmlelements.loader.HtmlElementLoader.createHtmlElement;
-
 public class HtmlElementListNamedProxyHandler<T extends HtmlElement> implements InvocationHandler {
 
     private final Class<T> elementClass;
     private final ElementLocator locator;
     private final String name;
 
-    public HtmlElementListNamedProxyHandler(Class<T> elementClass, ElementLocator locator, String name) {
+    public HtmlElementListNamedProxyHandler(
+            Class<T> elementClass, ElementLocator locator, String name) {
         this.elementClass = elementClass;
         this.locator = locator;
         this.name = name;

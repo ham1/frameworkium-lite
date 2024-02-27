@@ -2,6 +2,7 @@ package com.frameworkium.integration.capture.api.dto.screenshots;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.frameworkium.lite.api.dto.AbstractDTO;
+
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -29,7 +30,8 @@ public class CreateScreenshot extends AbstractDTO<CreateScreenshot> {
 
     private static String getBase64TestImage() {
         try {
-            InputStream imageStream = CreateScreenshot.class.getClassLoader()
+            InputStream imageStream = CreateScreenshot.class
+                    .getClassLoader()
                     .getResourceAsStream("capture-screenshot.png");
             byte[] bytes = IOUtils.toByteArray(imageStream);
             return Base64.getEncoder().encodeToString(bytes);

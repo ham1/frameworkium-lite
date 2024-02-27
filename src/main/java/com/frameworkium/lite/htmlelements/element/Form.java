@@ -1,11 +1,11 @@
 package com.frameworkium.lite.htmlelements.element;
 
+import static java.util.Objects.isNull;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.util.*;
-
-import static java.util.Objects.isNull;
 
 /**
  * Represents web page form tag.
@@ -39,8 +39,7 @@ public class Form extends TypifiedElement {
     public void fill(Map<String, Object> data) {
         data.entrySet().stream()
                 .map(e -> new AbstractMap.SimpleEntry<>(
-                        findElementByKey(e.getKey()),
-                        Objects.toString(e.getValue(), "")))
+                        findElementByKey(e.getKey()), Objects.toString(e.getValue(), "")))
                 .filter(e -> !isNull(e.getKey()))
                 .forEach(e -> fillElement(e.getKey(), e.getValue()));
     }

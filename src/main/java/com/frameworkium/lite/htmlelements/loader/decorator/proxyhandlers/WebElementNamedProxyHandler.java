@@ -1,6 +1,7 @@
 package com.frameworkium.lite.htmlelements.loader.decorator.proxyhandlers;
 
 import com.frameworkium.lite.htmlelements.utils.HtmlElementUtils;
+
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 import org.openqa.selenium.support.pagefactory.internal.LocatingElementHandler;
@@ -38,8 +39,7 @@ public class WebElementNamedProxyHandler extends LocatingElementHandler {
                 lastException = e;
                 this.waitFor();
             }
-        }
-        while (this.clock.millis() < end);
+        } while (this.clock.millis() < end);
         throw lastException;
     }
 

@@ -10,5 +10,4 @@ public class ScreenshotService extends BaseCaptureService {
     public void createScreenshot(CreateScreenshot createMessage) {
         post(CaptureEndpoint.SCREENSHOT.getUrl(), createMessage);
     }
-
 }

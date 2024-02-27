@@ -4,6 +4,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.ResponseOptions;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -54,7 +55,8 @@ public abstract class BaseService {
      * @param params the GET parameters
      * @return The response from the request
      */
-    protected ExtractableResponse<? extends ResponseOptions<?>> get(String url, Map<String, ?> params) {
+    protected ExtractableResponse<? extends ResponseOptions<?>> get(
+            String url, Map<String, ?> params) {
         return getRequestSpec()
                 .params(params)
                 .when()
@@ -63,5 +65,4 @@ public abstract class BaseService {
                 .spec(getResponseSpec())
                 .extract();
     }
-
 }

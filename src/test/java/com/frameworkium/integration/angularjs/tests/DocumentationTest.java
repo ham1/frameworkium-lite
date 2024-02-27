@@ -1,10 +1,11 @@
 package com.frameworkium.integration.angularjs.tests;
 
-import com.frameworkium.lite.ui.tests.BaseUITest;
-import com.frameworkium.integration.angularjs.pages.DeveloperGuidePage;
-import org.testng.annotations.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
+
+import com.frameworkium.integration.angularjs.pages.DeveloperGuidePage;
+import com.frameworkium.lite.ui.tests.BaseUITest;
+
+import org.testng.annotations.Test;
 
 public class DocumentationTest extends BaseUITest {
 
@@ -15,8 +16,6 @@ public class DocumentationTest extends BaseUITest {
                 .clickBootstrapSearchItem()
                 .getGuideTitle();
 
-        assertThat(guideTitle)
-                .endsWith("Bootstrap");
+        assertThat(guideTitle).endsWith("Bootstrap");
     }
-
 }

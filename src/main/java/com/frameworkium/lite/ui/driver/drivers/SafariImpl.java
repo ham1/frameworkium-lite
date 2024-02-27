@@ -1,6 +1,7 @@
 package com.frameworkium.lite.ui.driver.drivers;
 
 import com.frameworkium.lite.ui.driver.AbstractDriver;
+
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.safari.SafariDriver;
@@ -19,5 +20,4 @@ public class SafariImpl extends AbstractDriver {
     public WebDriver getWebDriver(Capabilities capabilities) {
         return new SafariDriver(new SafariOptions(capabilities));
     }
-
 }

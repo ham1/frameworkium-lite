@@ -3,6 +3,7 @@ package com.frameworkium.lite.htmlelements.loader.decorator;
 import com.frameworkium.lite.htmlelements.annotations.Timeout;
 import com.frameworkium.lite.htmlelements.pagefactory.CustomElementLocatorFactory;
 import com.frameworkium.lite.htmlelements.utils.HtmlElementUtils;
+
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocator;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
@@ -26,7 +27,8 @@ public class HtmlElementLocatorFactory implements CustomElementLocatorFactory {
      * @param field Field for which locator will be created.
      */
     public ElementLocator createLocator(Field field) {
-        return new AjaxElementLocator(searchContext, getTimeOut(field), new HtmlElementFieldAnnotationsHandler(field));
+        return new AjaxElementLocator(
+                searchContext, getTimeOut(field), new HtmlElementFieldAnnotationsHandler(field));
     }
 
     /**
@@ -38,7 +40,8 @@ public class HtmlElementLocatorFactory implements CustomElementLocatorFactory {
      */
     @SuppressWarnings("rawtypes")
     public ElementLocator createLocator(Class<?> clazz) {
-        return new AjaxElementLocator(searchContext, getTimeOut(clazz), new HtmlElementClassAnnotationsHandler(clazz));
+        return new AjaxElementLocator(
+                searchContext, getTimeOut(clazz), new HtmlElementClassAnnotationsHandler(clazz));
     }
 
     public int getTimeOut(Field field) {
@@ -48,7 +51,8 @@ public class HtmlElementLocatorFactory implements CustomElementLocatorFactory {
         if (field.getGenericType() instanceof Class) {
             return getTimeOut((Class<?>) field.getGenericType());
         }
-        return getTimeOut((Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0]);
+        return getTimeOut((Class<?>)
+                ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0]);
     }
 
     public int getTimeOut(Class<?> clazz) {
@@ -59,8 +63,7 @@ public class HtmlElementLocatorFactory implements CustomElementLocatorFactory {
                     return (Integer) method.invoke(clazz.getAnnotation(Timeout.class));
                 }
                 clazz = clazz.getSuperclass();
-            }
-            while (clazz != Object.class && clazz != null);
+            } while (clazz != Object.class && clazz != null);
         } catch (NoSuchMethodException
                 | InvocationTargetException
                 | IllegalAccessException ignored) {

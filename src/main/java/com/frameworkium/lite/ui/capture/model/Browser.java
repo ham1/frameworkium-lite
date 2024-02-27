@@ -1,15 +1,16 @@
 package com.frameworkium.lite.ui.capture.model;
 
+import static com.frameworkium.lite.common.properties.Property.*;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.frameworkium.lite.ui.UITestLifecycle;
 import com.frameworkium.lite.ui.driver.DriverSetup;
+
 import net.sf.uadetector.ReadableUserAgent;
 import net.sf.uadetector.UserAgentStringParser;
 import net.sf.uadetector.service.UADetectorServiceFactory;
 
 import java.util.Optional;
-
-import static com.frameworkium.lite.common.properties.Property.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Browser {
@@ -45,5 +46,4 @@ public class Browser {
             }
         }
     }
-
 }

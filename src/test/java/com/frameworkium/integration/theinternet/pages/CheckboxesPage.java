@@ -1,9 +1,10 @@
 package com.frameworkium.integration.theinternet.pages;
 
+import com.frameworkium.lite.htmlelements.element.CheckBox;
 import com.frameworkium.lite.ui.annotations.Visible;
 import com.frameworkium.lite.ui.pages.BasePage;
+
 import org.openqa.selenium.support.FindBy;
-import com.frameworkium.lite.htmlelements.element.CheckBox;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -20,8 +21,6 @@ public class CheckboxesPage extends BasePage<CheckboxesPage> {
     }
 
     public Stream<Boolean> getAllCheckboxCheckedStatus() {
-        return allCheckboxes.stream()
-                .map(CheckBox::isSelected);
+        return allCheckboxes.stream().map(CheckBox::isSelected);
     }
-
 }

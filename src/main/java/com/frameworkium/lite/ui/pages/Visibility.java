@@ -1,8 +1,16 @@
 package com.frameworkium.lite.ui.pages;
 
+import static com.frameworkium.lite.htmlelements.utils.HtmlElementUtils.*;
+
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfAllElements;
+
+import static java.util.stream.Collectors.toList;
+
 import com.frameworkium.lite.htmlelements.element.HtmlElement;
 import com.frameworkium.lite.ui.ExtraExpectedConditions;
 import com.frameworkium.lite.ui.annotations.*;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Wait;
 
@@ -12,11 +20,6 @@ import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
-
-import static com.frameworkium.lite.htmlelements.utils.HtmlElementUtils.*;
-import static java.util.stream.Collectors.toList;
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfAllElements;
 
 /**
  * All things Frameworkium-related dealing with PageObject element visibility.
@@ -44,8 +47,7 @@ public final class Visibility {
      */
     void waitForAnnotatedElementVisibility(Object pageObject) {
 
-        getDeclaredFieldsIncludingSuperClasses(pageObject.getClass())
-                .stream()
+        getDeclaredFieldsIncludingSuperClasses(pageObject.getClass()).stream()
                 .filter(field -> !Modifier.isStatic(field.getModifiers()))
                 .filter(this::hasOnlyOneVisibilityAnnotation)
                 .forEach(field -> invokeWaitFunctionForField(field, pageObject));
@@ -75,24 +77,20 @@ public final class Visibility {
         if (annotationCount > 1) {
             throw new IllegalArgumentException(String.format(
                     "Field %s on %s has too many Visibility related Annotations",
-                    field.getName(),
-                    field.getDeclaringClass().getName()));
+                    field.getName(), field.getDeclaringClass().getName()));
         } else {
             return annotationCount == 1;
         }
     }
 
     private Stream<Class<? extends Annotation>> visibilityAnnotationsOf(Field field) {
-        return VISIBILITY_ANNOTATION_CLASSES.stream()
-                .filter(field::isAnnotationPresent);
+        return VISIBILITY_ANNOTATION_CLASSES.stream().filter(field::isAnnotationPresent);
     }
 
     private void invokeWaitFunctionForField(Field field, Object pageObject) {
 
         Class<? extends Annotation> visibilityAnnotationClass =
-                visibilityAnnotationsOf(field)
-                        .findAny()
-                        .orElseThrow(IllegalStateException::new);
+                visibilityAnnotationsOf(field).findAny().orElseThrow(IllegalStateException::new);
 
         if (Visible.class.equals(visibilityAnnotationClass)) {
             int toCheckCount = field.getAnnotation(Visible.class).checkAtMost();
@@ -119,15 +117,13 @@ public final class Visibility {
                 field,
                 objectFromField,
                 we -> wait.until(visibilityOf(we)),
-                list -> wait.until(visibilityOfAllElements(
-                        list.stream()
-                                .limit(checkAtMost == -1 ? list.size() : checkAtMost)
-                                .collect(toList()))));
+                list -> wait.until(visibilityOfAllElements(list.stream()
+                        .limit(checkAtMost == -1 ? list.size() : checkAtMost)
+                        .collect(toList()))));
 
         // recurse inside HtmlElements
         if (isHtmlElementList(field)) {
-            ((List<HtmlElement>) objectFromField)
-                    .forEach(this::waitForAnnotatedElementVisibility);
+            ((List<HtmlElement>) objectFromField).forEach(this::waitForAnnotatedElementVisibility);
         } else if (isHtmlElement(field)) {
             waitForAnnotatedElementVisibility(objectFromField);
         }
@@ -143,10 +139,9 @@ public final class Visibility {
                 field,
                 getObjectFromField(pageObject, field),
                 we -> wait.until(ExtraExpectedConditions.notPresentOrInvisible(we)),
-                list -> wait.until(ExtraExpectedConditions.notPresentOrInvisible(
-                        list.stream()
-                                .limit(checkAtMost == -1 ? list.size() : checkAtMost)
-                                .collect(toList()))));
+                list -> wait.until(ExtraExpectedConditions.notPresentOrInvisible(list.stream()
+                        .limit(checkAtMost == -1 ? list.size() : checkAtMost)
+                        .collect(toList()))));
     }
 
     @SuppressWarnings("unchecked")
@@ -169,8 +164,8 @@ public final class Visibility {
                                 + "Lists thereof are supported by Visibility annotations.");
             }
         } catch (TimeoutException toex) {
-            String msg = "Timed out waiting for "
-                    + field.getDeclaringClass() + "." + field.getName();
+            String msg =
+                    "Timed out waiting for " + field.getDeclaringClass() + "." + field.getName();
             throw new TimeoutException(msg, toex);
         }
     }
@@ -183,5 +178,4 @@ public final class Visibility {
             throw new IllegalStateException(e);
         }
     }
-
 }

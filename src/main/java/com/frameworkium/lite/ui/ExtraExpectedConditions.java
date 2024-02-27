@@ -2,6 +2,7 @@ package com.frameworkium.lite.ui;
 
 import com.frameworkium.lite.htmlelements.element.HtmlElement;
 import com.frameworkium.lite.htmlelements.element.TypifiedElement;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -64,11 +65,8 @@ public class ExtraExpectedConditions {
     public static ExpectedCondition<List<? extends WebElement>> notPresentOrInvisible(
             List<? extends WebElement> elements) {
 
-        return expectedCondition(driver ->
-                        elements.stream()
-                                .noneMatch(WebElement::isDisplayed)
-                                ? elements
-                                : null,
+        return expectedCondition(
+                driver -> elements.stream().noneMatch(WebElement::isDisplayed) ? elements : null,
                 String.format(
                         "the following elements to not be present or be invisible: %s",
                         elements.stream()
@@ -132,9 +130,7 @@ public class ExtraExpectedConditions {
             List<? extends WebElement> list, String expectedText) {
 
         return expectedCondition(
-                driver -> list.stream()
-                        .map(WebElement::getText)
-                        .anyMatch(expectedText::equals)
+                driver -> list.stream().map(WebElement::getText).anyMatch(expectedText::equals)
                         ? list
                         : null,
                 "list to contain element with text " + expectedText);
@@ -151,9 +147,7 @@ public class ExtraExpectedConditions {
             List<? extends WebElement> list, String expectedText) {
 
         return expectedCondition(
-                driver -> list.stream()
-                        .map(WebElement::getText)
-                        .noneMatch(expectedText::equals)
+                driver -> list.stream().map(WebElement::getText).noneMatch(expectedText::equals)
                         ? list
                         : null,
                 "list to not contain element with text " + expectedText);
@@ -167,8 +161,7 @@ public class ExtraExpectedConditions {
     public static ExpectedCondition<Boolean> jQueryAjaxDone() {
 
         return javascriptExpectedCondition(
-                JQUERY_AJAX_DONE_SCRIPT,
-                "jQuery AJAX queries to not be active");
+                JQUERY_AJAX_DONE_SCRIPT, "jQuery AJAX queries to not be active");
     }
 
     /**
@@ -188,8 +181,7 @@ public class ExtraExpectedConditions {
     private static ExpectedCondition<Boolean> javascriptExpectedCondition(
             String query, String message) {
         return expectedCondition(
-                driver -> (Boolean) ((JavascriptExecutor) driver).executeScript(query),
-                message);
+                driver -> (Boolean) ((JavascriptExecutor) driver).executeScript(query), message);
     }
 
     private static <T> ExpectedCondition<T> expectedCondition(

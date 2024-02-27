@@ -15,5 +15,4 @@ public class Command extends AbstractDTO<Command> {
         command.value = "my-id";
         return command;
     }
-
 }

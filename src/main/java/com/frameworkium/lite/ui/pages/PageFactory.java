@@ -16,13 +16,11 @@ public class PageFactory {
         return instantiatePageObject(clazz).get();
     }
 
-    public static <T extends BasePage<T>> T newInstance(
-            Class<T> clazz, Duration timeout) {
+    public static <T extends BasePage<T>> T newInstance(Class<T> clazz, Duration timeout) {
         return instantiatePageObject(clazz).get(timeout);
     }
 
-    public static <T extends BasePage<T>> T newInstance(
-            Class<T> clazz, String url) {
+    public static <T extends BasePage<T>> T newInstance(Class<T> clazz, String url) {
         return instantiatePageObject(clazz).get(url);
     }
 
@@ -34,8 +32,10 @@ public class PageFactory {
     private static <T extends BasePage<T>> T instantiatePageObject(Class<T> clazz) {
         try {
             return clazz.getDeclaredConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException
-                | NoSuchMethodException | InvocationTargetException e) {
+        } catch (InstantiationException
+                | IllegalAccessException
+                | NoSuchMethodException
+                | InvocationTargetException e) {
             logger.fatal("Unable to instantiate PageObject", e);
             throw new IllegalStateException("Unable to instantiate PageObject", e);
         }

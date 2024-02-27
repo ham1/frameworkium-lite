@@ -39,5 +39,4 @@ public class StreamTable extends AbstractStreamTable {
     protected By cellLocator() {
         return By.cssSelector("td");
     }
-
 }

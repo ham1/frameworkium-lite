@@ -4,6 +4,7 @@ import com.frameworkium.lite.ui.annotations.Visible;
 import com.frameworkium.lite.ui.element.OptimisedStreamTable;
 import com.frameworkium.lite.ui.pages.BasePage;
 import com.frameworkium.lite.ui.pages.PageFactory;
+
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
@@ -23,8 +24,7 @@ public class SortableDataTablesPage extends BasePage<SortableDataTablesPage> {
 
     public static SortableDataTablesPage open() {
         return PageFactory.newInstance(
-                SortableDataTablesPage.class,
-                "https://the-internet.herokuapp.com/tables");
+                SortableDataTablesPage.class, "https://the-internet.herokuapp.com/tables");
     }
 
     public Stream<String> getTable1ColumnContents(String colHeader) {
@@ -39,5 +39,4 @@ public class SortableDataTablesPage extends BasePage<SortableDataTablesPage> {
         table2.getHeading(colHeader).ifPresent(WebElement::click);
         return this;
     }
-
 }

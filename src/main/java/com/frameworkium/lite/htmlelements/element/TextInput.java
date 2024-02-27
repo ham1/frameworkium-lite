@@ -32,9 +32,7 @@ public class TextInput extends TypifiedElement {
             return getWrappedElement().getText();
         }
 
-        return Optional
-                .ofNullable(getWrappedElement().getAttribute("value"))
-                .orElse("");
+        return Optional.ofNullable(getWrappedElement().getAttribute("value")).orElse("");
     }
 
     /**
@@ -56,6 +54,7 @@ public class TextInput extends TypifiedElement {
      * See https://github.com/yandex-qatools/htmlelements/issues/65
      */
     public String getClearCharSequence() {
-        return StringUtils.repeat(Keys.DELETE.toString() + Keys.BACK_SPACE, getText().length());
+        return StringUtils.repeat(
+                Keys.DELETE.toString() + Keys.BACK_SPACE, getText().length());
     }
 }

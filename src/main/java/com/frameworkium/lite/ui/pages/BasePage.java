@@ -5,6 +5,7 @@ import com.frameworkium.lite.ui.UITestLifecycle;
 import com.frameworkium.lite.ui.annotations.Visible;
 import com.frameworkium.lite.ui.capture.ScreenshotCapture;
 import com.frameworkium.lite.ui.capture.model.Command;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
@@ -130,10 +131,8 @@ public abstract class BasePage<T extends BasePage<T>> {
 
     private void takePageLoadedScreenshotAndSendToCapture() {
         if (ScreenshotCapture.isRequired()) {
-            Command pageLoadCommand = new Command(
-                    "load", "page", getSimplePageObjectName());
-            UITestLifecycle.get().getCapture().takeAndSendScreenshot(
-                    pageLoadCommand, driver);
+            Command pageLoadCommand = new Command("load", "page", getSimplePageObjectName());
+            UITestLifecycle.get().getCapture().takeAndSendScreenshot(pageLoadCommand, driver);
         }
     }
 
@@ -195,5 +194,4 @@ public abstract class BasePage<T extends BasePage<T>> {
         }
         return returnObj;
     }
-
 }

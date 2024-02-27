@@ -1,15 +1,16 @@
 package com.frameworkium.lite.htmlelements.utils;
 
+import static org.apache.commons.lang3.reflect.ConstructorUtils.invokeConstructor;
+
 import com.frameworkium.lite.htmlelements.element.HtmlElement;
 import com.frameworkium.lite.htmlelements.element.TypifiedElement;
 import com.google.common.collect.Lists;
+
 import org.openqa.selenium.WebElement;
 
 import java.lang.reflect.*;
 import java.net.URL;
 import java.util.List;
-
-import static org.apache.commons.lang3.reflect.ConstructorUtils.invokeConstructor;
 
 /** Contains utility methods used in framework. */
 public final class HtmlElementUtils {
@@ -21,11 +22,11 @@ public final class HtmlElementUtils {
      */
     public static final int DEFAULT_TIMEOUT_SECS = 6;
 
-    private HtmlElementUtils() {
-    }
+    private HtmlElementUtils() {}
 
-    public static <T> T newInstance(Class<T> clazz, Object... args) throws IllegalAccessException,
-            InstantiationException, NoSuchMethodException, InvocationTargetException {
+    public static <T> T newInstance(Class<T> clazz, Object... args)
+            throws IllegalAccessException, InstantiationException, NoSuchMethodException,
+                    InvocationTargetException {
         if (clazz.isMemberClass() && !Modifier.isStatic(clazz.getModifiers())) {
             Class<?> outerClass = clazz.getDeclaringClass();
             Object outerObject = outerClass.getDeclaredConstructor().newInstance();

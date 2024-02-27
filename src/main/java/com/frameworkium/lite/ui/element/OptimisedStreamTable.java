@@ -40,5 +40,4 @@ public class OptimisedStreamTable extends AbstractStreamTable {
     protected By cellLocator() {
         return By.cssSelector("td");
     }
-
 }

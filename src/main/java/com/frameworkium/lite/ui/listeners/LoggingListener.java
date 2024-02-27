@@ -115,5 +115,4 @@ public class LoggingListener implements WebDriverListener {
             logger.trace("on exception", thrw);
         }
     }
-
 }

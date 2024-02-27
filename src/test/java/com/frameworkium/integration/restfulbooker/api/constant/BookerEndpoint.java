@@ -4,7 +4,6 @@ import com.frameworkium.lite.api.Endpoint;
 
 /** The various Endpoints of Restful Booker. */
 public enum BookerEndpoint implements Endpoint {
-
     BASE_URI("https://restful-booker.herokuapp.com"),
     PING("/ping"),
     BOOKING("/booking"),
@@ -25,5 +24,4 @@ public enum BookerEndpoint implements Endpoint {
     public String getUrl(Object... params) {
         return String.format(urlFormat, params);
     }
-
 }

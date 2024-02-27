@@ -1,14 +1,20 @@
 package com.frameworkium.lite.ui.capture;
 
+import static com.frameworkium.lite.common.properties.Property.*;
+
+import static org.apache.http.HttpStatus.SC_CREATED;
+
 import com.frameworkium.lite.common.properties.Property;
 import com.frameworkium.lite.ui.UITestLifecycle;
 import com.frameworkium.lite.ui.capture.model.Command;
 import com.frameworkium.lite.ui.capture.model.message.CreateExecution;
 import com.frameworkium.lite.ui.capture.model.message.CreateScreenshot;
 import com.frameworkium.lite.ui.driver.DriverSetup;
+
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
@@ -16,9 +22,6 @@ import org.openqa.selenium.*;
 import java.net.*;
 import java.util.Set;
 import java.util.concurrent.*;
-
-import static com.frameworkium.lite.common.properties.Property.*;
-import static org.apache.http.HttpStatus.SC_CREATED;
 
 /** Takes and sends screenshots to "Capture" asynchronously. */
 public class ScreenshotCapture {
@@ -34,6 +37,7 @@ public class ScreenshotCapture {
 
     /** Prevent multiple final state screenshots from being sent. */
     private boolean finalScreenshotSent = false;
+
     private static final Set<String> FINAL_STATES = Set.of("pass", "fail", "skip");
 
     public ScreenshotCapture(String testID) {
@@ -49,8 +53,11 @@ public class ScreenshotCapture {
                     .body(createExecution)
                     .when()
                     .post(CaptureEndpoint.EXECUTIONS.getUrl())
-                    .then().statusCode(SC_CREATED)
-                    .extract().path("executionID").toString();
+                    .then()
+                    .statusCode(SC_CREATED)
+                    .extract()
+                    .path("executionID")
+                    .toString();
         } catch (Throwable t) {
             logger.error("Unable to create Capture execution.", t);
             return null;
@@ -58,9 +65,7 @@ public class ScreenshotCapture {
     }
 
     private RequestSpecification getRequestSpec() {
-        return RestAssured.given()
-                .relaxedHTTPSValidation()
-                .contentType(ContentType.JSON);
+        return RestAssured.given().relaxedHTTPSValidation().contentType(ContentType.JSON);
     }
 
     private String getNode() {
@@ -87,10 +92,10 @@ public class ScreenshotCapture {
     }
 
     private String getRemoteNodeAddress() throws MalformedURLException {
-        return RestAssured
-                .get(getTestSessionURL())
+        return RestAssured.get(getTestSessionURL())
                 .then()
-                .extract().jsonPath()
+                .extract()
+                .jsonPath()
                 .getString("proxyId");
     }
 
@@ -105,9 +110,7 @@ public class ScreenshotCapture {
     }
 
     public static boolean isRequired() {
-        return CAPTURE_URL.isSpecified()
-                && SUT_NAME.isSpecified()
-                && SUT_VERSION.isSpecified();
+        return CAPTURE_URL.isSpecified() && SUT_NAME.isSpecified() && SUT_VERSION.isSpecified();
     }
 
     public void takeAndSendScreenshot(Command command, WebDriver driver) {
@@ -118,8 +121,9 @@ public class ScreenshotCapture {
             Command command, WebDriver driver, String errorMessage) {
 
         if (executionID == null) {
-            logger.error("Can't send Screenshot. "
-                    + "Capture didn't initialise execution for test: {}", testID);
+            logger.error(
+                    "Can't send Screenshot. " + "Capture didn't initialise execution for test: {}",
+                    testID);
             return;
         }
 
@@ -133,13 +137,12 @@ public class ScreenshotCapture {
 
         finalScreenshotSent = FINAL_STATES.contains(command.action);
 
-        var createScreenshotMessage =
-                new CreateScreenshot(
-                        executionID,
-                        command,
-                        driver.getCurrentUrl(),
-                        errorMessage,
-                        getBase64Screenshot((TakesScreenshot) driver));
+        var createScreenshotMessage = new CreateScreenshot(
+                executionID,
+                command,
+                driver.getCurrentUrl(),
+                errorMessage,
+                getBase64Screenshot((TakesScreenshot) driver));
         addScreenshotToSendQueue(createScreenshotMessage);
     }
 
@@ -159,7 +162,8 @@ public class ScreenshotCapture {
                     .when()
                     .post(CaptureEndpoint.SCREENSHOT.getUrl())
                     .then()
-                    .assertThat().statusCode(SC_CREATED);
+                    .assertThat()
+                    .statusCode(SC_CREATED);
             logger.trace("Sent screenshot to Capture for {}", testID);
         } catch (Throwable t) {
             logger.warn("Failed sending screenshot to Capture for {}", testID);
@@ -187,8 +191,7 @@ public class ScreenshotCapture {
             throw new IllegalStateException(e);
         }
         if (timeout) {
-            logger.error("Shutdown timed out. "
-                    + "Some screenshots might not have been sent.");
+            logger.error("Shutdown timed out. " + "Some screenshots might not have been sent.");
         } else {
             logger.info("Finished processing backlog.");
         }

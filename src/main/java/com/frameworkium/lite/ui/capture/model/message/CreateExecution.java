@@ -3,6 +3,7 @@ package com.frameworkium.lite.ui.capture.model.message;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.frameworkium.lite.ui.capture.model.Browser;
 import com.frameworkium.lite.ui.capture.model.SoftwareUnderTest;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -1,12 +1,14 @@
 package com.frameworkium.integration.capture.api.service;
 
-import com.frameworkium.lite.api.services.BaseService;
 import com.frameworkium.integration.capture.api.constant.CaptureEndpoint;
+import com.frameworkium.lite.api.services.BaseService;
+
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
+
 import org.apache.http.HttpStatus;
 
 /** Base Service for Capture specific services. */
@@ -32,8 +34,7 @@ public class BaseCaptureService extends BaseService {
      */
     @Override
     protected ResponseSpecification getResponseSpec() {
-        return RestAssured.expect().response()
-                .statusCode(HttpStatus.SC_OK);
+        return RestAssured.expect().response().statusCode(HttpStatus.SC_OK);
     }
 
     protected ValidatableResponse post(String url, Object body) {
@@ -42,7 +43,7 @@ public class BaseCaptureService extends BaseService {
                 .body(body)
                 .post(url)
                 .then()
-                .assertThat().statusCode(HttpStatus.SC_CREATED);
+                .assertThat()
+                .statusCode(HttpStatus.SC_CREATED);
     }
-
 }

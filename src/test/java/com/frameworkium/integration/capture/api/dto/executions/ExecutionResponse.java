@@ -1,7 +1,7 @@
 package com.frameworkium.integration.capture.api.dto.executions;
 
-import com.frameworkium.lite.api.dto.AbstractDTO;
 import com.frameworkium.integration.capture.api.dto.screenshots.Screenshot;
+import com.frameworkium.lite.api.dto.AbstractDTO;
 
 import java.util.List;
 
@@ -23,5 +23,4 @@ public class ExecutionResponse extends AbstractDTO<ExecutionResponse> {
                 && testID.equals(createMessage.testID)
                 && nodeAddress.equals(createMessage.nodeAddress);
     }
-
 }

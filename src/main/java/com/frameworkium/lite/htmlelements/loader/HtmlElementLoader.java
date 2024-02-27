@@ -1,11 +1,16 @@
 package com.frameworkium.lite.htmlelements.loader;
 
+import static com.frameworkium.lite.htmlelements.loader.decorator.ProxyFactory.createWebElementProxy;
+import static com.frameworkium.lite.htmlelements.utils.HtmlElementUtils.getElementName;
+import static com.frameworkium.lite.htmlelements.utils.HtmlElementUtils.newInstance;
+
 import com.frameworkium.lite.htmlelements.element.HtmlElement;
 import com.frameworkium.lite.htmlelements.element.TypifiedElement;
 import com.frameworkium.lite.htmlelements.loader.decorator.HtmlElementDecorator;
 import com.frameworkium.lite.htmlelements.loader.decorator.HtmlElementLocatorFactory;
 import com.frameworkium.lite.htmlelements.loader.decorator.proxyhandlers.WebElementNamedProxyHandler;
 import com.frameworkium.lite.htmlelements.pagefactory.CustomElementLocatorFactory;
+
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -13,10 +18,6 @@ import org.openqa.selenium.support.pagefactory.ElementLocator;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
-
-import static com.frameworkium.lite.htmlelements.loader.decorator.ProxyFactory.createWebElementProxy;
-import static com.frameworkium.lite.htmlelements.utils.HtmlElementUtils.getElementName;
-import static com.frameworkium.lite.htmlelements.utils.HtmlElementUtils.newInstance;
 
 /** Initialises blocks of elements and page objects. */
 public class HtmlElementLoader {
@@ -45,7 +46,8 @@ public class HtmlElementLoader {
      * @param searchContext {@code SearchContext} that will be used to look up the elements.
      * @return Initialized instance of the specified class.
      */
-    public static <T extends HtmlElement> T createHtmlElement(Class<T> clazz, SearchContext searchContext) {
+    public static <T extends HtmlElement> T createHtmlElement(
+            Class<T> clazz, SearchContext searchContext) {
         ElementLocator locator = new HtmlElementLocatorFactory(searchContext).createLocator(clazz);
         String elementName = getElementName(clazz);
 
@@ -54,7 +56,8 @@ public class HtmlElementLoader {
         return createHtmlElement(clazz, elementToWrap);
     }
 
-    public static <T extends HtmlElement> T createHtmlElement(Class<T> elementClass, WebElement elementToWrap) {
+    public static <T extends HtmlElement> T createHtmlElement(
+            Class<T> elementClass, WebElement elementToWrap) {
         try {
             T instance = newInstance(elementClass);
             instance.setWrappedElement(elementToWrap);
@@ -62,14 +65,15 @@ public class HtmlElementLoader {
             populatePageObject(instance, elementToWrap);
             return instance;
         } catch (NoSuchMethodException
-                 | InstantiationException
-                 | IllegalAccessException
-                 | InvocationTargetException e) {
+                | InstantiationException
+                | IllegalAccessException
+                | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static <T extends TypifiedElement> T createTypifiedElement(Class<T> clazz, SearchContext searchContext) {
+    public static <T extends TypifiedElement> T createTypifiedElement(
+            Class<T> clazz, SearchContext searchContext) {
         ElementLocator locator = new HtmlElementLocatorFactory(searchContext).createLocator(clazz);
         String elementName = getElementName(clazz);
 
@@ -79,13 +83,14 @@ public class HtmlElementLoader {
         return createTypifiedElement(clazz, elementToWrap);
     }
 
-    public static <T extends TypifiedElement> T createTypifiedElement(Class<T> elementClass, WebElement elementToWrap) {
+    public static <T extends TypifiedElement> T createTypifiedElement(
+            Class<T> elementClass, WebElement elementToWrap) {
         try {
             return newInstance(elementClass, elementToWrap);
         } catch (NoSuchMethodException
-                 | InstantiationException
-                 | IllegalAccessException
-                 | InvocationTargetException e) {
+                | InstantiationException
+                | IllegalAccessException
+                | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }

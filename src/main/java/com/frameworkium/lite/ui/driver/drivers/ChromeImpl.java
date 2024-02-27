@@ -2,6 +2,7 @@ package com.frameworkium.lite.ui.driver.drivers;
 
 import com.frameworkium.lite.common.properties.Property;
 import com.frameworkium.lite.ui.driver.AbstractDriver;
+
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -28,5 +29,4 @@ public class ChromeImpl extends AbstractDriver {
         }
         return new ChromeDriver(chromeOptions);
     }
-
 }

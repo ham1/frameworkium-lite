@@ -1,6 +1,7 @@
 package com.frameworkium.lite.ui.driver.lifecycle;
 
 import com.frameworkium.lite.ui.driver.Driver;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
@@ -39,8 +40,7 @@ public class MultiUseDriverLifecycle implements DriverLifecycle {
     @Override
     public void initDriverPool() {
         if (driverPool != null) {
-            throw new IllegalStateException(
-                    "initDriverPool called when already initialised");
+            throw new IllegalStateException("initDriverPool called when already initialised");
         }
         driverPool = new LinkedBlockingDeque<>(poolSize);
         IntStream.range(0, poolSize)
@@ -95,15 +95,14 @@ public class MultiUseDriverLifecycle implements DriverLifecycle {
             return;
         }
 
-        driverPool.parallelStream()
-                .forEach(driver -> {
-                    try {
-                        driver.getWebDriver().quit();
-                    } catch (Exception e) {
-                        logger.error("Failed to quit a browser in the pool.");
-                        logger.debug("Failed to quit a browser in the pool.", e);
-                    }
-                });
+        driverPool.parallelStream().forEach(driver -> {
+            try {
+                driver.getWebDriver().quit();
+            } catch (Exception e) {
+                logger.error("Failed to quit a browser in the pool.");
+                logger.debug("Failed to quit a browser in the pool.", e);
+            }
+        });
 
         driverPool = null; // allows re-initialisation
     }

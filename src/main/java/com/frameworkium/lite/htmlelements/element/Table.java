@@ -1,13 +1,13 @@
 package com.frameworkium.lite.htmlelements.element;
 
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.util.*;
-
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 /**
  * Represents a simple table element.
@@ -47,9 +47,7 @@ public class Table extends TypifiedElement {
      * @return List with text values of table heading elements.
      */
     public List<String> getHeadingsAsString() {
-        return getHeadings().stream()
-                .map(WebElement::getText)
-                .collect(toList());
+        return getHeadings().stream().map(WebElement::getText).collect(toList());
     }
 
     /**
@@ -58,9 +56,7 @@ public class Table extends TypifiedElement {
      * @return List where each item is a table row.
      */
     public List<List<WebElement>> getRows() {
-        return getWrappedElement()
-                .findElements(By.xpath(".//tr"))
-                .stream()
+        return getWrappedElement().findElements(By.xpath(".//tr")).stream()
                 .map(rowElement -> rowElement.findElements(By.xpath(".//td")))
                 .filter(row -> !row.isEmpty()) // ignore rows with no <td> tags
                 .collect(toList());
@@ -73,9 +69,7 @@ public class Table extends TypifiedElement {
      */
     public List<List<String>> getRowsAsString() {
         return getRows().stream()
-                .map(row -> row.stream()
-                        .map(WebElement::getText)
-                        .collect(toList()))
+                .map(row -> row.stream().map(WebElement::getText).collect(toList()))
                 .collect(toList());
     }
 
@@ -111,8 +105,8 @@ public class Table extends TypifiedElement {
      * @return List where each item is a cell of a particular column.
      */
     public List<WebElement> getColumnByIndex(int index) {
-        return getWrappedElement().findElements(
-                By.cssSelector(String.format("tr > td:nth-of-type(%d)", index)));
+        return getWrappedElement()
+                .findElements(By.cssSelector(String.format("tr > td:nth-of-type(%d)", index)));
     }
 
     /**
@@ -122,9 +116,7 @@ public class Table extends TypifiedElement {
      */
     public List<List<String>> getColumnsAsString() {
         return getColumns().stream()
-                .map(row -> row.stream()
-                        .map(WebElement::getText)
-                        .collect(toList()))
+                .map(row -> row.stream().map(WebElement::getText).collect(toList()))
                 .collect(toList());
     }
 
@@ -157,7 +149,8 @@ public class Table extends TypifiedElement {
      */
     public List<Map<String, WebElement>> getRowsMappedToHeadings(List<String> headings) {
         return getRowsMappedToHeadings().stream()
-                .map(e -> e.entrySet().stream().filter(m -> headings.contains(m.getKey()))
+                .map(e -> e.entrySet().stream()
+                        .filter(m -> headings.contains(m.getKey()))
                         .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)))
                 .collect(toList());
     }
@@ -170,7 +163,6 @@ public class Table extends TypifiedElement {
                 .map(m -> m.entrySet().stream()
                         .collect(toMap(Map.Entry::getKey, e -> e.getValue().getText())))
                 .collect(toList());
-
     }
 
     /**

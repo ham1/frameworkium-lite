@@ -13,5 +13,4 @@ public class SoftwareUnderTest extends AbstractDTO<SoftwareUnderTest> {
         sut.version = "master";
         return sut;
     }
-
 }

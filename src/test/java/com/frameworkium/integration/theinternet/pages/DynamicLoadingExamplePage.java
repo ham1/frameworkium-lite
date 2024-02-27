@@ -1,14 +1,15 @@
 package com.frameworkium.integration.theinternet.pages;
 
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
+
 import com.frameworkium.lite.htmlelements.annotations.Timeout;
 import com.frameworkium.lite.htmlelements.element.Button;
 import com.frameworkium.lite.htmlelements.element.HtmlElement;
 import com.frameworkium.lite.ui.annotations.Invisible;
 import com.frameworkium.lite.ui.annotations.Visible;
 import com.frameworkium.lite.ui.pages.BasePage;
-import org.openqa.selenium.support.FindBy;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
+import org.openqa.selenium.support.FindBy;
 
 public class DynamicLoadingExamplePage extends BasePage<DynamicLoadingExamplePage> {
 
@@ -35,5 +36,4 @@ public class DynamicLoadingExamplePage extends BasePage<DynamicLoadingExamplePag
         wait.until(visibilityOf(dynamicElement));
         return dynamicElement.getText();
     }
-
 }

@@ -7,8 +7,7 @@ import java.time.format.DateTimeFormatter;
 
 public class BookingDates extends AbstractDTO<BookingDates> {
 
-    public static final DateTimeFormatter FORMAT =
-            DateTimeFormatter.ISO_LOCAL_DATE;
+    public static final DateTimeFormatter FORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
 
     public String checkin;
     public String checkout;

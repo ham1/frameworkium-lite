@@ -1,10 +1,13 @@
 package com.frameworkium.lite.ui;
 
+import static java.time.temporal.ChronoUnit.SECONDS;
+
 import com.frameworkium.lite.common.properties.Property;
 import com.frameworkium.lite.ui.browsers.UserAgent;
 import com.frameworkium.lite.ui.capture.ScreenshotCapture;
 import com.frameworkium.lite.ui.driver.DriverSetup;
 import com.frameworkium.lite.ui.driver.lifecycle.*;
+
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -15,8 +18,6 @@ import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.Optional;
-
-import static java.time.temporal.ChronoUnit.SECONDS;
 
 /**
  * Handles all UI test related state and life cycle.
@@ -43,10 +44,8 @@ public class UITestLifecycle {
     /** Run this before the test suite to initialise a pool of drivers. */
     public static void beforeSuite() {
         if (Property.REUSE_BROWSER.getBoolean()) {
-            driverLifecycle =
-                    new MultiUseDriverLifecycle(
-                            DriverSetup::instantiateDriver,
-                            Property.THREADS.getIntWithDefault(1));
+            driverLifecycle = new MultiUseDriverLifecycle(
+                    DriverSetup::instantiateDriver, Property.THREADS.getIntWithDefault(1));
         } else {
             driverLifecycle = new SingleUseDriverLifecycle(DriverSetup::instantiateDriver);
         }

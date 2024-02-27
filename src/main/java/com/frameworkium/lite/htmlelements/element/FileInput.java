@@ -1,19 +1,13 @@
 package com.frameworkium.lite.htmlelements.element;
 
-import com.frameworkium.lite.common.properties.Property;
-import com.frameworkium.lite.ui.UITestLifecycle;
-import org.openqa.selenium.WebDriver;
+import static com.frameworkium.lite.htmlelements.utils.HtmlElementUtils.existsInClasspath;
+import static com.frameworkium.lite.htmlelements.utils.HtmlElementUtils.getResourceFromClasspath;
+
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.WrapsDriver;
-import org.openqa.selenium.remote.LocalFileDetector;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.frameworkium.lite.htmlelements.utils.HtmlElementUtils.existsInClasspath;
-import static com.frameworkium.lite.htmlelements.utils.HtmlElementUtils.getResourceFromClasspath;
 
 /**
  * Represents web page file upload element.
@@ -55,9 +49,8 @@ public class FileInput extends TypifiedElement {
      * @param fileNames a list of file Names to be uploaded.
      */
     public void setFilesToUpload(List<String> fileNames) {
-        String filePaths = fileNames.stream()
-                .map(this::getFilePath)
-                .collect(Collectors.joining("\n"));
+        String filePaths =
+                fileNames.stream().map(this::getFilePath).collect(Collectors.joining("\n"));
         sendKeys(filePaths);
     }
 

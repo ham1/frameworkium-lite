@@ -8,5 +8,4 @@ public class Screenshot extends AbstractDTO<Screenshot> {
     public String imageURL;
     public String timestamp;
     public String url;
-
 }

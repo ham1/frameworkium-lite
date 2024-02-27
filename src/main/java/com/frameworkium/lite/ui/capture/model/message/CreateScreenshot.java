@@ -2,6 +2,7 @@ package com.frameworkium.lite.ui.capture.model.message;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.frameworkium.lite.ui.capture.model.Command;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,15 +20,21 @@ public class CreateScreenshot {
      * Create screenshot object.
      */
     public CreateScreenshot(
-            String executionID, Command command, String url,
-            String errorMessage, String screenshotBase64) {
+            String executionID,
+            Command command,
+            String url,
+            String errorMessage,
+            String screenshotBase64) {
 
-        logger.debug("Creating screenshot: executionID='{}', "
+        logger.debug(
+                "Creating screenshot: executionID='{}', "
                         + "Command.action='{}', url='{}', "
                         + "errorMessage='{}', screenshotBase64.length={}",
                 executionID,
-                command.action, url,
-                errorMessage, screenshotBase64.length());
+                command.action,
+                url,
+                errorMessage,
+                screenshotBase64.length());
         this.executionID = executionID;
         this.command = command;
         this.url = url;

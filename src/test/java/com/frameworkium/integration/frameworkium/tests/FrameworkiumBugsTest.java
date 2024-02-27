@@ -1,13 +1,14 @@
 package com.frameworkium.integration.frameworkium.tests;
 
-import com.frameworkium.lite.ui.UITestLifecycle;
-import com.frameworkium.lite.ui.tests.BaseUITest;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.frameworkium.integration.frameworkium.pages.JQueryDemoPage;
 import com.frameworkium.integration.seleniumhq.pages.SeleniumDownloadPage;
+import com.frameworkium.lite.ui.UITestLifecycle;
+import com.frameworkium.lite.ui.tests.BaseUITest;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 // tests if BeforeMethods are run despite not being in this group
 @Test(groups = "fw-bugs")
@@ -19,10 +20,7 @@ public class FrameworkiumBugsTest extends BaseUITest {
     }
 
     public void ensure_jQueryAjaxDone_does_not_fail() {
-        String headingText =
-                JQueryDemoPage.open()
-                        .waitForJQuery()
-                        .getHeadingText();
+        String headingText = JQueryDemoPage.open().waitForJQuery().getHeadingText();
         assertThat(headingText).isEqualTo("jQuery UI Demos");
     }
 
@@ -40,5 +38,4 @@ public class FrameworkiumBugsTest extends BaseUITest {
         logger.info("Using BaseUITest logger");
         SeleniumDownloadPage.open().log();
     }
-
 }

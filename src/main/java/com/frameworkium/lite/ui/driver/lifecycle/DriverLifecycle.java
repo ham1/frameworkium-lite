@@ -1,6 +1,7 @@
 package com.frameworkium.lite.ui.driver.lifecycle;
 
 import com.frameworkium.lite.ui.driver.Driver;
+
 import org.openqa.selenium.WebDriver;
 
 import java.util.function.Supplier;

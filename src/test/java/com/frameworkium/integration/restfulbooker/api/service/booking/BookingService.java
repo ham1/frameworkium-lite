@@ -11,40 +11,37 @@ import java.util.Map;
 public class BookingService extends AbstractBookerService {
 
     public List<BookingID> listBookings() {
-        return get(BookerEndpoint.BOOKING.getUrl())
-                .jsonPath().getList(".", BookingID.class);
+        return get(BookerEndpoint.BOOKING.getUrl()).jsonPath().getList(".", BookingID.class);
     }
 
     public Booking getBooking(int id) {
-        return get(BookerEndpoint.BOOKING_ID.getUrl(id))
-                .as(Booking.class);
+        return get(BookerEndpoint.BOOKING_ID.getUrl(id)).as(Booking.class);
     }
 
     public CreateBookingResponse createBooking(Booking booking) {
-        return post(booking, BookerEndpoint.BOOKING.getUrl())
-                .as(CreateBookingResponse.class);
+        return post(booking, BookerEndpoint.BOOKING.getUrl()).as(CreateBookingResponse.class);
     }
 
     public List<BookingID> search(Map<String, String> searchParams) {
         return get(BookerEndpoint.BOOKING.getUrl(), searchParams)
-                .jsonPath().getList(".", BookingID.class);
+                .jsonPath()
+                .getList(".", BookingID.class);
     }
 
     public String createAuthToken(String username, String password) {
         return post(
-                ImmutableMap.of("username", username, "password", password),
-                BookerEndpoint.AUTH.getUrl())
-                .jsonPath().get("token");
+                        ImmutableMap.of("username", username, "password", password),
+                        BookerEndpoint.AUTH.getUrl())
+                .jsonPath()
+                .get("token");
     }
 
     public void delete(int bookingID, String token) {
-        getRequestSpec()
-                .cookie("token", token)
-                .delete(BookerEndpoint.BOOKING_ID.getUrl(bookingID))
-                // API does not match documentation
-                // .then()
-                // .statusCode(HttpStatus.SC_NO_CONTENT)
-                ;
+        getRequestSpec().cookie("token", token).delete(BookerEndpoint.BOOKING_ID.getUrl(bookingID))
+        // API does not match documentation
+        // .then()
+        // .statusCode(HttpStatus.SC_NO_CONTENT)
+        ;
     }
 
     public boolean doesBookingExist(int bookingID) {

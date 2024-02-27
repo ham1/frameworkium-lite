@@ -2,6 +2,7 @@ package com.frameworkium.lite.ui.driver;
 
 import com.frameworkium.lite.common.properties.Property;
 import com.frameworkium.lite.ui.driver.drivers.*;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,7 +14,12 @@ public class DriverSetup {
 
     /** Supported drivers. */
     public enum Browser {
-        FIREFOX, CHROME, EDGE, IE, SAFARI, CUSTOM
+        FIREFOX,
+        CHROME,
+        EDGE,
+        IE,
+        SAFARI,
+        CUSTOM
     }
 
     protected static final Logger logger = LogManager.getLogger();
@@ -48,10 +54,13 @@ public class DriverSetup {
                     return getCustomBrowserImpl(customBrowserImpl)
                             .getDeclaredConstructor()
                             .newInstance();
-                } catch (InstantiationException | IllegalAccessException
-                        | NoSuchMethodException | InvocationTargetException e) {
+                } catch (InstantiationException
+                        | IllegalAccessException
+                        | NoSuchMethodException
+                        | InvocationTargetException e) {
                     throw new IllegalArgumentException(
-                            "Unable to use custom browser implementation - " + customBrowserImpl, e);
+                            "Unable to use custom browser implementation - " + customBrowserImpl,
+                            e);
                 }
             default:
                 throw new IllegalArgumentException("Invalid Browser specified");
@@ -84,9 +93,9 @@ public class DriverSetup {
         } catch (ClassNotFoundException ex) {
             String message = "Failed to find custom browser implementation class: " + implClassName;
             logger.fatal(message, ex);
-            throw new IllegalArgumentException(message
-                    + "\nFully qualified class name is required. "
-                    + "e.g. com.frameworkium.ui.MyCustomImpl");
+            throw new IllegalArgumentException(
+                    message + "\nFully qualified class name is required. "
+                            + "e.g. com.frameworkium.ui.MyCustomImpl");
         } catch (ClassCastException ex) {
             String message = String.format(
                     "Custom browser implementation class '%s' does not implement the Driver interface.",

@@ -1,14 +1,15 @@
 package com.frameworkium.integration.theinternet.pages;
 
+import static java.time.temporal.ChronoUnit.SECONDS;
+
+import com.frameworkium.lite.htmlelements.element.Link;
 import com.frameworkium.lite.ui.annotations.Visible;
 import com.frameworkium.lite.ui.pages.BasePage;
 import com.frameworkium.lite.ui.pages.PageFactory;
+
 import org.openqa.selenium.support.FindBy;
-import com.frameworkium.lite.htmlelements.element.Link;
 
 import java.time.Duration;
-
-import static java.time.temporal.ChronoUnit.SECONDS;
 
 public class WelcomePage extends BasePage<WelcomePage> {
 
@@ -49,8 +50,7 @@ public class WelcomePage extends BasePage<WelcomePage> {
 
     public CheckboxesPage clickCheckboxesLink() {
         checkboxesLink.click();
-        return PageFactory.newInstance(
-                CheckboxesPage.class, Duration.of(15, SECONDS));
+        return PageFactory.newInstance(CheckboxesPage.class, Duration.of(15, SECONDS));
     }
 
     public DragAndDropPage clickDragAndDropLink() {

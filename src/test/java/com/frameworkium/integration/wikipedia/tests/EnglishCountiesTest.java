@@ -1,11 +1,12 @@
 package com.frameworkium.integration.wikipedia.tests;
 
-import com.frameworkium.lite.ui.tests.BaseUITest;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.frameworkium.integration.wikipedia.pages.EnglishCountiesPage;
 import com.frameworkium.integration.wikipedia.pages.EnglishCountiesUsingListsPage;
-import org.testng.annotations.Test;
+import com.frameworkium.lite.ui.tests.BaseUITest;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.testng.annotations.Test;
 
 /**
  * This test demonstrates the different between using
@@ -22,27 +23,18 @@ public class EnglishCountiesTest extends BaseUITest {
     public void exploring_english_counties_data_with_stream_table() {
         var page = EnglishCountiesPage.open();
 
-        assertThat(page.populationOf("Cornwall"))
-                .isGreaterThan(550_000);
+        assertThat(page.populationOf("Cornwall")).isGreaterThan(550_000);
         // at least two counties have population densities of more than 3000
-        assertThat(page.densities()
-                .filter(density -> density > 3000)
-                .limit(2)
-                .count())
+        assertThat(page.densities().filter(density -> density > 3000).limit(2).count())
                 .isEqualTo(2L);
     }
-
 
     public void exploring_english_counties_data_with_lists() {
         var page = EnglishCountiesUsingListsPage.open();
 
-        assertThat(page.populationOf("Cornwall"))
-                .isGreaterThan(550_000);
+        assertThat(page.populationOf("Cornwall")).isGreaterThan(550_000);
         // at least two counties have population densities of more than 3000
-        assertThat(page.densities()
-                .filter(density -> density > 3000)
-                .limit(2)
-                .count())
+        assertThat(page.densities().filter(density -> density > 3000).limit(2).count())
                 .isEqualTo(2L);
     }
 }

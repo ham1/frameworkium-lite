@@ -31,7 +31,8 @@ public class EnglishCountiesPage extends BasePage<EnglishCountiesPage> {
     private OptimisedStreamTable listTable;
 
     public static EnglishCountiesPage open() {
-        return PageFactory.newInstance(EnglishCountiesPage.class,
+        return PageFactory.newInstance(
+                EnglishCountiesPage.class,
                 "https://en.wikipedia.org/wiki/List_of_ceremonial_counties_of_England");
     }
 
@@ -56,5 +57,4 @@ public class EnglishCountiesPage extends BasePage<EnglishCountiesPage> {
                 .map(density -> density.replaceAll("\\D+", ""))
                 .map(Integer::parseInt);
     }
-
 }

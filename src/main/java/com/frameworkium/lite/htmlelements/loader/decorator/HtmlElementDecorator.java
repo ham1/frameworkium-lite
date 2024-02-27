@@ -1,20 +1,21 @@
 package com.frameworkium.lite.htmlelements.loader.decorator;
 
+import static com.frameworkium.lite.htmlelements.loader.HtmlElementLoader.createHtmlElement;
+import static com.frameworkium.lite.htmlelements.loader.HtmlElementLoader.createTypifiedElement;
+import static com.frameworkium.lite.htmlelements.loader.decorator.ProxyFactory.*;
+import static com.frameworkium.lite.htmlelements.utils.HtmlElementUtils.*;
+
 import com.frameworkium.lite.htmlelements.element.HtmlElement;
 import com.frameworkium.lite.htmlelements.element.TypifiedElement;
 import com.frameworkium.lite.htmlelements.loader.decorator.proxyhandlers.*;
 import com.frameworkium.lite.htmlelements.pagefactory.CustomElementLocatorFactory;
+
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.util.List;
-
-import static com.frameworkium.lite.htmlelements.loader.HtmlElementLoader.createHtmlElement;
-import static com.frameworkium.lite.htmlelements.loader.HtmlElementLoader.createTypifiedElement;
-import static com.frameworkium.lite.htmlelements.loader.decorator.ProxyFactory.*;
-import static com.frameworkium.lite.htmlelements.utils.HtmlElementUtils.*;
 
 /**
  * Decorator which is used to decorate fields of blocks and page objects.
@@ -67,7 +68,8 @@ public class HtmlElementDecorator implements FieldDecorator {
         }
     }
 
-    protected <T extends TypifiedElement> T decorateTypifiedElement(ClassLoader loader, Field field) {
+    protected <T extends TypifiedElement> T decorateTypifiedElement(
+            ClassLoader loader, Field field) {
         WebElement elementToWrap = decorateWebElement(loader, field);
 
         //noinspection unchecked
@@ -88,31 +90,36 @@ public class HtmlElementDecorator implements FieldDecorator {
         return createWebElementProxy(loader, handler);
     }
 
-    protected <T extends TypifiedElement> List<T> decorateTypifiedElementList(ClassLoader loader, Field field) {
+    protected <T extends TypifiedElement> List<T> decorateTypifiedElementList(
+            ClassLoader loader, Field field) {
         @SuppressWarnings("unchecked")
         Class<T> elementClass = (Class<T>) getGenericParameterClass(field);
         ElementLocator locator = factory.createLocator(field);
         String name = getElementName(field);
 
-        InvocationHandler handler = new TypifiedElementListNamedProxyHandler<>(elementClass, locator, name);
+        InvocationHandler handler =
+                new TypifiedElementListNamedProxyHandler<>(elementClass, locator, name);
 
         return createTypifiedElementListProxy(loader, handler);
     }
 
-    protected <T extends HtmlElement> List<T> decorateHtmlElementList(ClassLoader loader, Field field) {
+    protected <T extends HtmlElement> List<T> decorateHtmlElementList(
+            ClassLoader loader, Field field) {
         @SuppressWarnings("unchecked")
         Class<T> elementClass = (Class<T>) getGenericParameterClass(field);
         ElementLocator locator = factory.createLocator(field);
         String name = getElementName(field);
 
-        InvocationHandler handler = new HtmlElementListNamedProxyHandler<>(elementClass, locator, name);
+        InvocationHandler handler =
+                new HtmlElementListNamedProxyHandler<>(elementClass, locator, name);
 
         return createHtmlElementListProxy(loader, handler);
     }
 
     protected List<WebElement> decorateWebElementList(ClassLoader loader, Field field) {
         ElementLocator locator = factory.createLocator(field);
-        InvocationHandler handler = new WebElementListNamedProxyHandler(locator, getElementName(field));
+        InvocationHandler handler =
+                new WebElementListNamedProxyHandler(locator, getElementName(field));
 
         return createWebElementListProxy(loader, handler);
     }
