@@ -7,25 +7,16 @@ import com.frameworkium.lite.ui.driver.Driver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.ui.Wait;
 
-import java.util.Set;
-
-@ExtendWith(BrowserSetupAndTearDown.class)
+@Tag("base-ui")
 public abstract class BaseUITest {
 
     /**
      * Logger for subclasses (logs with correct class i.e. not BaseUITest).
      */
     protected final Logger logger = LogManager.getLogger(this);
-
-    @RegisterExtension
-    static RetryOnExceptionExtension retryOnExceptionExtension =
-            new RetryOnExceptionExtension(3, Set.of(UnreachableBrowserException.class));
 
     /**
      * Runs before each test method, it initialises the following:

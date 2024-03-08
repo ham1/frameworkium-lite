@@ -2,22 +2,17 @@ package com.frameworkium.lite.ui.tests;
 
 import com.frameworkium.lite.ui.UITestLifecycle;
 
-import org.junit.jupiter.api.extension.AfterAllCallback;
-import org.junit.jupiter.api.extension.BeforeAllCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.platform.launcher.TestExecutionListener;
+import org.junit.platform.launcher.TestPlan;
 
-public class BrowserSetupAndTearDown implements BeforeAllCallback, AfterAllCallback {
+public class BrowserSetupAndTearDown implements TestExecutionListener {
 
-    private static boolean started = false;
     /**
      * Runs before the test suite to initialise a pool of drivers, if requested.
      */
     @Override
-    public void beforeAll(ExtensionContext context) {
-        if (!started) {
-            UITestLifecycle.beforeSuite();
-            started = true;
-        }
+    public void testPlanExecutionStarted(TestPlan testPlan) {
+        UITestLifecycle.beforeSuite();
     }
 
     /**
@@ -27,7 +22,7 @@ public class BrowserSetupAndTearDown implements BeforeAllCallback, AfterAllCallb
      * </ul>
      */
     @Override
-    public void afterAll(ExtensionContext context) throws Exception {
+    public void testPlanExecutionFinished(TestPlan testPlan) {
         UITestLifecycle.get().afterTestSuite();
     }
 }

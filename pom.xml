@@ -278,25 +278,26 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.2.5</version>
                 <configuration>
-                    <parallel>all</parallel>
-                    <threadCount>${threads}</threadCount>
-                    <useUnlimitedThreads>false</useUnlimitedThreads>
+                    <groups>${groups}</groups>
+
                     <properties>
                         <configurationParameters>
-                            junit.jupiter.execution.parallel.enabled = true
-                            junit.jupiter.execution.parallel.mode.default = concurrent
+                            junit.jupiter.execution.parallel.enabled=true
+                            junit.jupiter.execution.parallel.mode.default=concurrent
+                            junit.jupiter.execution.parallel.mode.classes.default=concurrent
+
+                            <!-- Control the strategy for parallelism -->
+                            junit.jupiter.execution.parallel.config.strategy=fixed
+                            junit.jupiter.execution.parallel.config.fixed.parallelism=${threads}
+                            <!-- JUnit5 uses a ForkJoin Pool this is needed to make it behaves as we expect -->
+                            junit.jupiter.execution.parallel.config.fixed.max-pool-size=${threads}
+
+                            junit.jupiter.testclass.order.default=org.junit.jupiter.api.ClassOrderer$Random
                         </configurationParameters>
                     </properties>
 
-                    <systemPropertyVariables>
-                        <!-- For Local screenshots on test failure -->
-                        <screenshotDirectory>
-                            ${project.build.directory}/screenshots
-                        </screenshotDirectory>
-                    </systemPropertyVariables>
-
                     <failIfNoTests>true</failIfNoTests>
-                    <groups>${groups}</groups>
+
                     <includes>
                         <include>**/*Test.java</include>
                         <include>**/*Tests.java</include>

@@ -5,12 +5,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.frameworkium.integration.theinternet.pages.*;
 import com.frameworkium.lite.ui.tests.BaseUITest;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Disabled("Website is now too slow")
 public class TheInternetExampleTests extends BaseUITest {
 
     public void check_boxes_can_all_be_checked() {

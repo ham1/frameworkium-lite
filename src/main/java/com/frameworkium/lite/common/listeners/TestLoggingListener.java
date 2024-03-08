@@ -20,7 +20,7 @@ public class TestLoggingListener implements TestExecutionListener {
     @Override
     public void executionStarted(TestIdentifier testIdentifier) {
         if (testIdentifier.isTest()) {
-            logger.debug("START {}", getTestIdentifier(testIdentifier));
+            logger.info("START {}", getTestIdentifier(testIdentifier));
         }
     }
 
@@ -36,7 +36,7 @@ public class TestLoggingListener implements TestExecutionListener {
                     case ABORTED -> "ABORT";
                     case FAILED -> "FAIL";
                 };
-        logger.debug("{}} {}", msg, getTestIdentifier(testIdentifier));
+        logger.info("{}  {}", msg, getTestIdentifier(testIdentifier));
     }
 
     private String getTestIdentifier(TestIdentifier testIdentifier) {
