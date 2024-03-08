@@ -1,376 +1,392 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.github.ham1</groupId>
-  <artifactId>frameworkium-lite</artifactId>
-  <version>4.7.6-SNAPSHOT</version>
-  <name>frameworkium-lite</name>
-  <description>
-    A UI and API Test framework, based upon Frameworkium Core.
-  </description>
-  <url />
-  <inceptionYear>2020</inceptionYear>
-  <licenses />
+    <groupId>com.github.ham1</groupId>
+    <artifactId>frameworkium-lite</artifactId>
+    <version>4.7.6-SNAPSHOT</version>
+    <name>frameworkium-lite</name>
+    <description>
+        A UI and API Test framework, based upon Frameworkium Core.
+    </description>
+    <url/>
+    <inceptionYear>2020</inceptionYear>
+    <licenses/>
 
-  <developers />
-  <contributors />
+    <developers/>
+    <contributors/>
 
-  <modules />
+    <modules/>
 
-  <scm>
-    <connection>scm:git:git@github.com:ham1/frameworkium-lite</connection>
-    <url>scm:git:git@github.com:ham1/frameworkium-lite</url>
-    <developerConnection>scm:git:git@github.com:ham1/frameworkium-lite</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
-  <issueManagement>
-    <system>github issues</system>
-    <url>https://github.com/ham1/frameworkium-lite/issues</url>
-  </issueManagement>
-  <ciManagement>
-    <url>https://github.com/ham1/frameworkium-lite/actions</url>
-  </ciManagement>
+    <scm>
+        <connection>scm:git:git@github.com:ham1/frameworkium-lite</connection>
+        <url>scm:git:git@github.com:ham1/frameworkium-lite</url>
+        <developerConnection>scm:git:git@github.com:ham1/frameworkium-lite</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+    <issueManagement>
+        <system>github issues</system>
+        <url>https://github.com/ham1/frameworkium-lite/issues</url>
+    </issueManagement>
+    <ciManagement>
+        <url>https://github.com/ham1/frameworkium-lite/actions</url>
+    </ciManagement>
 
-  <distributionManagement />
+    <distributionManagement/>
 
-  <properties>
-    <threads>1</threads>
-    <groups />
-    <log4j2.version>2.23.0</log4j2.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <!-- default skip.surefire.tests to the value of skipTests -->
-    <skip.surefire.tests>${skipTests}</skip.surefire.tests>
-    <sonar.projectKey>ham1_frameworkium-lite</sonar.projectKey>
-    <sonar.organization>ham1</sonar.organization>
-    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-  </properties>
+    <properties>
+        <threads>1</threads>
+        <groups/>
+        <log4j2.version>2.23.0</log4j2.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- default skip.surefire.tests to the value of skipTests -->
+        <skip.surefire.tests>${skipTests}</skip.surefire.tests>
+        <sonar.projectKey>ham1_frameworkium-lite</sonar.projectKey>
+        <sonar.organization>ham1</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    </properties>
 
-  <!-- Check for updates with mvn versions:display-dependency-updates -->
-  <dependencies>
-    <!-- Selenium related -->
-    <dependency>
-      <groupId>org.seleniumhq.selenium</groupId>
-      <artifactId>selenium-java</artifactId>
-      <version>4.18.1</version>
-    </dependency>
-
-    <dependency>
-      <groupId>net.sf.uadetector</groupId>
-      <artifactId>uadetector-resources</artifactId>
-      <version>2014.10</version>
-    </dependency>
-
-    <!-- Test related -->
-    <dependency>
-      <!--
-      Need to use IntelliJ 2020.3 or later, see:
-      https://stackoverflow.com/questions/57299606/testng-by-default-disables-loading-dtd-from-unsecure-urls
-      https://youtrack.jetbrains.com/issue/IDEA-234765
-      -->
-      <groupId>org.testng</groupId>
-      <artifactId>testng</artifactId>
-      <version>7.9.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <version>3.25.3</version>
-    </dependency>
-
-    <!-- Used in some parts of the code and is the latest version
-         rather than rely on an older version from Selenium. -->
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>33.0.0-jre</version>
-    </dependency>
-
-    <!-- Logging related -->
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-core</artifactId>
-      <version>${log4j2.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-api</artifactId>
-      <version>${log4j2.version}</version>
-    </dependency>
-
-    <!-- API related -->
-    <dependency>
-      <groupId>io.rest-assured</groupId>
-      <artifactId>rest-assured</artifactId>
-      <version>5.4.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>2.16.1</version>
-    </dependency>
-
-    <!-- Explicitly adding utilities -->
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>3.14.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
-      <version>2.16.1</version>
-    </dependency>
-
-    <!-- Local Unit Testing -->
-    <dependency>
-      <groupId>org.spockframework</groupId>
-      <artifactId>spock-core</artifactId>
-      <version>2.3-groovy-4.0</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- Used in a Capture Integration Test -->
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.15.1</version>
-      <scope>test</scope>
-    </dependency>
-
-  </dependencies>
-
-  <pluginRepositories />
-
-  <build>
-    <!-- Check for updates with mvn versions:display-plugin-updates -->
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <version>3.4.1</version>
-        <executions>
-          <execution>
-            <id>enforce-maven</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <requireMavenVersion>
-                  <!-- this is the version jitpack.io uses -->
-                  <version>3.6.1</version>
-                </requireMavenVersion>
-              </rules>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!-- Compiles Java -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.12.1</version>
-        <configuration>
-          <source>17</source>
-          <target>17</target>
-        </configuration>
-      </plugin>
-
-      <!-- Code coverage -->
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.11</version>
-        <executions>
-          <!-- Start the agent for unit tests -->
-          <execution>
-            <id>jacoco-initialize</id>
-            <goals>
-              <goal>prepare-agent</goal>
-            </goals>
-            <configuration>
-              <!-- Property containing settings for JaCoCo runtime agent -->
-              <propertyName>surefireArgLine</propertyName>
-            </configuration>
-          </execution>
-          <!-- Create coverage report after running unit tests -->
-          <execution>
-            <id>post-unit-test</id>
-            <phase>test</phase>
-            <goals>
-              <goal>report</goal>
-            </goals>
-          </execution>
-          <!-- Start the agent for integration tests -->
-          <execution>
-            <id>pre-integration-test</id>
-            <phase>pre-integration-test</phase>
-            <goals>
-              <goal>prepare-agent</goal>
-            </goals>
-            <configuration>
-              <!-- Property for JaCoCo runtime agent, passed to Failsafe plugin -->
-              <propertyName>failsafeArgLine</propertyName>
-            </configuration>
-          </execution>
-          <!-- Create coverage report after running integration tests -->
-          <execution>
-            <id>post-integration-test</id>
-            <phase>post-integration-test</phase>
-            <goals>
-              <goal>report</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!-- Compiles Groovy code for Spock unit tests-->
-      <plugin>
-        <groupId>org.codehaus.gmavenplus</groupId>
-        <artifactId>gmavenplus-plugin</artifactId>
-        <version>3.0.2</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>compileTests</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!-- Spock unit tests (using surefire-plugin) -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.2.5</version>
-        <configuration>
-          <!-- Sets arg line for Jacoco agent when unit tests are run -->
-          <argLine>${surefireArgLine}</argLine>
-          <failIfNoTests>true</failIfNoTests>
-          <includes>
-            <include>**/*Spec.*</include>
-          </includes>
-          <skipTests>${skip.surefire.tests}</skipTests>
-        </configuration>
-      </plugin>
-
-      <!-- Integration tests (failsafe-plugin) -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
-        <version>3.2.5</version>
-        <configuration>
-          <parallel>methods</parallel>
-          <threadCount>${threads}</threadCount>
-
-          <systemPropertyVariables>
-            <!-- For Local screenshots on test failure -->
-            <screenshotDirectory>
-              ${project.build.directory}/screenshots
-            </screenshotDirectory>
-          </systemPropertyVariables>
-
-          <failIfNoTests>true</failIfNoTests>
-          <groups>${groups}</groups>
-          <includes>
-            <include>**/*Test.java</include>
-            <include>**/*Tests.java</include>
-          </includes>
-
-          <!-- required for Jacoco code coverage -->
-          <argLine>${failsafeArgLine}</argLine>
-        </configuration>
+    <dependencyManagement>
         <dependencies>
-          <dependency>
-            <groupId>org.apache.maven.surefire</groupId>
-            <artifactId>surefire-testng</artifactId>
-            <version>3.2.5</version>
-          </dependency>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.10.2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
-        <executions>
-          <execution>
-            <goals>
-              <goal>integration-test</goal>
-              <goal>verify</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+    </dependencyManagement>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>3.3.0</version>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+    <!-- Check for updates with mvn versions:display-dependency-updates -->
+    <dependencies>
+        <!-- Selenium related -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>4.18.1</version>
+        </dependency>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.6.3</version>
-        <configuration>
-          <additionalOptions>-Xdoclint:none</additionalOptions>
-        </configuration>
-      </plugin>
+        <dependency>
+            <groupId>net.sf.uadetector</groupId>
+            <artifactId>uadetector-resources</artifactId>
+            <version>2014.10</version>
+        </dependency>
 
-      <!--
-        Release a new version with Maven, saving a lot of repetitive work.
-        e.g. mvn -Darguments="-DskipTests" release:clean release:prepare
-      -->
-      <plugin>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>3.0.1</version>
-        <configuration>
-          <useReleaseProfile>false</useReleaseProfile>
-          <tagNameFormat>@{version}</tagNameFormat>
-        </configuration>
-      </plugin>
+        <!-- Test related -->
+        <!-- JUnit -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-engine</artifactId>
+        </dependency>
 
-      <!--  Helps find latest plugins  -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>versions-maven-plugin</artifactId>
-        <version>2.16.2</version>
-        <configuration>
-          <generateBackupPoms>false</generateBackupPoms>
-        </configuration>
-      </plugin>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.25.3</version>
+        </dependency>
 
-      <!-- Spotless for code formatting -->
-      <plugin>
-        <groupId>com.diffplug.spotless</groupId>
-        <artifactId>spotless-maven-plugin</artifactId>
-        <version>2.43.0</version>
-        <configuration>
-          <java>
-            <palantirJavaFormat>
-              <version>2.40.0</version>
-              <style>AOSP</style>                       <!-- or AOSP/GOOGLE (optional) -->
-              <formatJavadoc>false</formatJavadoc>          <!-- defaults to false (optional, requires at least Palantir 2.39.0) -->
-            </palantirJavaFormat>
-          </java>
-        </configuration>
-        <executions>
-          <execution>
-            <id>spotless</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+        <!-- Used in some parts of the code and is the latest version
+             rather than rely on an older version from Selenium. -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>33.0.0-jre</version>
+        </dependency>
+
+        <!-- Logging related -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+
+        <!-- API related -->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>5.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.16.1</version>
+        </dependency>
+
+        <!-- Explicitly adding utilities -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.14.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.16.1</version>
+        </dependency>
+
+        <!-- Local Unit Testing -->
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+            <version>2.3-groovy-4.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Used in a Capture Integration Test -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.15.1</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <pluginRepositories/>
+
+    <build>
+        <!-- Check for updates with mvn versions:display-plugin-updates -->
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.4.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <!-- The version on jitpack-->
+                                    <version>3.6.1</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Compiles Java -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.12.1</version>
+                <configuration>
+                    <release>17</release>
+                </configuration>
+            </plugin>
+
+            <!-- Code coverage -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.11</version>
+                <executions>
+                    <!-- Start the agent for unit tests -->
+                    <execution>
+                        <id>jacoco-initialize</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Property containing settings for JaCoCo runtime agent -->
+                            <propertyName>surefireArgLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <!-- Create coverage report after running unit tests -->
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <!-- Start the agent for integration tests -->
+                    <execution>
+                        <id>pre-integration-test</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Property for JaCoCo runtime agent, passed to Failsafe plugin -->
+                            <propertyName>failsafeArgLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <!-- Create coverage report after running integration tests -->
+                    <execution>
+                        <id>post-integration-test</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Compiles Groovy code for Spock unit tests-->
+            <plugin>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compileTests</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Spock unit tests (using surefire-plugin) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <!-- Sets arg line for Jacoco agent when unit tests are run -->
+                    <argLine>${surefireArgLine}</argLine>
+                    <failIfNoTests>true</failIfNoTests>
+                    <includes>
+                        <include>**/*Spec.*</include>
+                    </includes>
+                    <skipTests>${skip.surefire.tests}</skipTests>
+                </configuration>
+            </plugin>
+
+            <!-- Integration tests (failsafe-plugin) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <parallel>all</parallel>
+                    <threadCount>${threads}</threadCount>
+                    <useUnlimitedThreads>false</useUnlimitedThreads>
+                    <properties>
+                        <configurationParameters>
+                            junit.jupiter.execution.parallel.enabled = true
+                            junit.jupiter.execution.parallel.mode.default = concurrent
+                        </configurationParameters>
+                    </properties>
+
+                    <systemPropertyVariables>
+                        <!-- For Local screenshots on test failure -->
+                        <screenshotDirectory>
+                            ${project.build.directory}/screenshots
+                        </screenshotDirectory>
+                    </systemPropertyVariables>
+
+                    <failIfNoTests>true</failIfNoTests>
+                    <groups>${groups}</groups>
+                    <includes>
+                        <include>**/*Test.java</include>
+                        <include>**/*Tests.java</include>
+                    </includes>
+
+                    <!-- required for Jacoco code coverage -->
+                    <argLine>${failsafeArgLine}</argLine>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.3</version>
+                <configuration>
+                    <additionalOptions>-Xdoclint:none</additionalOptions>
+                </configuration>
+            </plugin>
+
+            <!--
+              Release a new version with Maven, saving a lot of repetitive work.
+              e.g. mvn -Darguments="-DskipTests" release:clean release:prepare
+            -->
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <tagNameFormat>@{version}</tagNameFormat>
+                </configuration>
+            </plugin>
+
+            <!--  Helps find latest plugins  -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.16.2</version>
+                <configuration>
+                    <generateBackupPoms>false</generateBackupPoms>
+                </configuration>
+            </plugin>
+
+            <!-- Spotless for code formatting -->
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>2.43.0</version>
+                <configuration>
+                    <java>
+                        <palantirJavaFormat>
+                            <version>2.40.0</version>
+                            <style>AOSP</style>                       <!-- or AOSP/GOOGLE (optional) -->
+                            <formatJavadoc>false
+                            </formatJavadoc>          <!-- defaults to false (optional, requires at least Palantir 2.39.0) -->
+                        </palantirJavaFormat>
+                    </java>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>spotless</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

@@ -13,11 +13,15 @@ import com.frameworkium.lite.ui.tests.BaseUITest;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.platform.engine.TestExecutionResult;
+import org.junit.platform.engine.TestSource;
+import org.junit.platform.engine.support.descriptor.ClassSource;
+import org.junit.platform.engine.support.descriptor.MethodSource;
+import org.junit.platform.launcher.TestExecutionListener;
+import org.junit.platform.launcher.TestIdentifier;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.events.WebDriverListener;
-import org.testng.ITestListener;
-import org.testng.ITestResult;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +29,7 @@ import java.util.List;
 /**
  * Assumes {@link ScreenshotCapture#isRequired()} is true for WebDriver events.
  */
-public class CaptureListener implements WebDriverListener, ITestListener {
+public class CaptureListener implements WebDriverListener, TestExecutionListener {
 
     private final Logger logger = LogManager.getLogger(this);
 
@@ -56,36 +60,15 @@ public class CaptureListener implements WebDriverListener, ITestListener {
                         errorMessage);
     }
 
-    private void sendFinalScreenshot(ITestResult result, String action) {
+    /* WebDriver events */
+
+    @Override
+    public void beforeClick(WebElement element) {
         try {
-            if (!ScreenshotCapture.isRequired() || !isUITest(result)) {
-                return;
-            }
-
-            var uiTestLifecycle = UITestLifecycle.get();
-            if (uiTestLifecycle == null) {
-                return;
-            }
-
-            var driver = uiTestLifecycle.getWebDriver();
-            if (driver == null) {
-                return;
-            }
-
-            var thrw = result.getThrowable();
-            if (thrw != null) {
-                takeScreenshotAndSend(action, thrw);
-            } else {
-                var command = new Command(action, "n/a", "n/a");
-                takeScreenshotAndSend(command);
-            }
+            highlightElementOnClickAndSendScreenshot(UITestLifecycle.get().getWebDriver(), element);
         } catch (Exception e) {
-            logger.debug("Failed to send final screenshot", e);
+            logger.trace("Failed to highlight element before click and send screenshot", e);
         }
-    }
-
-    private boolean isUITest(ITestResult result) {
-        return BaseUITest.class.isAssignableFrom(result.getTestClass().getRealClass());
     }
 
     private void highlightElementOnClickAndSendScreenshot(WebDriver driver, WebElement element) {
@@ -97,16 +80,6 @@ public class CaptureListener implements WebDriverListener, ITestListener {
         var command = new Command("click", element);
         takeScreenshotAndSend(command);
         highlighter.unhighlightPrevious();
-    }
-
-    /* WebDriver events */
-    @Override
-    public void beforeClick(WebElement element) {
-        try {
-            highlightElementOnClickAndSendScreenshot(UITestLifecycle.get().getWebDriver(), element);
-        } catch (Exception e) {
-            logger.trace("Failed to highlight element before click and send screenshot", e);
-        }
     }
 
     @Override
@@ -139,17 +112,65 @@ public class CaptureListener implements WebDriverListener, ITestListener {
     /* Test end methods */
 
     @Override
-    public void onTestSuccess(ITestResult result) {
-        sendFinalScreenshot(result, "pass");
+    public void executionFinished(
+            TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
+        if (!testIdentifier.isTest()) {
+            return;
+        }
+
+        var resultString =
+                switch (testExecutionResult.getStatus()) {
+                    case SUCCESSFUL -> "pass";
+                    case ABORTED -> "abort";
+                    case FAILED -> "fail";
+                };
+
+        sendFinalScreenshot(testIdentifier, testExecutionResult, resultString);
     }
 
-    @Override
-    public void onTestFailure(ITestResult result) {
-        sendFinalScreenshot(result, "fail");
+    private void sendFinalScreenshot(
+            TestIdentifier testIdentifier, TestExecutionResult testExecutionResult, String action) {
+        try {
+            if (!ScreenshotCapture.isRequired() || !isUITest(testIdentifier)) {
+                return;
+            }
+
+            var uiTestLifecycle = UITestLifecycle.get();
+            if (uiTestLifecycle == null) {
+                return;
+            }
+
+            var driver = uiTestLifecycle.getWebDriver();
+            if (driver == null) {
+                return;
+            }
+
+            if (testExecutionResult.getThrowable().isPresent()) {
+                takeScreenshotAndSend(action, testExecutionResult.getThrowable().get());
+            } else {
+                var command = new Command(action, "n/a", "n/a");
+                takeScreenshotAndSend(command);
+            }
+        } catch (Exception e) {
+            logger.debug("Failed to send final screenshot", e);
+        }
     }
 
-    @Override
-    public void onTestSkipped(ITestResult result) {
-        sendFinalScreenshot(result, "skip");
+    static boolean isUITest(TestIdentifier testIdentifier) {
+        TestSource source = testIdentifier.getSource().orElseThrow();
+        Class<?> testClass;
+        if (source instanceof MethodSource methodSource) {
+            try {
+                testClass = Class.forName(methodSource.getClassName());
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (source instanceof ClassSource classSource) {
+            testClass = classSource.getJavaClass();
+        } else {
+            throw new RuntimeException("Unknown test source: " + source);
+        }
+
+        return BaseUITest.class.isAssignableFrom(testClass);
     }
 }

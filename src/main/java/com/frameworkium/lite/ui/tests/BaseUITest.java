@@ -1,65 +1,51 @@
 package com.frameworkium.lite.ui.tests;
 
-import com.frameworkium.lite.common.listeners.*;
 import com.frameworkium.lite.ui.UITestLifecycle;
 import com.frameworkium.lite.ui.capture.ScreenshotCapture;
 import com.frameworkium.lite.ui.driver.Driver;
-import com.frameworkium.lite.ui.listeners.CaptureListener;
-import com.frameworkium.lite.ui.listeners.ScreenshotListener;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.ui.Wait;
-import org.testng.annotations.*;
 
-import java.lang.reflect.Method;
+import java.util.Set;
 
-@Listeners({CaptureListener.class, ScreenshotListener.class, TestListener.class})
-@Test(groups = "base-ui")
+@ExtendWith(BrowserSetupAndTearDown.class)
 public abstract class BaseUITest {
 
-    /** Logger for subclasses (logs with correct class i.e. not BaseUITest). */
+    /**
+     * Logger for subclasses (logs with correct class i.e. not BaseUITest).
+     */
     protected final Logger logger = LogManager.getLogger(this);
 
-    /**
-     * Runs before the test suite to initialise a pool of drivers, if requested.
-     */
-    @BeforeSuite(alwaysRun = true)
-    protected void initialiseDriverPool() {
-        UITestLifecycle.beforeSuite();
-    }
+    @RegisterExtension
+    static RetryOnExceptionExtension retryOnExceptionExtension =
+            new RetryOnExceptionExtension(3, Set.of(UnreachableBrowserException.class));
 
     /**
      * Runs before each test method, it initialises the following:
      * <ul>
-     * <li>{@link Driver} and {@link WebDriver}</li>
-     * <li>{@link Wait}</li>
-     * <li>{@link ScreenshotCapture}</li>
-     * <li>userAgent</li>
+     * <li>{@link Driver} and {@link WebDriver}
+     * <li>{@link Wait}
+     * <li>{@link ScreenshotCapture}
+     * <li>userAgent
      * </ul>
      */
-    @BeforeMethod(alwaysRun = true)
-    protected void configureBrowserBeforeTest(Method testMethod) {
-        UITestLifecycle.get().beforeTestMethod(testMethod);
+    @BeforeEach
+    protected void configureBrowserBeforeTest(TestInfo testInfo) {
+        UITestLifecycle.get().beforeTestMethod(testInfo.getTestMethod().orElseThrow());
     }
 
     /**
      * Tears down the browser after the test method.
      */
-    @AfterMethod(alwaysRun = true)
+    @AfterEach
     protected void tearDownDriver() {
         UITestLifecycle.get().afterTestMethod();
-    }
-
-    /**
-     * <ul>
-     * <li>Ensures each driver in the pool has {@code quit()}
-     * <li>Processes remaining screenshot backlog
-     * </ul>
-     */
-    @AfterSuite(alwaysRun = true)
-    protected void afterTestSuiteCleanUp() {
-        UITestLifecycle.get().afterTestSuite();
     }
 }

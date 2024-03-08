@@ -5,13 +5,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.frameworkium.integration.theinternet.pages.*;
 import com.frameworkium.lite.ui.tests.BaseUITest;
 
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
-import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Test
 public class TheInternetExampleTests extends BaseUITest {
 
     public void check_boxes_can_all_be_checked() {
@@ -28,20 +27,21 @@ public class TheInternetExampleTests extends BaseUITest {
         assertThat(checkboxesStatus).doesNotContain(false);
     }
 
+    @Test
     public void dragAndDrop() {
-
         var headings = WelcomePage.open().clickDragAndDropLink().dragAontoB().getListOfHeadings();
 
         assertThat(headings).containsExactly("B", "A");
     }
 
+    @Test
     public void dynamicLoading() {
-
         String elementText = DynamicLoadingExamplePage.open().clickStart().getElementText();
 
         assertThat(elementText).isEqualTo("Hello World!");
     }
 
+    @Test
     public void dropdowns() {
         var dropDownPage = WelcomePage.open().clickDropDownLink();
 
@@ -53,6 +53,7 @@ public class TheInternetExampleTests extends BaseUITest {
         assertThat(dropDownPage.getCurrentSelection()).isEqualTo("Option 1");
     }
 
+    @Test
     public void hovers() {
 
         String firstFigureCaption = WelcomePage.open().clickHoversLink().getFirstFigureCaption();
@@ -60,6 +61,7 @@ public class TheInternetExampleTests extends BaseUITest {
         assertThat(firstFigureCaption).contains("name: user1");
     }
 
+    @Test
     public void javascriptAlerts() {
 
         var javascriptAlerts =
@@ -68,6 +70,7 @@ public class TheInternetExampleTests extends BaseUITest {
         assertThat(javascriptAlerts.getResultText()).isEqualTo("You successfully clicked an alert");
     }
 
+    @Test
     public void keyPresses() {
 
         var keyPressesPage = WelcomePage.open().clickKeyPressesLink().enterKeyPress(Keys.ENTER);
@@ -75,6 +78,7 @@ public class TheInternetExampleTests extends BaseUITest {
         assertThat(keyPressesPage.getResultText()).isEqualTo("You entered: " + Keys.ENTER.name());
     }
 
+    @Test
     public void sortDataTable() {
 
         var tablesPage = SortableDataTablesPage.open();

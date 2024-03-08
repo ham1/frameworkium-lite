@@ -69,7 +69,7 @@ public class UITestLifecycle {
      *
      * @param testName the test name for Capture
      */
-    public void beforeTestMethod(String testName) {
+    private void beforeTestMethod(String testName) {
         try {
             driverLifecycle.initBrowserBeforeTest();
         } catch (WebDriverException | NullPointerException ex) {

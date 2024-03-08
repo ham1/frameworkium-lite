@@ -2,35 +2,33 @@ package com.frameworkium.integration.capture.api.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.frameworkium.integration.capture.api.dto.executions.*;
+import com.frameworkium.integration.capture.api.dto.executions.CreateExecution;
+import com.frameworkium.integration.capture.api.dto.executions.ExecutionResponse;
+import com.frameworkium.integration.capture.api.dto.executions.ExecutionResults;
 import com.frameworkium.integration.capture.api.dto.screenshots.CreateScreenshot;
 import com.frameworkium.integration.capture.api.dto.screenshots.Screenshot;
 import com.frameworkium.integration.capture.api.service.executions.ExecutionService;
 import com.frameworkium.integration.capture.api.service.screenshots.ScreenshotService;
 import com.frameworkium.lite.api.tests.BaseAPITest;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NotFoundException;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Ignore;
-import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-/** Tests for the Capture execution API. */
-@Ignore
+/**
+ * Tests for the Capture execution API.
+ */
+@Disabled("This is an example of a test class that would be run against the Capture API.")
 public class CaptureExecutionAPITest extends BaseAPITest {
 
     private CreateExecution createExMessage;
     private String executionID;
 
-    /**
-     * Using {@link BeforeClass} to ensure anything like:
-     * https://github.com/cbeust/testng/issues/1660
-     * gets caught before we release.
-     * This, with threads, is a common pattern.
-     */
-    @BeforeClass
+    @BeforeEach
     public void create_execution() {
         createExMessage = CreateExecution.newCreateInstance();
         executionID = new ExecutionService().createExecution(createExMessage).executionID;

@@ -2,23 +2,25 @@ package com.frameworkium.integration.restfulbooker.api.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.frameworkium.integration.restfulbooker.api.dto.booking.*;
+import com.frameworkium.integration.restfulbooker.api.dto.booking.Booking;
+import com.frameworkium.integration.restfulbooker.api.dto.booking.BookingID;
+import com.frameworkium.integration.restfulbooker.api.dto.booking.CreateBookingResponse;
 import com.frameworkium.integration.restfulbooker.api.service.booking.BookingService;
 import com.frameworkium.integration.restfulbooker.api.service.ping.PingService;
 import com.frameworkium.lite.api.tests.BaseAPITest;
 
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 // app resets every 10m, so could happen in the middle of this test
-@Test
 public class BookerTest extends BaseAPITest {
 
-    @BeforeClass
-    public void ensure_site_is_up_by_using_ping_service() {
+    @BeforeAll
+    public static void ensure_site_is_up_by_using_ping_service() {
         assertThat(new PingService().ping()).isEqualTo("Created");
     }
 
+    @Test
     public void create_new_booking() {
         // given some booking data
         BookingService service = new BookingService();
@@ -32,11 +34,13 @@ public class BookerTest extends BaseAPITest {
         assertThat(service.getBooking(bookingResponse.bookingid)).isEqualTo(booking);
     }
 
+    @Test
     public void auth_token_matches_expected_pattern() {
         String token = new BookingService().createAuthToken("admin", "password123");
         assertThat(token).matches("[a-z0-9]{15}");
     }
 
+    @Test
     public void delete_newly_created_booking() {
         // given an existing booking
         BookingService service = new BookingService();
