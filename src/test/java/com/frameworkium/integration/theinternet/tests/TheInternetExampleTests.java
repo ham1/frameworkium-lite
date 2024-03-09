@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Disabled("Website is now too slow")
 public class TheInternetExampleTests extends BaseUITest {
@@ -22,7 +21,7 @@ public class TheInternetExampleTests extends BaseUITest {
                 .clickCheckboxesLink()
                 .checkAllCheckboxes()
                 .getAllCheckboxCheckedStatus()
-                .collect(Collectors.toList());
+                .toList();
 
         // Assert that all checkboxes are checked
         assertThat(checkboxesStatus).isNotEmpty();
@@ -90,7 +89,7 @@ public class TheInternetExampleTests extends BaseUITest {
         List<String> sortedLastNameColumn = tablesPage
                 .sortTable2ByColumnName("Last Name")
                 .getTable2ColumnContents("Last Name")
-                .collect(Collectors.toList());
+                .toList();
 
         assertThat(sortedLastNameColumn.get(0)).isEqualTo("Bach");
         assertThat(sortedLastNameColumn).isSorted();

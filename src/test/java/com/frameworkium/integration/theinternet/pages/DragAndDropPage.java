@@ -9,13 +9,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Simple test of the HTML5 Drag and Drop functionality.
  * <p>
  * Not currently natively supported by Selenium, see:
- * https://github.com/seleniumhq/selenium-google-code-issue-archive/issues/3604
+ * <a href="https://github.com/seleniumhq/selenium-google-code-issue-archive/issues/3604">...</a>
  */
 public class DragAndDropPage extends BasePage<DragAndDropPage> {
 
@@ -74,6 +73,6 @@ public class DragAndDropPage extends BasePage<DragAndDropPage> {
     }
 
     public List<String> getListOfHeadings() {
-        return boxes.stream().map(WebElement::getText).collect(Collectors.toList());
+        return boxes.stream().map(WebElement::getText).toList();
     }
 }

@@ -51,7 +51,7 @@ public class TextInput extends TypifiedElement {
     /**
      * Returns sequence of backspaces and deletes that will clear element.
      * clear() can't be used because generates separate onchange event
-     * See https://github.com/yandex-qatools/htmlelements/issues/65
+     * See <a href="https://github.com/yandex-qatools/htmlelements/issues/65">...</a>
      */
     public String getClearCharSequence() {
         return StringUtils.repeat(

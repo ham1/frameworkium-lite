@@ -15,7 +15,7 @@ import java.util.List;
  * <pre class="code">
  * &#64;FindBy(css = "form_css")
  * public class SearchForm extends HtmlElement {
- *
+ * <p>
  *   &#64;FindBy(css = "request_input_css")
  *   private TextInput requestInput;
  * <p/>

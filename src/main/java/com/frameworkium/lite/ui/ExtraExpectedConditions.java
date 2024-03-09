@@ -156,7 +156,7 @@ public class ExtraExpectedConditions {
     /**
      * Wait until all jQuery AJAX calls are done.
      *
-     * @return true iff jQuery is available and 0 ajax queries are active.
+     * @return ExpectedCondition that returns true iff jQuery is available and 0 ajax queries are active.
      */
     public static ExpectedCondition<Boolean> jQueryAjaxDone() {
 

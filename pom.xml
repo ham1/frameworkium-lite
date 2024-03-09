@@ -372,12 +372,18 @@
                         <palantirJavaFormat>
                             <version>2.40.0</version>
                             <style>AOSP</style>                       <!-- or AOSP/GOOGLE (optional) -->
-                            <formatJavadoc>false
-                            </formatJavadoc>          <!-- defaults to false (optional, requires at least Palantir 2.39.0) -->
+                            <formatJavadoc>false</formatJavadoc>      <!-- defaults to false (optional, requires at least Palantir 2.39.0) -->
                         </palantirJavaFormat>
                     </java>
                 </configuration>
                 <executions>
+                    <execution>
+                        <goals>
+                            <goal>apply</goal>
+                        </goals>
+                        <!-- Run the spotless:apply goal in the process-sources phase -->
+                        <phase>process-sources</phase>
+                    </execution>
                     <execution>
                         <id>spotless</id>
                         <phase>verify</phase>

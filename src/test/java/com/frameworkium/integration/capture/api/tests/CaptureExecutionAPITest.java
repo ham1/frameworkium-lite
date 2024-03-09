@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.NotFoundException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Tests for the Capture execution API.
@@ -42,7 +41,7 @@ public class CaptureExecutionAPITest extends BaseAPITest {
 
         List<ExecutionResponse> filteredExecutions = latestExecutions.results.stream()
                 .filter(ex -> executionID.equals(ex.executionID))
-                .collect(Collectors.toList());
+                .toList();
 
         // ensure only one with our expected ID
         assertThat(filteredExecutions).hasSize(1);
