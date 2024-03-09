@@ -11,6 +11,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Wait;
 
 @Tag("base-ui")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class BaseUITest {
 
     /**
