@@ -18,6 +18,11 @@ public class TestLoggingListener implements TestExecutionListener {
     }
 
     @Override
+    public void testPlanExecutionFinished(TestPlan testPlan) {
+        logger.info("Test plan execution finished.");
+    }
+
+    @Override
     public void executionStarted(TestIdentifier testIdentifier) {
         if (testIdentifier.isTest()) {
             logger.info("START {}", getTestIdentifier(testIdentifier));
