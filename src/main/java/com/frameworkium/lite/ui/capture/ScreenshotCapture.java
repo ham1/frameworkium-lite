@@ -176,6 +176,11 @@ public class ScreenshotCapture {
      */
     public static void processRemainingBacklog() {
 
+        if (executorService == null) {
+            // if we haven't initialised e.g. only running API tests
+            return;
+        }
+
         executorService.shutdown();
 
         if (!isRequired()) {
