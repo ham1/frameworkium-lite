@@ -5,13 +5,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.frameworkium.integration.theinternet.pages.*;
 import com.frameworkium.lite.ui.tests.BaseUITest;
 
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
-import org.testng.annotations.Test;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Test
+@Disabled("Website is now too slow")
 public class TheInternetExampleTests extends BaseUITest {
 
     public void check_boxes_can_all_be_checked() {
@@ -21,27 +21,28 @@ public class TheInternetExampleTests extends BaseUITest {
                 .clickCheckboxesLink()
                 .checkAllCheckboxes()
                 .getAllCheckboxCheckedStatus()
-                .collect(Collectors.toList());
+                .toList();
 
         // Assert that all checkboxes are checked
         assertThat(checkboxesStatus).isNotEmpty();
         assertThat(checkboxesStatus).doesNotContain(false);
     }
 
+    @Test
     public void dragAndDrop() {
-
         var headings = WelcomePage.open().clickDragAndDropLink().dragAontoB().getListOfHeadings();
 
         assertThat(headings).containsExactly("B", "A");
     }
 
+    @Test
     public void dynamicLoading() {
-
         String elementText = DynamicLoadingExamplePage.open().clickStart().getElementText();
 
         assertThat(elementText).isEqualTo("Hello World!");
     }
 
+    @Test
     public void dropdowns() {
         var dropDownPage = WelcomePage.open().clickDropDownLink();
 
@@ -53,6 +54,7 @@ public class TheInternetExampleTests extends BaseUITest {
         assertThat(dropDownPage.getCurrentSelection()).isEqualTo("Option 1");
     }
 
+    @Test
     public void hovers() {
 
         String firstFigureCaption = WelcomePage.open().clickHoversLink().getFirstFigureCaption();
@@ -60,6 +62,7 @@ public class TheInternetExampleTests extends BaseUITest {
         assertThat(firstFigureCaption).contains("name: user1");
     }
 
+    @Test
     public void javascriptAlerts() {
 
         var javascriptAlerts =
@@ -68,6 +71,7 @@ public class TheInternetExampleTests extends BaseUITest {
         assertThat(javascriptAlerts.getResultText()).isEqualTo("You successfully clicked an alert");
     }
 
+    @Test
     public void keyPresses() {
 
         var keyPressesPage = WelcomePage.open().clickKeyPressesLink().enterKeyPress(Keys.ENTER);
@@ -75,6 +79,7 @@ public class TheInternetExampleTests extends BaseUITest {
         assertThat(keyPressesPage.getResultText()).isEqualTo("You entered: " + Keys.ENTER.name());
     }
 
+    @Test
     public void sortDataTable() {
 
         var tablesPage = SortableDataTablesPage.open();
@@ -84,7 +89,7 @@ public class TheInternetExampleTests extends BaseUITest {
         List<String> sortedLastNameColumn = tablesPage
                 .sortTable2ByColumnName("Last Name")
                 .getTable2ColumnContents("Last Name")
-                .collect(Collectors.toList());
+                .toList();
 
         assertThat(sortedLastNameColumn.get(0)).isEqualTo("Bach");
         assertThat(sortedLastNameColumn).isSorted();

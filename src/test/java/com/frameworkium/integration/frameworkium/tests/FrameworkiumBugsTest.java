@@ -7,33 +7,37 @@ import com.frameworkium.integration.seleniumhq.pages.SeleniumDownloadPage;
 import com.frameworkium.lite.ui.UITestLifecycle;
 import com.frameworkium.lite.ui.tests.BaseUITest;
 
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.*;
 
-// tests if BeforeMethods are run despite not being in this group
-@Test(groups = "fw-bugs")
+@Tag("fw-bugs")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class FrameworkiumBugsTest extends BaseUITest {
 
-    @BeforeMethod(dependsOnMethods = "configureBrowserBeforeTest")
+    @BeforeEach
     public void configureBrowserBeforeUse_allows_browser_access_in_before_method() {
         assertThat(UITestLifecycle.get().getWebDriver().getPageSource()).isNotEmpty();
     }
 
+    @Test
     public void ensure_jQueryAjaxDone_does_not_fail() {
         String headingText = JQueryDemoPage.open().waitForJQuery().getHeadingText();
         assertThat(headingText).isEqualTo("jQuery UI Demos");
     }
 
+    @Test
+    @Order(1)
     public void use_base_page_visibility() {
         SeleniumDownloadPage.open().waitForContent();
     }
 
-    @Test(dependsOnMethods = {"use_base_page_visibility"})
+    @Test
+    @Order(2)
     public void ensure_BaseUITest_wait_is_updated_after_browser_reset() {
         // tests bug whereby BasePage.wait wasn't updated after browser reset
         SeleniumDownloadPage.open().waitForContent();
     }
 
+    @Test
     public void use_various_loggers() {
         logger.info("Using BaseUITest logger");
         SeleniumDownloadPage.open().log();

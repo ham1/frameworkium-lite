@@ -3,10 +3,12 @@ package com.frameworkium.lite.api.dto;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.builder.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public abstract class AbstractDTO<T> implements Serializable, Cloneable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Override

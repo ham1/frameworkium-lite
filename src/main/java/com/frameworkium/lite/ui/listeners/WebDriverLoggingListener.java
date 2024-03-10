@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LoggingListener implements WebDriverListener {
+public class WebDriverLoggingListener implements WebDriverListener {
 
     private static final Logger logger = LogManager.getLogger();
 

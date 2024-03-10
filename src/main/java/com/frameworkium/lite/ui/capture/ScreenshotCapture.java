@@ -29,8 +29,7 @@ public class ScreenshotCapture {
     private static final Logger logger = LogManager.getLogger();
 
     /** Shared Executor for async sending of screenshot messages to capture. */
-    private static final ExecutorService executorService =
-            Executors.newFixedThreadPool(CAPTURE_THREADS.getIntWithDefault(1));
+    private static ExecutorService executorService;
 
     private final String testID;
     private final String executionID;
@@ -44,6 +43,9 @@ public class ScreenshotCapture {
         logger.debug("About to initialise Capture execution for {}", testID);
         this.testID = testID;
         this.executionID = createExecution(new CreateExecution(testID, getNode()));
+        if (executionID == null) {
+            executorService = Executors.newFixedThreadPool(CAPTURE_THREADS.getIntWithDefault(1));
+        }
         logger.debug("Capture executionID={}", executionID);
     }
 
@@ -175,6 +177,11 @@ public class ScreenshotCapture {
      * Waits up to 2 minutes to send any remaining Screenshot messages.
      */
     public static void processRemainingBacklog() {
+
+        if (executorService == null) {
+            // if we haven't initialised e.g. only running API tests
+            return;
+        }
 
         executorService.shutdown();
 

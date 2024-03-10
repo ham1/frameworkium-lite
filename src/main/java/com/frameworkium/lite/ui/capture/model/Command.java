@@ -1,7 +1,7 @@
 package com.frameworkium.lite.ui.capture.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.frameworkium.lite.ui.listeners.LoggingListener;
+import com.frameworkium.lite.ui.listeners.WebDriverLoggingListener;
 
 import org.openqa.selenium.WebElement;
 
@@ -21,6 +21,6 @@ public class Command {
     public Command(String action, WebElement element) {
         this.action = action;
         this.using = "n/a";
-        this.value = LoggingListener.getLocatorFromElement(element);
+        this.value = WebDriverLoggingListener.getLocatorFromElement(element);
     }
 }

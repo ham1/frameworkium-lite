@@ -10,7 +10,7 @@ class AbstractDTOSpec extends Specification {
         given:
             def other = new TopLevelDTO()
         expect:
-            sut.equals(other)
+            sut == other
             !sut.is(other) // == in Java
             sut.hashCode() == other.hashCode()
     }
@@ -29,7 +29,8 @@ class AbstractDTOSpec extends Specification {
         given:
             def other = new LowLevelDTO()
         expect:
-            sut != other
+            !sut.class.isAssignableFrom(other.class)
+            !other.class.isAssignableFrom(sut.class)
             !sut.is(other) // == in Java
             sut.hashCode() != other.hashCode()
     }

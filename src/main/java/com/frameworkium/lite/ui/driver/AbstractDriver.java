@@ -3,7 +3,7 @@ package com.frameworkium.lite.ui.driver;
 import com.frameworkium.lite.common.properties.Property;
 import com.frameworkium.lite.ui.capture.ScreenshotCapture;
 import com.frameworkium.lite.ui.listeners.CaptureListener;
-import com.frameworkium.lite.ui.listeners.LoggingListener;
+import com.frameworkium.lite.ui.listeners.WebDriverLoggingListener;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,8 +36,8 @@ public abstract class AbstractDriver implements Driver {
     }
 
     private WebDriver decorateWebDriver(WebDriver driverToBeDecorated) {
-        var decoratedDriver =
-                new EventFiringDecorator<>(new LoggingListener()).decorate(driverToBeDecorated);
+        var decoratedDriver = new EventFiringDecorator<>(new WebDriverLoggingListener())
+                .decorate(driverToBeDecorated);
         if (ScreenshotCapture.isRequired()) {
             var captureListener = new CaptureListener();
             decoratedDriver = new EventFiringDecorator<>(captureListener).decorate(decoratedDriver);

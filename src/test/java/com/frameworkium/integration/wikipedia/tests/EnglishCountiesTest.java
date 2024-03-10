@@ -6,7 +6,7 @@ import com.frameworkium.integration.wikipedia.pages.EnglishCountiesPage;
 import com.frameworkium.integration.wikipedia.pages.EnglishCountiesUsingListsPage;
 import com.frameworkium.lite.ui.tests.BaseUITest;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * This test demonstrates the different between using
@@ -17,9 +17,9 @@ import org.testng.annotations.Test;
  * especially if your table is changing shape (but not header text), however it
  * is significantly faster.
  */
-@Test
 public class EnglishCountiesTest extends BaseUITest {
 
+    @Test
     public void exploring_english_counties_data_with_stream_table() {
         var page = EnglishCountiesPage.open();
 
@@ -29,6 +29,7 @@ public class EnglishCountiesTest extends BaseUITest {
                 .isEqualTo(2L);
     }
 
+    @Test
     public void exploring_english_counties_data_with_lists() {
         var page = EnglishCountiesUsingListsPage.open();
 

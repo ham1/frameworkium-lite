@@ -9,21 +9,23 @@ import com.frameworkium.integration.restfulbooker.api.service.booking.BookingSer
 import com.frameworkium.integration.restfulbooker.api.service.ping.PingService;
 import com.frameworkium.lite.api.tests.BaseAPITest;
 
-import org.testng.SkipException;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 // app resets every 10m, so could happen in the middle of this test
-@Test(enabled = false) // currently down
+@Disabled("Service is down")
 public class SearchBookerTest extends BaseAPITest {
 
-    @BeforeClass
-    public void ensure_site_is_up_by_using_ping_service() {
+    @BeforeAll
+    public static void ensure_site_is_up_by_using_ping_service() {
         assertThat(new PingService().ping()).isEqualTo("Created");
     }
 
+    @Test
     public void search_for_existing_records_by_name() {
         BookingService service = new BookingService();
         BookingID existingID = service.listBookings().get(1);
@@ -34,6 +36,7 @@ public class SearchBookerTest extends BaseAPITest {
         assertThat(bookingIDs).contains(existingID);
     }
 
+    @Test
     public void search_for_existing_records_by_date() {
         BookingService service = new BookingService();
         BookingID existingID = service.listBookings().get(3);
@@ -41,8 +44,8 @@ public class SearchBookerTest extends BaseAPITest {
 
         List<BookingID> bookingIDs = service.search(SearchParamsMapper.datesOfBooking(booking));
 
-        // TODO: move to dedicated test
-        throw new SkipException("Known bug in service, dates not inclusive");
-        // assertThat(bookingIDs).contains(existingID);
+        Assumptions.assumeTrue(
+                bookingIDs.contains(existingID), "Known bug in service, dates not inclusive");
+        assertThat(bookingIDs).contains(existingID);
     }
 }

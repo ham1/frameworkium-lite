@@ -1,36 +1,42 @@
 package com.frameworkium.lite.ui.listeners;
 
+import static org.junit.platform.engine.TestExecutionResult.Status.SUCCESSFUL;
+
 import com.frameworkium.lite.ui.UITestLifecycle;
 import com.frameworkium.lite.ui.capture.ScreenshotCapture;
-import com.frameworkium.lite.ui.tests.BaseUITest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.*;
-import org.testng.ITestResult;
-import org.testng.TestListenerAdapter;
+import org.junit.platform.engine.TestExecutionResult;
+import org.junit.platform.launcher.TestExecutionListener;
+import org.junit.platform.launcher.TestIdentifier;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriverException;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-public class ScreenshotListener extends TestListenerAdapter {
+public class ScreenshotListener implements TestExecutionListener {
 
     private static final Logger logger = LogManager.getLogger();
     private final boolean captureEnabled = ScreenshotCapture.isRequired();
 
     @Override
-    public void onTestFailure(ITestResult failingTest) {
-        if (!captureEnabled && isScreenshotSupported(failingTest)) {
-            takeScreenshotAndSaveLocally(failingTest.getName());
-        }
-    }
+    public void executionFinished(
+            TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
 
-    @Override
-    public void onTestSkipped(ITestResult skippedTest) {
-        if (!captureEnabled && isScreenshotSupported(skippedTest)) {
-            takeScreenshotAndSaveLocally(skippedTest.getName());
+        if (!testIdentifier.isTest()
+                || captureEnabled
+                || !CaptureListener.isUITest(testIdentifier)
+                || testExecutionResult.getStatus().equals(SUCCESSFUL)) {
+            return;
         }
+
+        takeScreenshotAndSaveLocally(testIdentifier.getDisplayName());
     }
 
     private void takeScreenshotAndSaveLocally(String testName) {
@@ -72,9 +78,5 @@ public class ScreenshotListener extends TestListenerAdapter {
         } catch (WebDriverException e) {
             logger.error("Unable to take screenshot.", e);
         }
-    }
-
-    private boolean isScreenshotSupported(ITestResult testResult) {
-        return testResult.getInstance() instanceof BaseUITest;
     }
 }

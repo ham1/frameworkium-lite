@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.frameworkium.integration.seleniumhq.pages.HomePage;
 import com.frameworkium.lite.ui.tests.BaseUITest;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 public class SeleniumTest extends BaseUITest {
 

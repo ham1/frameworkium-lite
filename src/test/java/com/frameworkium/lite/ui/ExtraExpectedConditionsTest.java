@@ -3,7 +3,7 @@ package com.frameworkium.lite.ui;
 import com.frameworkium.lite.htmlelements.element.Link;
 import com.frameworkium.lite.ui.element.StreamTable;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +11,9 @@ import java.util.List;
 /**
  * Tests to ensure elements other than just WebElements can be passed into
  * {@link ExtraExpectedConditions}.
- *
+ * <p>
  * These tests do not check the correctness of the implementation, they are here
- * to prevent https://github.com/Frameworkium/frameworkium-core/issues/133
+ * to prevent <a href="https://github.com/Frameworkium/frameworkium-core/issues/133">issue 133</a>
  */
 public class ExtraExpectedConditionsTest {
 

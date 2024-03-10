@@ -237,7 +237,6 @@ public abstract class AbstractStreamTable extends HtmlElement {
                 .filter(Objects::nonNull);
     }
 
-    @SuppressWarnings("UnstableApiUsage")
     protected long getHeaderIndex(Predicate<WebElement> headerPredicate) {
         return Streams.mapWithIndex(
                         getHeadings(),
