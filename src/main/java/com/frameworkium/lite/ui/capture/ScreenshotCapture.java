@@ -43,7 +43,9 @@ public class ScreenshotCapture {
         logger.debug("About to initialise Capture execution for {}", testID);
         this.testID = testID;
         this.executionID = createExecution(new CreateExecution(testID, getNode()));
-        executorService = Executors.newFixedThreadPool(CAPTURE_THREADS.getIntWithDefault(1));
+        if (executionID == null) {
+            executorService = Executors.newFixedThreadPool(CAPTURE_THREADS.getIntWithDefault(1));
+        }
         logger.debug("Capture executionID={}", executionID);
     }
 
