@@ -38,7 +38,7 @@ public class TestLoggingListener implements TestExecutionListener {
         var msg =
                 switch (testExecutionResult.getStatus()) {
                     case SUCCESSFUL -> "PASS";
-                    case ABORTED -> "ABORT";
+                    case ABORTED -> "SKIP";
                     case FAILED -> "FAIL";
                 };
         logger.info("{}  {}", msg, getTestIdentifier(testIdentifier));

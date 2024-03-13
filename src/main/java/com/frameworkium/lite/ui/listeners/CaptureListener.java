@@ -121,7 +121,7 @@ public class CaptureListener implements WebDriverListener, TestExecutionListener
         var resultString =
                 switch (testExecutionResult.getStatus()) {
                     case SUCCESSFUL -> "pass";
-                    case ABORTED -> "abort";
+                    case ABORTED -> "skip";
                     case FAILED -> "fail";
                 };
 
