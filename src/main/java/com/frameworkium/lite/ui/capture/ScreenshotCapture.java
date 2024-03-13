@@ -196,6 +196,9 @@ public class ScreenshotCapture {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new IllegalStateException(e);
+        } finally {
+            // ensure it gets reinitialised
+            executorService = null;
         }
         if (timeout) {
             logger.error("Shutdown timed out. " + "Some screenshots might not have been sent.");
