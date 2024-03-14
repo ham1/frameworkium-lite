@@ -1,4 +1,3 @@
-com.frameworkium.lite.ui.listeners.CaptureListener
 com.frameworkium.lite.ui.listeners.ScreenshotListener
 com.frameworkium.lite.common.listeners.TestLoggingListener
 com.frameworkium.lite.ui.tests.BrowserSetupAndTearDown

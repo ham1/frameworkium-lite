@@ -4,6 +4,7 @@ import static org.junit.platform.engine.TestExecutionResult.Status.SUCCESSFUL;
 
 import com.frameworkium.lite.ui.UITestLifecycle;
 import com.frameworkium.lite.ui.capture.ScreenshotCapture;
+import com.frameworkium.lite.ui.tests.BaseUITest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,7 +32,9 @@ public class ScreenshotListener implements TestExecutionListener {
 
         if (!testIdentifier.isTest()
                 || captureEnabled
-                || !CaptureListener.isUITest(testIdentifier)
+                || testIdentifier.getSource().isEmpty()
+                || !BaseUITest.class.isAssignableFrom(
+                        testIdentifier.getSource().get().getClass())
                 || testExecutionResult.getStatus().equals(SUCCESSFUL)) {
             return;
         }

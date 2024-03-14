@@ -13,12 +13,8 @@ import com.frameworkium.lite.ui.tests.BaseUITest;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.platform.engine.TestExecutionResult;
-import org.junit.platform.engine.TestSource;
-import org.junit.platform.engine.support.descriptor.ClassSource;
-import org.junit.platform.engine.support.descriptor.MethodSource;
-import org.junit.platform.launcher.TestExecutionListener;
-import org.junit.platform.launcher.TestIdentifier;
+import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.events.WebDriverListener;
@@ -29,7 +25,7 @@ import java.util.List;
 /**
  * Assumes {@link ScreenshotCapture#isRequired()} is true for WebDriver events.
  */
-public class CaptureListener implements WebDriverListener, TestExecutionListener {
+public class CaptureListener implements WebDriverListener, AfterTestExecutionCallback {
 
     private final Logger logger = LogManager.getLogger(this);
 
@@ -112,26 +108,12 @@ public class CaptureListener implements WebDriverListener, TestExecutionListener
     /* Test end methods */
 
     @Override
-    public void executionFinished(
-            TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
-        if (!testIdentifier.isTest()) {
-            return;
-        }
-
-        var resultString =
-                switch (testExecutionResult.getStatus()) {
-                    case SUCCESSFUL -> "pass";
-                    case ABORTED -> "skip";
-                    case FAILED -> "fail";
-                };
-
-        sendFinalScreenshot(testIdentifier, testExecutionResult, resultString);
-    }
-
-    private void sendFinalScreenshot(
-            TestIdentifier testIdentifier, TestExecutionResult testExecutionResult, String action) {
+    public void afterTestExecution(ExtensionContext context) {
         try {
-            if (!ScreenshotCapture.isRequired() || !isUITest(testIdentifier)) {
+            var testClass = context.getTestClass();
+            if (!ScreenshotCapture.isRequired()
+                    || testClass.isEmpty()
+                    || !BaseUITest.class.isAssignableFrom(testClass.get())) {
                 return;
             }
 
@@ -139,38 +121,20 @@ public class CaptureListener implements WebDriverListener, TestExecutionListener
             if (uiTestLifecycle == null) {
                 return;
             }
-
             var driver = uiTestLifecycle.getWebDriver();
             if (driver == null) {
                 return;
             }
 
-            if (testExecutionResult.getThrowable().isPresent()) {
-                takeScreenshotAndSend(action, testExecutionResult.getThrowable().get());
+            var throwable = context.getExecutionException();
+            if (throwable.isPresent()) {
+                takeScreenshotAndSend("fail", throwable.get());
             } else {
-                var command = new Command(action, "n/a", "n/a");
+                var command = new Command("pass", "n/a", "n/a");
                 takeScreenshotAndSend(command);
             }
         } catch (Exception e) {
             logger.debug("Failed to send final screenshot", e);
         }
-    }
-
-    static boolean isUITest(TestIdentifier testIdentifier) {
-        TestSource source = testIdentifier.getSource().orElseThrow();
-        Class<?> testClass;
-        if (source instanceof MethodSource methodSource) {
-            try {
-                testClass = Class.forName(methodSource.getClassName());
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        } else if (source instanceof ClassSource classSource) {
-            testClass = classSource.getJavaClass();
-        } else {
-            throw new RuntimeException("Unknown test source: " + source);
-        }
-
-        return BaseUITest.class.isAssignableFrom(testClass);
     }
 }

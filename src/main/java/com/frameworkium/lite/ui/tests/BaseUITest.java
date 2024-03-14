@@ -3,15 +3,18 @@ package com.frameworkium.lite.ui.tests;
 import com.frameworkium.lite.ui.UITestLifecycle;
 import com.frameworkium.lite.ui.capture.ScreenshotCapture;
 import com.frameworkium.lite.ui.driver.Driver;
+import com.frameworkium.lite.ui.listeners.CaptureListener;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Wait;
 
 @Tag("base-ui")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(CaptureListener.class)
 public abstract class BaseUITest {
 
     /**
