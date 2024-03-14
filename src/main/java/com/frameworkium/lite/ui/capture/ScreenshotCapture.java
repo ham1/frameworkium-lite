@@ -10,6 +10,7 @@ import com.frameworkium.lite.ui.capture.model.Command;
 import com.frameworkium.lite.ui.capture.model.message.CreateExecution;
 import com.frameworkium.lite.ui.capture.model.message.CreateScreenshot;
 import com.frameworkium.lite.ui.driver.DriverSetup;
+import com.pngencoder.PngEncoder;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -19,9 +20,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.net.*;
+import java.util.Base64;
 import java.util.Set;
 import java.util.concurrent.*;
+
+import javax.imageio.ImageIO;
 
 /** Takes and sends screenshots to "Capture" asynchronously. */
 public class ScreenshotCapture {
@@ -149,7 +156,25 @@ public class ScreenshotCapture {
     }
 
     private String getBase64Screenshot(TakesScreenshot driver) {
-        return driver.getScreenshotAs(OutputType.BASE64);
+        var imageBytes = driver.getScreenshotAs(OutputType.BYTES);
+        BufferedImage image;
+        try {
+            image = ImageIO.read(new ByteArrayInputStream(imageBytes));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Use PNGEncoder to encode the image as a PNG
+        byte[] pngBytes = new PngEncoder()
+                .withBufferedImage(image)
+                .withCompressionLevel(9) // Max compression
+                .withTryIndexedEncoding(true)
+                .toBytes();
+
+        // Convert PNG byte array to Base64 encoded string
+        String b64 = Base64.getEncoder().encodeToString(pngBytes);
+        logger.trace("Screenshot size before {} after {}", imageBytes.length, b64.length());
+        return b64;
     }
 
     private void addScreenshotToSendQueue(CreateScreenshot createScreenshotMessage) {
