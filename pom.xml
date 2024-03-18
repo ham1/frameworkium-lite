@@ -74,13 +74,6 @@
             <version>2014.10</version>
         </dependency>
 
-        <!-- Used to make capture PNGs smaller -->
-        <dependency>
-            <groupId>com.pngencoder</groupId>
-            <artifactId>pngencoder</artifactId>
-            <version>0.15.0</version>
-        </dependency>
-
         <!-- Test related -->
         <!-- JUnit -->
         <dependency>

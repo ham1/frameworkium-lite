@@ -10,7 +10,6 @@ import com.frameworkium.lite.ui.capture.model.Command;
 import com.frameworkium.lite.ui.capture.model.message.CreateExecution;
 import com.frameworkium.lite.ui.capture.model.message.CreateScreenshot;
 import com.frameworkium.lite.ui.driver.DriverSetup;
-import com.pngencoder.PngEncoder;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -18,30 +17,57 @@ import io.restassured.specification.RequestSpecification;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.*;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
-import java.net.*;
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Base64;
 import java.util.Set;
 import java.util.concurrent.*;
 
-import javax.imageio.ImageIO;
-
-/** Takes and sends screenshots to "Capture" asynchronously. */
+/**
+ * Takes and sends screenshots to "Capture" asynchronously.
+ */
 public class ScreenshotCapture {
 
     private static final Logger logger = LogManager.getLogger();
 
-    /** Shared Executor for async sending of screenshot messages to capture. */
-    private static ExecutorService executorService;
+    private static final boolean isConvertAvailable = isConvertAvailable();
+
+    public static boolean isConvertAvailable() {
+        try {
+            int exitCode = Runtime.getRuntime().exec("convert -version").waitFor();
+            return exitCode == 0;
+        } catch (IOException e) {
+            return false;
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return false;
+        }
+    }
+
+    /**
+     * Shared Executor for async sending of screenshot messages to capture.
+     */
+    private static ExecutorService sendScreenshotExecutor;
+
+    private static final ExecutorService compressScreenshotExecutor =
+            Executors.newFixedThreadPool(THREADS.getIntWithDefault(4));
 
     private final String testID;
     private final String executionID;
 
-    /** Prevent multiple final state screenshots from being sent. */
+    /**
+     * Prevent multiple final state screenshots from being sent.
+     */
     private boolean finalScreenshotSent = false;
 
     private static final Set<String> FINAL_STATES = Set.of("pass", "fail", "skip");
@@ -50,8 +76,9 @@ public class ScreenshotCapture {
         logger.debug("About to initialise Capture execution for {}", testID);
         this.testID = testID;
         this.executionID = createExecution(new CreateExecution(testID, getNode()));
-        if (executorService == null) {
-            executorService = Executors.newFixedThreadPool(CAPTURE_THREADS.getIntWithDefault(1));
+        if (sendScreenshotExecutor == null) {
+            sendScreenshotExecutor =
+                    Executors.newFixedThreadPool(CAPTURE_THREADS.getIntWithDefault(1));
         }
         logger.debug("Capture executionID={}", executionID);
     }
@@ -131,7 +158,7 @@ public class ScreenshotCapture {
 
         if (executionID == null) {
             logger.error(
-                    "Can't send Screenshot. " + "Capture didn't initialise execution for test: {}",
+                    "Can't send Screenshot. Capture didn't initialise execution for test: {}",
                     testID);
             return;
         }
@@ -146,39 +173,61 @@ public class ScreenshotCapture {
 
         finalScreenshotSent = FINAL_STATES.contains(command.action);
 
-        var createScreenshotMessage = new CreateScreenshot(
-                executionID,
-                command,
-                driver.getCurrentUrl(),
-                errorMessage,
-                getBase64Screenshot((TakesScreenshot) driver));
-        addScreenshotToSendQueue(createScreenshotMessage);
+        // Take screenshot
+        File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+
+        // Compress it on a separate thread
+        Future<String> future =
+                compressScreenshotExecutor.submit(() -> getBase64Screenshot(screenshotFile));
+
+        // Send it to capture on a separate single thread (sequentially)
+        sendScreenshotExecutor.execute(() -> {
+            try {
+                CreateScreenshot createScreenshotMessage = new CreateScreenshot(
+                        executionID, command, driver.getCurrentUrl(), errorMessage, future.get());
+                sendScreenshot(createScreenshotMessage);
+            } catch (InterruptedException | ExecutionException e) {
+                logger.warn(e);
+            }
+        });
     }
 
-    private String getBase64Screenshot(TakesScreenshot driver) {
-        var imageBytes = driver.getScreenshotAs(OutputType.BYTES);
-        BufferedImage image;
+    private String getBase64Screenshot(File imageFile) {
+        Path outputFile = null;
         try {
-            image = ImageIO.read(new ByteArrayInputStream(imageBytes));
+            if (!isConvertAvailable) {
+                return Base64.getEncoder().encodeToString(Files.readAllBytes(imageFile.toPath()));
+            }
+
+            outputFile = Files.createTempFile("screenshot", ".png");
+            try {
+                String outputPath = outputFile.toAbsolutePath().toString();
+                new ProcessBuilder(
+                                "convert",
+                                imageFile.getAbsolutePath(),
+                                "+dither",
+                                "-colors",
+                                "128",
+                                outputPath)
+                        .start()
+                        .waitFor(30, TimeUnit.SECONDS);
+            } catch (IOException | InterruptedException e) {
+                logger.error("Failed to reduce palette size of screenshot", e);
+            }
+            return Base64.getEncoder().encodeToString(Files.readAllBytes(outputFile));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            logger.warn("Failed to reduce palette size of screenshot", e);
+            return "";
+        } finally {
+            try {
+                Files.delete(imageFile.toPath());
+                if (outputFile != null) {
+                    Files.delete(outputFile.toAbsolutePath());
+                }
+            } catch (IOException e) {
+                logger.warn("Failed to delete temporary screenshot files", e);
+            }
         }
-
-        // Use PNGEncoder to encode the image as a PNG
-        byte[] pngBytes = new PngEncoder()
-                .withBufferedImage(image)
-                .withCompressionLevel(9) // Max compression
-                .withTryIndexedEncoding(true)
-                .toBytes();
-
-        // Convert PNG byte array to Base64 encoded string
-        String b64 = Base64.getEncoder().encodeToString(pngBytes);
-        logger.trace("Screenshot size before {} after {}", imageBytes.length, b64.length());
-        return b64;
-    }
-
-    private void addScreenshotToSendQueue(CreateScreenshot createScreenshotMessage) {
-        executorService.execute(() -> sendScreenshot(createScreenshotMessage));
     }
 
     private void sendScreenshot(CreateScreenshot createScreenshotMessage) {
@@ -203,12 +252,12 @@ public class ScreenshotCapture {
      */
     public static void processRemainingBacklog() {
 
-        if (executorService == null) {
+        if (sendScreenshotExecutor == null) {
             // if we haven't initialised e.g. only running API tests
             return;
         }
 
-        executorService.shutdown();
+        sendScreenshotExecutor.shutdown();
 
         if (!isRequired()) {
             return;
@@ -217,16 +266,16 @@ public class ScreenshotCapture {
         logger.info("Processing remaining Screenshot Capture backlog...");
         boolean timeout;
         try {
-            timeout = !executorService.awaitTermination(2, TimeUnit.MINUTES);
+            timeout = !sendScreenshotExecutor.awaitTermination(2, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new IllegalStateException(e);
+            throw new RuntimeException(e);
         } finally {
-            // ensure it gets reinitialised
-            executorService = null;
+            // clear to ensure it gets reinitialised e.g. for retries
+            sendScreenshotExecutor = null;
         }
         if (timeout) {
-            logger.error("Shutdown timed out. " + "Some screenshots might not have been sent.");
+            logger.error("Shutdown timed out. Some screenshots might not have been sent.");
         } else {
             logger.info("Finished processing backlog.");
         }
