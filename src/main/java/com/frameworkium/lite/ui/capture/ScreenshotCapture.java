@@ -173,8 +173,9 @@ public class ScreenshotCapture {
 
         finalScreenshotSent = FINAL_STATES.contains(command.action);
 
-        // Take screenshot
+        // Take screenshot and get useful info
         File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        String currentURL = driver.getCurrentUrl();
 
         // Compress it on a separate thread
         Future<String> future =
@@ -184,7 +185,7 @@ public class ScreenshotCapture {
         sendScreenshotExecutor.execute(() -> {
             try {
                 CreateScreenshot createScreenshotMessage = new CreateScreenshot(
-                        executionID, command, driver.getCurrentUrl(), errorMessage, future.get());
+                        executionID, command, currentURL, errorMessage, future.get());
                 sendScreenshot(createScreenshotMessage);
             } catch (InterruptedException | ExecutionException e) {
                 logger.warn(e);
