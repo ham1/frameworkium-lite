@@ -21,13 +21,13 @@ public abstract class BaseUITest extends BaseTest {
     @BeforeEach
     void beforeEach(TestInfo testInfo) {
         configureBrowserBeforeTest(testInfo);
-        onThrowable(Exception.class, this::beforeEachWithRetry, MAX_RETRIES);
+        retryOnThrowable(this::beforeEachWithRetry, MAX_RETRIES);
     }
 
     @AfterEach
     void afterEach() {
         try {
-            onThrowable(Exception.class, this::afterEachWithRetry, MAX_RETRIES);
+            retryOnThrowable(this::afterEachWithRetry, MAX_RETRIES);
         } finally {
             tearDownDriver();
         }

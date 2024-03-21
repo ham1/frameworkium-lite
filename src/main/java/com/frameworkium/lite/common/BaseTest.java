@@ -19,7 +19,7 @@ public abstract class BaseTest {
 
     @BeforeEach
     void beforeEach(TestInfo testInfo) {
-        onThrowable(Exception.class, this::beforeEachWithRetry, MAX_RETRIES);
+        retryOnThrowable(this::beforeEachWithRetry, MAX_RETRIES);
     }
 
     protected void beforeEachWithRetry() {
@@ -28,7 +28,7 @@ public abstract class BaseTest {
 
     @BeforeAll
     void beforeAll() {
-        onThrowable(Exception.class, this::beforeAllWithRetry, MAX_RETRIES);
+        retryOnThrowable(this::beforeAllWithRetry, MAX_RETRIES);
     }
 
     protected void beforeAllWithRetry() {
@@ -37,7 +37,7 @@ public abstract class BaseTest {
 
     @AfterEach
     void afterEach() {
-        onThrowable(Exception.class, this::afterEachWithRetry, MAX_RETRIES);
+        retryOnThrowable(this::afterEachWithRetry, MAX_RETRIES);
     }
 
     protected void afterEachWithRetry() {
@@ -46,30 +46,27 @@ public abstract class BaseTest {
 
     @AfterAll
     void afterAll() {
-        onThrowable(Exception.class, this::afterAllWithRetry, MAX_RETRIES);
+        retryOnThrowable(this::afterAllWithRetry, MAX_RETRIES);
     }
 
     protected void afterAllWithRetry() {
         // Default implementation does nothing. Override in subclasses if needed.
     }
 
-    public void onThrowable(Class<?> exceptionClass, Runnable runnable, int retryCount) {
+    public void retryOnThrowable(Runnable runnable, int retryCount) {
         if (retryCount < 1) {
-            throw new IllegalStateException(
-                    "No more retries left, too many " + exceptionClass.getName());
+            throw new IllegalStateException("No more retries left");
         }
         try {
             runnable.run();
-        } catch (Throwable ex) {
-            if (ex.getClass().isAssignableFrom(InterruptedException.class)) {
+        } catch (Exception ex) {
+            if (ex instanceof InterruptedException
+                    || ex.getCause() instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
                 throw ex;
             }
-            if (ex.getClass().equals(exceptionClass)) {
-                logger.trace("Caught {}", ex.getMessage().getClass(), ex);
-                onThrowable(exceptionClass, runnable, retryCount - 1);
-            }
-
-            throw ex;
+            logger.trace("Caught {}", ex.getClass(), ex);
+            retryOnThrowable(runnable, retryCount - 1);
         }
     }
 }

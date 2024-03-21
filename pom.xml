@@ -256,7 +256,7 @@
                 </executions>
             </plugin>
 
-            <!-- Spock unit tests (using surefire-plugin) -->
+            <!-- All tests (using surefire-plugin) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -264,21 +264,10 @@
                 <configuration>
                     <!-- Sets arg line for Jacoco agent when unit tests are run -->
                     <argLine>${surefireArgLine}</argLine>
-                    <failIfNoTests>true</failIfNoTests>
-                    <includes>
-                        <include>**/*Spec.*</include>
-                    </includes>
-                    <skipTests>${skip.surefire.tests}</skipTests>
-                </configuration>
-            </plugin>
-
-            <!-- Integration tests (failsafe-plugin) -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.2.5</version>
-                <configuration>
+                    <threadCount>${threads}</threadCount>
                     <groups>${groups}</groups>
+                    <!-- Rerun failing tests -->
+                    <rerunFailingTestsCount>3</rerunFailingTestsCount>
 
                     <properties>
                         <configurationParameters>
@@ -289,7 +278,7 @@
                             <!-- Control the strategy for parallelism -->
                             junit.jupiter.execution.parallel.config.strategy=fixed
                             junit.jupiter.execution.parallel.config.fixed.parallelism=${threads}
-                            <!-- JUnit5 uses a ForkJoin Pool this is needed to make it behaves as we expect -->
+                            <!-- JUnit5 uses a ForkJoin Pool this is needed to make it behave as we expect -->
                             junit.jupiter.execution.parallel.config.fixed.max-pool-size=${threads}
 
                             junit.jupiter.testclass.order.default=org.junit.jupiter.api.ClassOrderer$Random
@@ -299,6 +288,7 @@
                     <failIfNoTests>true</failIfNoTests>
 
                     <includes>
+                        <include>**/*Spec.*</include>
                         <include>**/*Test.java</include>
                         <include>**/*Tests.java</include>
                     </includes>
@@ -306,14 +296,6 @@
                     <!-- required for Jacoco code coverage -->
                     <argLine>${failsafeArgLine}</argLine>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>
