@@ -13,6 +13,11 @@ import org.junit.jupiter.api.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class FrameworkiumBugsTest extends BaseUITest {
 
+    @Override
+    protected void beforeEachWithRetry() {
+        assertThat(UITestLifecycle.get().getWebDriver().getPageSource()).isNotEmpty();
+    }
+
     @BeforeEach
     public void configureBrowserBeforeUse_allows_browser_access_in_before_method() {
         assertThat(UITestLifecycle.get().getWebDriver().getPageSource()).isNotEmpty();

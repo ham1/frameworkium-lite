@@ -31,7 +31,6 @@ public abstract class BaseUITest {
      * <li>userAgent
      * </ul>
      */
-    @BeforeEach
     protected void configureBrowserBeforeTest(TestInfo testInfo) {
         UITestLifecycle.get().beforeTestMethod(testInfo.getTestMethod().orElseThrow());
     }
@@ -39,8 +38,73 @@ public abstract class BaseUITest {
     /**
      * Tears down the browser after the test method.
      */
-    @AfterEach
     protected void tearDownDriver() {
         UITestLifecycle.get().afterTestMethod();
+    }
+
+    /*
+     * JUnit does not allow retries in Before or After methods, we have to implement our own
+     */
+    private static final int MAX_RETRIES = 3;
+
+    @BeforeEach
+    void beforeEach(TestInfo testInfo) {
+        configureBrowserBeforeTest(testInfo);
+        onThrowable(Exception.class, this::beforeEachWithRetry, MAX_RETRIES);
+    }
+
+    protected void beforeEachWithRetry() {
+        // Default implementation does nothing. Override in subclasses if needed.
+    }
+
+    @BeforeAll
+    void beforeAll() {
+        onThrowable(Exception.class, this::beforeAllWithRetry, MAX_RETRIES);
+    }
+
+    protected void beforeAllWithRetry() {
+        // Default implementation does nothing. Override in subclasses if needed.
+    }
+
+    @AfterEach
+    void afterEach() {
+        try {
+            onThrowable(Exception.class, this::afterEachWithRetry, MAX_RETRIES);
+        } finally {
+            tearDownDriver();
+        }
+    }
+
+    protected void afterEachWithRetry() {
+        // Default implementation does nothing. Override in subclasses if needed.
+    }
+
+    @AfterAll
+    void afterAll() {
+        onThrowable(Exception.class, this::afterAllWithRetry, MAX_RETRIES);
+    }
+
+    protected void afterAllWithRetry() {
+        // Default implementation does nothing. Override in subclasses if needed.
+    }
+
+    public void onThrowable(Class<?> exception, Runnable runnable, int retryCount) {
+        if (retryCount < 1) {
+            throw new IllegalStateException(
+                    "No more retries left, too many " + exception.getName());
+        }
+        try {
+            runnable.run();
+        } catch (Throwable ex) {
+            if (ex.getClass().isAssignableFrom(InterruptedException.class)) {
+                throw ex;
+            }
+            if (ex.getClass().equals(exception)) {
+                logger.trace("Caught {}", ex.getMessage().getClass(), ex);
+                onThrowable(exception, runnable, retryCount - 1);
+            }
+
+            throw ex;
+        }
     }
 }
