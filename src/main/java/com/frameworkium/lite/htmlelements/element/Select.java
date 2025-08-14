@@ -90,4 +90,20 @@ public class Select extends TypifiedElement implements ISelect {
     public void deselectByVisibleText(String text) {
         getSelect().deselectByVisibleText(text);
     }
+
+    @Override
+    public void selectByContainsVisibleText(String text) {
+       getSelect().getOptions().stream()
+            .filter(option -> option.getText().contains(text))
+            .findFirst()
+            .ifPresent(WebElement::click);
+    }
+
+    @Override
+    public void deSelectByContainsVisibleText(String text) {
+        getSelect().getOptions().stream()
+            .filter(option -> option.getText().contains(text) && option.isSelected())
+            .findFirst()
+            .ifPresent(WebElement::click);
+    }
 }

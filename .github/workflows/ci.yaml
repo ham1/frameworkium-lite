@@ -10,10 +10,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup JDK 17
+      - name: Setup JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
 
       - name: Cache Maven deps
@@ -66,24 +66,24 @@ jobs:
   test-chrome-grid:
     runs-on: ubuntu-latest
     container:
-      image: maven:3.9-eclipse-temurin-17
+      image: maven:3.9-eclipse-temurin-21
     env:
       HUB_HOST: hub
       THREAD_COUNT: 2
     services:
       hub:
-        image: selenium/hub:4.13
+        image: selenium/hub:4.34
         ports:
           - 4442-4444:4442-4444
       chrome1:
-        image: selenium/node-chrome:4.13
+        image: selenium/node-chrome:4.34
         options: -v /dev/shm:/dev/shm
         env:
           SE_EVENT_BUS_PUBLISH_PORT: 4442
           SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
           SE_EVENT_BUS_HOST: hub
       chrome2:
-        image: selenium/node-chrome:4.13
+        image: selenium/node-chrome:4.34
         options: -v /dev/shm:/dev/shm
         env:
           SE_EVENT_BUS_PUBLISH_PORT: 4442
@@ -121,24 +121,24 @@ jobs:
   test-firefox-grid:
     runs-on: ubuntu-latest
     container:
-      image: maven:3.9-eclipse-temurin-17
+      image: maven:3.9-eclipse-temurin-21
     env:
       HUB_HOST: hub
       THREAD_COUNT: 2
     services:
       hub:
-        image: selenium/hub:4.13
+        image: selenium/hub:4.34
         ports:
           - 4442-4444:4442-4444
       firefox1:
-        image: selenium/node-firefox:4.13
+        image: selenium/node-firefox:4.34
         options: -v /dev/shm:/dev/shm
         env:
           SE_EVENT_BUS_PUBLISH_PORT: 4442
           SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
           SE_EVENT_BUS_HOST: hub
       firefox2:
-        image: selenium/node-firefox:4.13
+        image: selenium/node-firefox:4.34
         options: -v /dev/shm:/dev/shm
         env:
           SE_EVENT_BUS_PUBLISH_PORT: 4442
@@ -190,10 +190,10 @@ jobs:
   #       with:
   #         fetch-depth: 0
 
-  #     - name: Setup JDK 17
+  #     - name: Setup JDK 21
   #       uses: actions/setup-java@v4
   #       with:
-  #         java-version: '17'
+  #         java-version: '21'
   #         distribution: 'temurin'
 
   #     - name: Cache Sonar packages
