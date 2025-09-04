@@ -224,6 +224,7 @@
             <goals>
               <goal>compileTests</goal>
             </goals>
+            <phase>test-compile</phase>
           </execution>
         </executions>
       </plugin>
@@ -341,9 +342,9 @@
         <configuration>
           <java>
             <palantirJavaFormat>
-              <version>2.40.0</version>
+              <version>2.73.0</version>
               <style>AOSP</style>                       <!-- or AOSP/GOOGLE (optional) -->
-              <formatJavadoc>false</formatJavadoc>          <!-- defaults to false (optional, requires at least Palantir 2.39.0) -->
+              <formatJavadoc>false</formatJavadoc>      <!-- defaults to false (optional, requires at least Palantir 2.39.0) -->
             </palantirJavaFormat>
           </java>
         </configuration>
