@@ -39,7 +39,7 @@ public class EnglishCountiesPage extends BasePage<EnglishCountiesPage> {
     public int populationOf(String countyName) {
         Predicate<WebElement> lookUpCellMatcher = e -> e.getText().trim().equals(countyName);
         int lookupColumnIndex = 0;
-        int targetColumnIndex = 1;
+        int targetColumnIndex = 3;
         String population = listTable
                 .getCellsByLookupAndIndex(lookUpCellMatcher, lookupColumnIndex, targetColumnIndex)
                 .findFirst()
