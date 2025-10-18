@@ -1,6 +1,10 @@
 package com.frameworkium.lite.ui.capture;
 
-import static com.frameworkium.lite.common.properties.Property.*;
+import static com.frameworkium.lite.common.properties.Property.CAPTURE_THREADS;
+import static com.frameworkium.lite.common.properties.Property.CAPTURE_URL;
+import static com.frameworkium.lite.common.properties.Property.SUT_NAME;
+import static com.frameworkium.lite.common.properties.Property.SUT_VERSION;
+import static com.frameworkium.lite.common.properties.Property.THREADS;
 
 import static org.apache.http.HttpStatus.SC_CREATED;
 
@@ -28,7 +32,11 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /** Takes and sends screenshots to "Capture" asynchronously. */
@@ -40,8 +48,15 @@ public class ScreenshotCapture {
 
     public static boolean isConvertAvailable() {
         try {
-            int exitCode = Runtime.getRuntime().exec("convert -version").waitFor();
-            return exitCode == 0;
+            Process p = new ProcessBuilder("convert", "-version")
+                    .redirectErrorStream(true)
+                    .start();
+            boolean finished = p.waitFor(2, TimeUnit.SECONDS);
+            if (!finished) {
+                p.destroyForcibly();
+                return false;
+            }
+            return p.exitValue() == 0;
         } catch (IOException e) {
             return false;
         } catch (InterruptedException e) {
@@ -140,8 +155,8 @@ public class ScreenshotCapture {
         String currentURL = driver.getCurrentUrl();
 
         // Compress it on a separate thread
-        Future<String> future =
-                compressScreenshotExecutor.submit(() -> getBase64Screenshot(screenshotFile));
+        Future<String> future = compressScreenshotExecutor.submit(
+                () -> getBase64ScreenshotAndDeleteFile(screenshotFile));
 
         // Send it to capture on a separate single thread
         // Hashing the execution ID so ensure they are sent sequentially for each execution
@@ -157,7 +172,7 @@ public class ScreenshotCapture {
         });
     }
 
-    private String getBase64Screenshot(File imageFile) throws IOException {
+    private String getBase64ScreenshotAndDeleteFile(File imageFile) throws IOException {
         Path outputFile = null;
         try {
             if (!isConvertAvailable) {
@@ -169,8 +184,11 @@ public class ScreenshotCapture {
             limitColoursToCompressImage(imageFile, outputFile);
             return Base64.getEncoder().encodeToString(Files.readAllBytes(outputFile));
         } catch (IOException e) {
-            logger.warn("Failed to reduce palette size of screenshot", e);
+            logger.warn("Error compressing screenshot", e);
             return Base64.getEncoder().encodeToString(Files.readAllBytes(imageFile.toPath()));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
         } finally {
             try {
                 Files.delete(imageFile.toPath());
@@ -183,21 +201,18 @@ public class ScreenshotCapture {
         }
     }
 
-    private static void limitColoursToCompressImage(File imageFile, Path outputFile) {
-        try {
-            String outputPath = outputFile.toAbsolutePath().toString();
-            new ProcessBuilder(
-                            "convert",
-                            imageFile.getAbsolutePath(),
-                            "+dither",
-                            "-colors",
-                            "128",
-                            outputPath)
-                    .start()
-                    .waitFor(30, TimeUnit.SECONDS);
-        } catch (IOException | InterruptedException e) {
-            logger.error("Failed to reduce palette size of screenshot", e);
-        }
+    private static void limitColoursToCompressImage(File imageFile, Path outputFile)
+            throws InterruptedException, IOException {
+        String outputPath = outputFile.toAbsolutePath().toString();
+        new ProcessBuilder(
+                        "convert",
+                        imageFile.getAbsolutePath(),
+                        "+dither",
+                        "-colors",
+                        "128",
+                        outputPath)
+                .start()
+                .waitFor(30, TimeUnit.SECONDS);
     }
 
     private void sendScreenshot(CreateScreenshot createScreenshotMessage) {
