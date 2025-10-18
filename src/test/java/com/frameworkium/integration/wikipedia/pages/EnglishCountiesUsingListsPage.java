@@ -31,7 +31,7 @@ public class EnglishCountiesUsingListsPage extends BasePage<EnglishCountiesUsing
     private List<WebElement> countyColumn;
 
     @CacheLookup
-    @FindBy(css = "table.wikitable > tbody > tr > td:nth-child(2)")
+    @FindBy(css = "table.wikitable > tbody > tr > td:nth-child(4)")
     private List<WebElement> populationColumn;
 
     @CacheLookup
