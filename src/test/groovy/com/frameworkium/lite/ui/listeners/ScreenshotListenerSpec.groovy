@@ -24,7 +24,7 @@ class ScreenshotListenerSpec extends Specification {
 
     def sut = new ScreenshotListener()
 
-    @Ignore
+    //@Ignore
     def "takeScreenshotAndSaveLocally takes a screenshot and saves file"() {
         given:
             TakesScreenshot mockDriver = Mock()

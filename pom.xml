@@ -37,6 +37,7 @@
     <threads>1</threads>
     <groups />
     <log4j2.version>2.25.2</log4j2.version>
+      <groovy.version>5.0.3</groovy.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <!-- default skip.surefire.tests to the value of skipTests -->
@@ -117,6 +118,26 @@
       <version>2.4-M7-groovy-5.0</version>
       <scope>test</scope>
     </dependency>
+
+    <!-- Explicit Groovy dependency to match Spock/Groovy 5 build -->
+    <dependency>
+      <groupId>org.apache.groovy</groupId>
+      <artifactId>groovy</artifactId>
+      <version>${groovy.version}</version>
+      <scope>test</scope>
+    </dependency>
+        <dependency>
+          <groupId>org.apache.groovy</groupId>
+          <artifactId>groovy-xml</artifactId>
+          <version>${groovy.version}</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.groovy</groupId>
+          <artifactId>groovy-json</artifactId>
+          <version>${groovy.version}</version>
+          <scope>test</scope>
+        </dependency>
 
     <!-- Used in a Capture Integration Test -->
     <dependency>
@@ -219,6 +240,16 @@
         <groupId>org.codehaus.gmavenplus</groupId>
         <artifactId>gmavenplus-plugin</artifactId>
         <version>4.2.1</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.groovy</groupId>
+            <artifactId>groovy</artifactId>
+            <version>${groovy.version}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <targetBytecode>21</targetBytecode>
+        </configuration>
         <executions>
           <execution>
             <goals>
