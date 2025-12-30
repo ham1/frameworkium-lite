@@ -5,6 +5,8 @@
 
 A Framework for writing maintainable Selenium and REST API tests in Java.
 
+Requires Java 21.
+
 To use this you will need the following in your `pom.xml`
 
 ```xml
@@ -20,7 +22,7 @@ To use this you will need the following in your `pom.xml`
     <dependency>
       <groupId>com.github.ham1</groupId>
       <artifactId>frameworkium-lite</artifactId>
-      <version>4.10.1</version>
+      <version>4.11.0</version>
     </dependency>
   </dependencies>
 ```
