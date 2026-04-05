@@ -93,9 +93,9 @@
       <version>6.0.0</version>
     </dependency>
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>2.20.1</version>
+        <groupId>tools.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>3.1.1</version>
     </dependency>
 
     <!-- Explicitly adding utilities -->
@@ -103,11 +103,6 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>3.20.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
-      <version>3.0-rc5</version>
     </dependency>
 
     <!-- Local Unit Testing -->
