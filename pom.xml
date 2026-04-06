@@ -92,10 +92,11 @@
       <artifactId>rest-assured</artifactId>
       <version>6.0.0</version>
     </dependency>
+
     <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-        <version>3.1.1</version>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.21.2</version>
     </dependency>
 
     <!-- Explicitly adding utilities -->
