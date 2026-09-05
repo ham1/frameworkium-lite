@@ -4,7 +4,7 @@
 
 A Framework for writing maintainable Selenium and REST API tests in Java.
 
-Requires Java 21.
+Requires Java 25.
 
 To use this you will need the following in your `pom.xml`
 
