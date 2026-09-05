@@ -61,8 +61,6 @@ jobs:
           path: logs/
           retention-days: 7
 
-      - uses: codecov/codecov-action@v7
-
   test-chrome-grid:
     runs-on: ubuntu-latest
     container:
@@ -115,8 +113,6 @@ jobs:
           name: fwium-logs
           path: logs/
           retention-days: 7
-
-      - uses: codecov/codecov-action@v7
 
   test-firefox-grid:
     runs-on: ubuntu-latest
@@ -179,5 +175,3 @@ jobs:
           name: fwium-logs
           path: logs/
           retention-days: 7
-
-      - uses: codecov/codecov-action@v7
