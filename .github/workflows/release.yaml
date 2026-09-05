@@ -59,6 +59,7 @@ jobs:
       - name: Set release version and tag
         run: |
           mvn -B versions:set -DnewVersion=${{ steps.versions.outputs.release }} -DgenerateBackupPoms=false
+          sed -i -E 's#(<version>)[^<]+(</version>)#\1${{ steps.versions.outputs.release }}\2#' README.md
           git commit -am "Release ${{ steps.versions.outputs.release }}"
           git tag ${{ steps.versions.outputs.release }}
 
@@ -69,3 +70,11 @@ jobs:
 
       - name: Push commits and tag
         run: git push origin HEAD:main "${{ steps.versions.outputs.release }}"
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.versions.outputs.release }}" \
+            --title "${{ steps.versions.outputs.release }}" \
+            --generate-notes
