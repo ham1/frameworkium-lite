@@ -41,9 +41,6 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <!-- default skip.surefire.tests to the value of skipTests -->
     <skip.surefire.tests>${skipTests}</skip.surefire.tests>
-    <sonar.projectKey>ham1_frameworkium-lite</sonar.projectKey>
-    <sonar.organization>ham1</sonar.organization>
-    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
   </properties>
 
   <!-- Check for updates with mvn versions:display-dependency-updates -->
