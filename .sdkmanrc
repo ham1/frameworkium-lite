@@ -1,4 +1,5 @@
-# Enable auto-env through the sdkman_auto_env config
-# Add key=value pairs of SDKs to use below
+# Used by JitPack's build (see jitpack.yml's `sdk env install`/`sdk env`) since
+# its build environment has SDKMAN pre-installed but not mise. Local dev uses
+# .mise.toml instead - keep both in sync.
 java=21.0.8-tem
 maven=3.9.14
