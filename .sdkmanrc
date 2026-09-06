@@ -1,5 +1,0 @@
-# Used by JitPack's build (see jitpack.yml's `sdk env install`/`sdk env`) since
-# its build environment has SDKMAN pre-installed but not mise. Local dev uses
-# .mise.toml instead - keep both in sync.
-java=25.0.4-tem
-maven=3.9.16
