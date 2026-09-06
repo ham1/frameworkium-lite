@@ -1,3 +1,6 @@
+# Used for local dev. JitPack's build uses .sdkmanrc instead (see its
+# comment) since that environment has SDKMAN pre-installed but not mise -
+# keep both in sync.
 [tools]
 java = "temurin-25.0.4+101.0.LTS"
 maven = "3.9.16"
