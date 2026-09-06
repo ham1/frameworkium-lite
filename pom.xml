@@ -46,6 +46,7 @@
   <!-- Check for updates with mvn versions:display-dependency-updates -->
   <dependencies>
     <!-- Selenium related -->
+    <!-- Keep SELENIUM_VERSION in .github/workflows/ci.yaml aligned with this version. -->
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>

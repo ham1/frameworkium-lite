@@ -2,6 +2,10 @@ name: FWium-lite CI
 
 on: [push]
 
+env:
+  # Keep aligned with the selenium-java version in pom.xml.
+  SELENIUM_VERSION: '4.48'
+
 jobs:
   test-local:
     runs-on: ubuntu-latest
@@ -70,18 +74,18 @@ jobs:
       THREAD_COUNT: 2
     services:
       hub:
-        image: selenium/hub:4.48
+        image: selenium/hub:${{ env.SELENIUM_VERSION }}
         ports:
           - 4442-4444:4442-4444
       chrome1:
-        image: selenium/node-chrome:4.48
+        image: selenium/node-chrome:${{ env.SELENIUM_VERSION }}
         options: -v /dev/shm:/dev/shm
         env:
           SE_EVENT_BUS_PUBLISH_PORT: 4442
           SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
           SE_EVENT_BUS_HOST: hub
       chrome2:
-        image: selenium/node-chrome:4.48
+        image: selenium/node-chrome:${{ env.SELENIUM_VERSION }}
         options: -v /dev/shm:/dev/shm
         env:
           SE_EVENT_BUS_PUBLISH_PORT: 4442
@@ -123,18 +127,18 @@ jobs:
       THREAD_COUNT: 2
     services:
       hub:
-        image: selenium/hub:4.48
+        image: selenium/hub:${{ env.SELENIUM_VERSION }}
         ports:
           - 4442-4444:4442-4444
       firefox1:
-        image: selenium/node-firefox:4.48
+        image: selenium/node-firefox:${{ env.SELENIUM_VERSION }}
         options: -v /dev/shm:/dev/shm
         env:
           SE_EVENT_BUS_PUBLISH_PORT: 4442
           SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
           SE_EVENT_BUS_HOST: hub
       firefox2:
-        image: selenium/node-firefox:4.48
+        image: selenium/node-firefox:${{ env.SELENIUM_VERSION }}
         options: -v /dev/shm:/dev/shm
         env:
           SE_EVENT_BUS_PUBLISH_PORT: 4442
