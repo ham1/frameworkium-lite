@@ -21,12 +21,9 @@ public class FirefoxImpl extends AbstractDriver {
 
     @Override
     public WebDriver getWebDriver(Capabilities capabilities) {
-        final FirefoxOptions firefoxOptions;
-        if (capabilities instanceof FirefoxOptions) {
-            firefoxOptions = (FirefoxOptions) capabilities;
-        } else {
-            firefoxOptions = new FirefoxOptions().merge(capabilities);
-        }
+        FirefoxOptions firefoxOptions = capabilities instanceof FirefoxOptions options
+                ? options
+                : new FirefoxOptions().merge(capabilities);
         return new FirefoxDriver(firefoxOptions);
     }
 }

@@ -37,21 +37,16 @@ public class DriverSetup {
     }
 
     private static Driver createDriverImpl(Browser browser) {
-        switch (browser) {
-            case FIREFOX:
-                return new FirefoxImpl();
-            case CHROME:
-                return new ChromeImpl();
-            case EDGE:
-                return new EdgeImpl();
-            case IE:
-                return new InternetExplorerImpl();
-            case SAFARI:
-                return new SafariImpl();
-            case CUSTOM:
+        return switch (browser) {
+            case FIREFOX -> new FirefoxImpl();
+            case CHROME -> new ChromeImpl();
+            case EDGE -> new EdgeImpl();
+            case IE -> new InternetExplorerImpl();
+            case SAFARI -> new SafariImpl();
+            case CUSTOM -> {
                 String customBrowserImpl = Property.CUSTOM_BROWSER_IMPL.getValue();
                 try {
-                    return getCustomBrowserImpl(customBrowserImpl)
+                    yield getCustomBrowserImpl(customBrowserImpl)
                             .getDeclaredConstructor()
                             .newInstance();
                 } catch (InstantiationException
@@ -62,9 +57,8 @@ public class DriverSetup {
                             "Unable to use custom browser implementation - " + customBrowserImpl,
                             e);
                 }
-            default:
-                throw new IllegalArgumentException("Invalid Browser specified");
-        }
+            }
+        };
     }
 
     public static boolean useRemoteDriver() {

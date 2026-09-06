@@ -21,12 +21,9 @@ public class ChromeImpl extends AbstractDriver {
 
     @Override
     public WebDriver getWebDriver(Capabilities capabilities) {
-        final ChromeOptions chromeOptions;
-        if (capabilities instanceof ChromeOptions) {
-            chromeOptions = (ChromeOptions) capabilities;
-        } else {
-            chromeOptions = new ChromeOptions().merge(capabilities);
-        }
+        ChromeOptions chromeOptions = capabilities instanceof ChromeOptions options
+                ? options
+                : new ChromeOptions().merge(capabilities);
         return new ChromeDriver(chromeOptions);
     }
 }

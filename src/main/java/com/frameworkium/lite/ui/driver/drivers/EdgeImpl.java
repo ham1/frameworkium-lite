@@ -16,12 +16,9 @@ public class EdgeImpl extends AbstractDriver {
 
     @Override
     public WebDriver getWebDriver(Capabilities capabilities) {
-        final EdgeOptions edgeOptions;
-        if (capabilities instanceof EdgeOptions) {
-            edgeOptions = (EdgeOptions) capabilities;
-        } else {
-            edgeOptions = new EdgeOptions().merge(capabilities);
-        }
+        EdgeOptions edgeOptions = capabilities instanceof EdgeOptions options
+                ? options
+                : new EdgeOptions().merge(capabilities);
         return new EdgeDriver(edgeOptions);
     }
 }
